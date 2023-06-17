@@ -1,0 +1,31 @@
+{
+    "data": [
+        {
+           "weekNumber": 0,
+            "events": [
+                {
+                    "id": "12345",
+                    "name": "event1",
+                    "description": "description",
+                    "day": "MONDAY",
+                    "startTime": 2345632342,
+                    "duration": 234500
+                }
+            ],
+            "tasks": [
+                {
+                    "id": "54321",
+                    "name": "task1",
+                    "description": "description",
+                    "day": "WEDNESDAY",
+                    "startTime": 2345632342,
+                    "duration": 234500
+                }
+            ]
+        }
+    ],
+    "settings": {
+        "maximumTasks": 10,
+        "maximumEvents": 20
+    }
+}
