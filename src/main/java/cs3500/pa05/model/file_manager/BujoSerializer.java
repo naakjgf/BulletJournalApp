@@ -1,6 +1,7 @@
 package cs3500.pa05.model.file_manager;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cs3500.pa05.model.Settings;
 import cs3500.pa05.model.Week;
@@ -21,27 +22,28 @@ public class BujoSerializer {
   }
 
   /**
-   * Serialize a list of weeks into JSON
+   * Converts a given record object to a JsonNode.
    *
-   * @param
-   * @return List of Week objects represented by JSON.
-   * @throws JsonProcessingException If error processing input JSON.
+   * @param record the record to convert
+   * @return the JsonNode representation of the given record
+   * @throws IllegalArgumentException if the record could not be converted correctly
    */
-  public String weeksToJson(String json) throws JsonProcessingException {
-    BujoJson bujoJson = this.mapper.readValue(json, BujoJson.class);
-    return bujoJson.weeks();
+  public JsonNode serializeRecord(Record record) throws IllegalArgumentException {
+    try {
+      return this.mapper.convertValue(record, JsonNode.class);
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException("Given record cannot be serialized");
+    }
   }
 
   /**
-   * Processes contents of a Bujo file into a Settings object.
+   * Serialize a BujoJson into JSON.
    *
-   * @param json Bujo file contents
-   * @return Settings object
+   * @param bujoJson BujoJson object
+   * @return List of Week objects represented by JSON.
    * @throws JsonProcessingException If error processing input JSON.
    */
-  public Settings settingsToJson(String json) throws JsonProcessingException {
-    BujoJson bujoJson = this.mapper.readValue(json, BujoJson.class);
-
-    return bujoJson.settings();
+  public String bujoToJson(BujoJson bujoJson) {
+    return serializeRecord(bujoJson).toString();
   }
 }
