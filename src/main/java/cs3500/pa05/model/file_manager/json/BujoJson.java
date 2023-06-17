@@ -7,7 +7,8 @@ import java.util.List;
 
 /**
  * Json Record for a Bujo file
- * @param weeks Weeks data in bujo file
+ *
+ * @param weeks List of Week data in a bujo file
  */
 public record BujoJson(@JsonProperty("data") List<Week> weeks, @JsonProperty Settings settings) {
 

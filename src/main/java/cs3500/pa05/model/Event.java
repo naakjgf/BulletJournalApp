@@ -12,6 +12,15 @@ public class Event implements EventInterface {
   private String description;
   private DayOfWeek day;
 
+  /**
+   * Constructor for an Event object.
+   *
+   * @param name Name of the event.
+   * @param description Description.
+   * @param day Day of the week the event belongs to.
+   * @param startTime The epoch time for the event starts
+   * @param duration The duration the event lasts, in milliseconds.
+   */
   public Event(String name, String description, DayOfWeek day, long startTime, long duration) {
     this.day = day;
     this.name = name;
