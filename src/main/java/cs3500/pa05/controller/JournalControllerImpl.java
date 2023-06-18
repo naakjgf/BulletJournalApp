@@ -170,7 +170,6 @@ public class JournalControllerImpl implements JournalController {
       manager.getWeek(i).getEvents().sort(Comparator.comparingLong(Event::getStartTime));
       for (Event e : manager.getWeek(i).getEvents()) {
         EventView eView = new EventView(e);
-        //TODO:
         VBox myVBox = (VBox) weekView.getChildren().get(e.getDayOfWeek().getNumVal());
         myVBox.getChildren().add(eView);
       }

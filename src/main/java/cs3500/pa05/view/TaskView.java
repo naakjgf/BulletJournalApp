@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
 import cs3500.pa05.model.Task;
+import javafx.scene.text.Font;
 
 public class TaskView extends VBox {
   private String id;
@@ -15,7 +16,7 @@ public class TaskView extends VBox {
     id = task.getId();
     this.dayOfWeek = task.getDayOfWeek();
     Label nameLabel = new Label("Task: " + task.getName());
-    nameLabel.setFont();
+    nameLabel.setFont(new Font("Roboto", 24));
     Label descLabel = new Label("Description: " + task.getDescription());
     Label statusLabel = new Label("Status: " + (task.isComplete() ? "Completed" : "Incomplete"));
 
