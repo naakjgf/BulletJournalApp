@@ -193,7 +193,26 @@
                               </VBox>
                            </children>
                         </HBox>
-                        <VBox fx:id="sideBar" prefHeight="435.0" prefWidth="145.0" />
+                        <VBox fx:id="sideBar" prefHeight="436.0" prefWidth="145.0" style="-fx-alignment: bottom-center;">
+                           <children>
+                              <VBox prefHeight="20.0" prefWidth="145.0" style="-fx-alignment: center;">
+                                 <children>
+                                    <Label text="Task Queue:" />
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="349.0" prefWidth="145.0" />
+                              <HBox prefHeight="26.0" prefWidth="145.0" style="-fx-alignment: center;">
+                                 <children>
+                                    <Button mnemonicParsing="false" text="Settings" />
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="24.0" prefWidth="145.0" style="-fx-alignment: bottom-center;">
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#switchToScene2" prefHeight="26.0" prefWidth="68.0" text="+Event" />
+                                    <Button mnemonicParsing="false" onAction="#switchToScene2" prefHeight="26.0" prefWidth="68.0" text="+Task" />
+                                 </children>
+                              </HBox>
+                           </children></VBox>
                      </children>
                   </HBox>
                </children>

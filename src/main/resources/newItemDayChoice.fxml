@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Scene?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<Scene xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <AnchorPane>
+        <children>
+            <HBox prefHeight="300.0" prefWidth="300.0">
+                <children>
+                    <VBox prefHeight="300.0" prefWidth="50.0" />
+                    <VBox prefHeight="300.0" prefWidth="224.0">
+                        <children>
+                            <Label alignment="CENTER" prefHeight="35.0" prefWidth="200.0" text="What Day of the week would you like this item to be?">
+                                <font>
+                                    <Font size="8.0" />
+                                </font>
+                            </Label>
+                            <GridPane prefHeight="264.0" prefWidth="200.0">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="96.45866394042969" minWidth="10.0" prefWidth="64.10342407226562" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="153.1200714111328" minWidth="10.0" prefWidth="92.39657592773438" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="153.1200714111328" minWidth="10.0" prefWidth="60.27093505859375" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints maxHeight="26.458120346069336" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="36.5" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="58.0" minHeight="0.0" prefHeight="38.42607116699219" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="46.57392883300781" minHeight="10.0" prefHeight="35.56153869628906" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="50.93846130371094" minHeight="10.0" prefHeight="35.113250732421875" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="53.386749267578125" minHeight="10.0" prefHeight="40.593597412109375" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="43.57392883300781" minHeight="10.0" prefHeight="39.406402587890625" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="51.125640869140625" minHeight="10.0" prefHeight="32.435882568359375" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="40.564117431640625" minHeight="10.0" prefHeight="40.564117431640625" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                <children>
+                                    <Button mnemonicParsing="false" onMouseClicked="#newMondayEvent" text="Monday" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <Button mnemonicParsing="false" onMouseClicked="#newTuesdayEvent" text="Tuesday" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                    <Button mnemonicParsing="false" onMouseClicked="#newWednesdayEvent" text="Wednesay" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                    <Button mnemonicParsing="false" onMouseClicked="#newThursdayEvent" text="Thursday" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                    <Button alignment="CENTER" mnemonicParsing="false" onMouseClicked="#newFridayEvent" text="Friday" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                    <Button mnemonicParsing="false" onMouseClicked="#newSaturdayEvent" text="Saturday" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                                    <Button alignment="TOP_LEFT" mnemonicParsing="false" onMouseClicked="#newSundayEvent" style="-fx-alignment: center;" text="Sunday" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                                    <Label GridPane.columnIndex="1" />
+                                </children>
+                            </GridPane>
+                        </children>
+                    </VBox>
+                </children>
+            </HBox>
+        </children>
+    </AnchorPane>
+</Scene>

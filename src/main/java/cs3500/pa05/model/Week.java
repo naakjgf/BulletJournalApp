@@ -9,9 +9,9 @@ import java.util.List;
  * Represents a Week in a Bujo Schedule.
  */
 public class Week {
-  private final List<Task> tasks;
-  private final List<Event> events;
-  private final int weekNumber;
+  private List<Task> tasks;
+  private List<Event> events;
+  private int weekNumber;
 
   /**
    * Constructor for rebuilding a Week object using Jackson.
@@ -61,11 +61,8 @@ public class Week {
     return weekNumber;
   }
 
-  public void addTask(Task task) {
-    tasks.add(task);
-  }
 
-  public void addEvent(Event event) {
-    events.add(event);
-  }
+
+
+
 }
