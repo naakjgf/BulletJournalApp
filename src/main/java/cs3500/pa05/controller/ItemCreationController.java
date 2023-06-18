@@ -29,6 +29,7 @@ public class ItemCreationController {
     dialog.setTitle(title);
     DialogPane dialogPane = new DialogPane();
     dialog.setDialogPane(dialogPane);
+
     return dialogPane;
   }
 
