@@ -11,9 +11,9 @@ import java.util.List;
  */
 public class FileManagerImpl implements FileManager {
   private final String filepath;
-  private String jsonContent;
   private final BujoSerializer serializer;
   private final BujoDeserializer deserializer;
+  private String jsonContent;
 
   /**
    * Constructor for a FileManager.
@@ -67,8 +67,11 @@ public class FileManagerImpl implements FileManager {
 
   @Override
   public void saveWeeksToFile(List<Week> weeks, int currentWeek) {
-      BujoJson saveBujo = new BujoJson(weeks, loadSettingsFromFile());
-      String serializedBujo = serializer.bujoToJson(saveBujo);
-      FileReaderWriter.writeFileContents(filepath, serializedBujo);
+    Settings settings = loadSettingsFromFile();
+    settings.setCurrentWeek(currentWeek);
+
+    BujoJson saveBujo = new BujoJson(weeks, settings);
+    String serializedBujo = serializer.bujoToJson(saveBujo);
+    FileReaderWriter.writeFileContents(filepath, serializedBujo);
   }
 }

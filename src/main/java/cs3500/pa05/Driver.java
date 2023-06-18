@@ -2,6 +2,8 @@ package cs3500.pa05;
 
 import cs3500.pa05.controller.JournalControllerImpl;
 import cs3500.pa05.model.ScheduleManagerImpl;
+import cs3500.pa05.model.file_manager.FileManager;
+import cs3500.pa05.model.file_manager.FileManagerImpl;
 import cs3500.pa05.view.GuiView;
 import cs3500.pa05.view.GuiViewImpl;
 import java.util.Objects;
@@ -40,9 +42,8 @@ public class Driver extends Application {
     //especially considering it isn't used yet in the impl it isn't too late to adjust this,
     //achieves the same thing making an instance in the constructor instead of the driver, up to you
     // though as you have been the one designing it, dealers' choice.
-    FileManager fileManager = new FileManagerImpl(filepath);
-    ScheduleManagerImpl scheduleManager = new ScheduleManagerImpl(fileManager);
-    JournalControllerImpl controller = new JournalControllerImpl(scheduleManager);
+    ScheduleManagerImpl scheduleManager = new ScheduleManagerImpl();
+    JournalControllerImpl controller = new JournalControllerImpl(primaryStage, scheduleManager);
 
     GuiView view = new GuiViewImpl(controller);
 

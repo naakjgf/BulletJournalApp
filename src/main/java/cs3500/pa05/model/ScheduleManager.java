@@ -1,5 +1,6 @@
 package cs3500.pa05.model;
 
+import cs3500.pa05.model.file_manager.FileManager;
 import java.util.List;
 
 /**
@@ -46,4 +47,16 @@ public interface ScheduleManager {
    * @return Return's the new week's week number.
    */
   int createNewWeek();
+
+  /**
+   * Loads a specific FileManager instance in.
+   *
+   * @param fileManager FileManager to set.
+   */
+  void setFileManager(FileManager fileManager);
+
+  /**
+   * @return boolean determining whether the filemanager has been set already or not.
+   */
+  boolean hasFileManager();
 }

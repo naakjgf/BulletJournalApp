@@ -22,13 +22,19 @@ public class ScheduleManagerImpl implements ScheduleManager {
     this.fileManager = fileManager;
   }
 
-  /**
-   * Sets FileManager object.
-   *
-   * @param fileManager File Manager object to set to.
-   */
+  public ScheduleManagerImpl() {
+
+  }
+
+
+  @Override
   public void setFileManager(FileManager fileManager) {
     this.fileManager = fileManager;
+  }
+
+  @Override
+  public boolean hasFileManager() {
+    return this.fileManager != null;
   }
 
   @Override
@@ -43,7 +49,9 @@ public class ScheduleManagerImpl implements ScheduleManager {
 
   @Override
   public void saveWeeks() {
-    this.fileManager.saveWeeksToFile(weeks, currentWeekNumber);
+    if (this.fileManager != null) {
+      this.fileManager.saveWeeksToFile(weeks, currentWeekNumber);
+    }
   }
 
   @Override
