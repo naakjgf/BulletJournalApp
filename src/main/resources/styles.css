@@ -1,0 +1,25 @@
+.weekSection {
+    -fx-border-color: gray;
+    -fx-border-style: hidden dashed hidden hidden;
+    -fx-border-width: 1px;
+}
+
+.weekSection > label {
+    -fx-start-margin: 30px;
+}
+
+.normalButton {
+    -fx-background-radius: 5px;
+    -fx-padding: 5px 5px 5px 5px;
+    -fx-font-size: 15px;
+}
+
+.roundedButton {
+    -fx-background-radius: 15px;
+    -fx-padding:  5px 10px 5px 10px;
+    -fx-font-size: 15px;
+}
+
+.weekLabel {
+    -fx-alignment: CENTER;
+}

@@ -27,7 +27,7 @@
                            <center>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <Button alignment="CENTER_RIGHT" mnemonicParsing="false" style="-fx-background-radius: 20px; -fx-font-size: 15px; -fx-padding: 5px 0px 5px 0px;" text="Prev">
+                                    <Button alignment="CENTER_RIGHT" mnemonicParsing="false" styleClass="roundedButton" text="Prev">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
@@ -43,7 +43,7 @@
                                           <Font size="22.0" />
                                        </font>
                                     </Label>
-                                    <Button alignment="CENTER_RIGHT" mnemonicParsing="false" style="-fx-background-radius: 20px; -fx-font-size: 15px; -fx-padding: 5px 0px 5px 0px;" text="Next">
+                                    <Button alignment="CENTER_RIGHT" mnemonicParsing="false" styleClass="roundedButton" text="Next">
                                        <font>
                                           <Font size="25.0" />
                                        </font>
@@ -52,7 +52,7 @@
                               </HBox>
                            </center>
                            <right>
-                              <Button mnemonicParsing="false" style="-fx-background-radius: 5px; -fx-font-size: 15px; -fx-padding: 5px 5px 5px 5px;" text="+ Week" BorderPane.alignment="CENTER">
+                              <Button mnemonicParsing="false" styleClass="normalButton" text="+ Week" BorderPane.alignment="CENTER">
                                  <BorderPane.margin>
                                     <Insets right="5.0" />
                                  </BorderPane.margin>
@@ -130,63 +130,63 @@
                      <children>
                         <HBox fx:id="weekView" prefHeight="100.0">
                            <children>
-                              <VBox prefHeight="200.0" prefWidth="100.0">
+                              <VBox prefHeight="200.0" prefWidth="100.0" styleClass="weekSection">
                                  <children>
-                                    <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" text="Monday">
+                                    <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Monday">
                                        <font>
                                           <Font size="12.0" />
                                        </font>
                                     </Label>
                                  </children>
                               </VBox>
-                              <VBox prefHeight="200.0" prefWidth="100.0">
+                              <VBox prefHeight="200.0" prefWidth="100.0" styleClass="weekSection">
                                  <children>
-                                    <Label text="Tuesday">
+                                    <Label alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" styleClass="weekLabel" text="Tuesday" VBox.vgrow="ALWAYS">
                                        <font>
                                           <Font size="12.0" />
                                        </font>
                                     </Label>
                                  </children>
                               </VBox>
-                              <VBox prefHeight="200.0" prefWidth="100.0">
+                              <VBox prefHeight="200.0" prefWidth="100.0" styleClass="weekSection">
                                  <children>
-                                    <Label text="Wednesday">
+                                    <Label maxWidth="1.7976931348623157E308" minWidth="0.0" prefHeight="15.0" styleClass="weekLabel" text="Wednesday">
                                        <font>
                                           <Font size="12.0" />
                                        </font>
                                     </Label>
                                  </children>
                               </VBox>
-                              <VBox prefHeight="200.0" prefWidth="100.0">
+                              <VBox prefHeight="200.0" prefWidth="100.0" styleClass="weekSection">
                                  <children>
-                                    <Label text="Thursday">
+                                    <Label maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Thursday">
                                        <font>
                                           <Font size="12.0" />
                                        </font>
                                     </Label>
                                  </children>
                               </VBox>
-                              <VBox prefHeight="200.0" prefWidth="100.0">
+                              <VBox prefHeight="200.0" prefWidth="100.0" styleClass="weekSection">
                                  <children>
-                                    <Label text="Friday">
+                                    <Label maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Friday">
                                        <font>
                                           <Font size="12.0" />
                                        </font>
                                     </Label>
                                  </children>
                               </VBox>
-                              <VBox prefHeight="200.0" prefWidth="100.0">
+                              <VBox prefHeight="200.0" prefWidth="100.0" styleClass="weekSection">
                                  <children>
-                                    <Label text="Saturday">
+                                    <Label maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Saturday">
                                        <font>
                                           <Font size="12.0" />
                                        </font>
                                     </Label>
                                  </children>
                               </VBox>
-                              <VBox prefHeight="200.0" prefWidth="100.0">
+                              <VBox prefHeight="200.0" prefWidth="100.0" styleClass="weekSection">
                                  <children>
-                                    <Label text="Sunday">
+                                    <Label maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Sunday">
                                        <font>
                                           <Font size="12.0" />
                                        </font>
