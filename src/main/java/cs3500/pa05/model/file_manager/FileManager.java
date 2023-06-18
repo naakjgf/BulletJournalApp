@@ -33,5 +33,5 @@ public interface FileManager {
    *
    * @param weeks List of weeks to save
    */
-  void saveWeeksToFile(List<Week> weeks);
+  void saveWeeksToFile(List<Week> weeks, int currentWeek);
 }

@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 public class Settings {
   private int maximumTasks;
   private int maximumEvents;
+  private int currentWeek;
 
   /**
    * Constructor for a Settings object
@@ -17,9 +18,29 @@ public class Settings {
    * @param maximumTasks Maximum number of tasks a user can create per week.
    * @param maximumEvents Maximum number of events a user can create per week.
    */
-  public Settings(@JsonProperty int maximumTasks, @JsonProperty int maximumEvents) {
+  public Settings(@JsonProperty int maximumTasks, @JsonProperty int maximumEvents, @JsonProperty int currentWeek) {
     this.maximumEvents = maximumEvents;
     this.maximumTasks = maximumTasks;
+    this.currentWeek = currentWeek;
+  }
+
+  /**
+   * Retrieves the current week number
+   *
+   * @return int for current week.
+   */
+  @JsonGetter
+  public int getCurrentWeek() {
+    return currentWeek;
+  }
+
+  /**
+   * Sets the current week number
+   *
+   * @param currentWeek current week number to set.
+   */
+  public void setCurrentWeek(int currentWeek) {
+    this.currentWeek = currentWeek;
   }
 
   /**
