@@ -15,13 +15,13 @@ public class EventView extends VBox {
   public EventView(Event event) {
     this.id = event.getId();
     this.dayOfWeek = event.getDayOfWeek();
-    Label nameLabel = new Label("Event: " + event.getName());
-    Label descLabel = new Label("Description: " + event.getDescription());
+    Label nameLabel = new Label(event.getName());
+    Label descLabel = new Label(event.getDescription());
     Label startTimeLabel = new Label("Start Time: " + formatTime(event.getStartTime()));
-    Label durationLabel = new Label("Duration: " + event.getDuration() + " ms");
+    Label durationLabel = new Label("Duration: " + event.getDuration() + " minutes");
 
     this.getChildren().addAll(nameLabel, descLabel, startTimeLabel, durationLabel);
-    this.setSpacing(10);
+    this.setSpacing(1);
   }
 
   private String formatTime(long epochTime) {

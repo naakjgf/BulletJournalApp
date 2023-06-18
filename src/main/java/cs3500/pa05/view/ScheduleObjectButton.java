@@ -19,10 +19,16 @@ public class ScheduleObjectButton extends Button {
     }
     else if (item instanceof Task)
     {
-
+      vbox = new TaskView((Task) item);
     }
     else {
       throw new IllegalArgumentException();
     }
+    this.setGraphic(vbox);
+    this.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+    this.setOnAction(e -> {
+      ScheduleItemAlert alert = new ScheduleItemAlert(item);
+      alert.showAndWait();
+    });
   }
 }
