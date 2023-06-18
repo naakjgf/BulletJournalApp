@@ -28,20 +28,20 @@ public class Driver extends Application {
 
   @Override
   public void start(Stage primaryStage) {
-    try {
-      FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("gui.fxml"));
-      primaryStage.setTitle("Bullet Journal");
-      primaryStage.setScene(new Scene(Objects.requireNonNull(loader.load())));
-      primaryStage.show();
-    } catch (Exception e) {
-      System.out.println("Error loading GUI; Please reference the stack trace below:");
-      e.printStackTrace();
-    }
-
     ScheduleManagerImpl scheduleManager = new ScheduleManagerImpl();
     JournalControllerImpl controller = new JournalControllerImpl(primaryStage, scheduleManager);
 
     GuiView view = new GuiViewImpl(controller);
 
+    try {
+//      FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("gui.fxml"));
+//      primaryStage.setTitle("Bullet Journal");
+
+      primaryStage.setScene(view.load());
+      primaryStage.show();
+    } catch (Exception e) {
+      System.out.println("Error loading GUI; Please reference the stack trace below:");
+      e.printStackTrace();
+    }
   }
 }
