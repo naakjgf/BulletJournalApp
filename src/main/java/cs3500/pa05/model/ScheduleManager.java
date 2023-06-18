@@ -19,7 +19,7 @@ public interface ScheduleManager {
    *
    * @param weeks List of weeks to load into the model.
    */
-  void loadWeeks(List<Week> weeks);
+  void loadWeeks();
 
   /**
    * Save weeks to File using FileManager.

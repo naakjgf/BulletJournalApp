@@ -3,6 +3,7 @@ package cs3500.pa05.model.file_manager;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import cs3500.pa05.model.Settings;
 import cs3500.pa05.model.Week;
+import cs3500.pa05.model.file_manager.json.BujoJson;
 import java.util.List;
 import java.util.Set;
 
@@ -18,6 +19,7 @@ public class FileManagerImpl implements FileManager {
     this.jsonContent = FileReader.readFileContents(fileName);
     this.deserializer = new BujoDeserializer();
     this.serializer = new BujoSerializer();
+    updateJsonContent();
   }
 
   private void updateJsonContent() {
@@ -26,7 +28,6 @@ public class FileManagerImpl implements FileManager {
 
   @Override
   public List<Week> loadWeeksFromFile() {
-    updateJsonContent();
     List<Week> weeks;
 
     try {
@@ -40,7 +41,6 @@ public class FileManagerImpl implements FileManager {
 
   @Override
   public Settings loadSettingsFromFile() {
-    updateJsonContent();
     Settings settings;
 
     try {
@@ -59,6 +59,7 @@ public class FileManagerImpl implements FileManager {
 
   @Override
   public void saveWeeksToFile(List<Week> weeks, int currentWeek) {
+      BujoJson saveBujo = new BujoJson(weeks, loadSettingsFromFile());
 
 
   }

@@ -1,6 +1,7 @@
 package cs3500.pa05.model;
 
 import cs3500.pa05.model.file_manager.FileManager;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,8 +44,8 @@ public class ScheduleManagerImpl implements ScheduleManager {
   }
 
   @Override
-  public void loadWeeks(List<Week> weeks) {
-    this.weeks = weeks;
+  public void loadWeeks() {
+    this.weeks = this.fileManager.loadWeeksFromFile();
   }
 
   @Override
@@ -68,6 +69,11 @@ public class ScheduleManagerImpl implements ScheduleManager {
 
   @Override
   public int createNewWeek() {
-    return 0;
+    int newWeekNumber = weeks.size();
+    Week newWeek = new Week(newWeekNumber);
+    weeks.add(newWeek);
+    setCurrentWeek(newWeekNumber);
+
+    return newWeekNumber;
   }
 }

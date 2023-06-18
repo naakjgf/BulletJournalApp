@@ -26,6 +26,12 @@ public class Week {
     this.events = events;
   }
 
+  public Week(int weekNumber) {
+    this.weekNumber = weekNumber;
+    this.tasks = new ArrayList<>();
+    this.events = new ArrayList<>();
+  }
+
   /**
    * @return List of events belonging to week.
    */
