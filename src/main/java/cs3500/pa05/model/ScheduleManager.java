@@ -40,6 +40,12 @@ public interface ScheduleManager {
   Week getCurrentWeek();
 
   /**
+   * Retrieves current week number.
+   * @return current week number
+   */
+  int getCurrentWeekNum();
+
+  /**
    * Creates a new week and sets current week to it.
    *
    * @return Return's the new week's week number.

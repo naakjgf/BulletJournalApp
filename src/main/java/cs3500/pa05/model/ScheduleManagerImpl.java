@@ -4,6 +4,7 @@ import cs3500.pa05.model.file_manager.FileManager;
 import cs3500.pa05.model.file_manager.json.BujoJson;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of the ScheduleManager.
@@ -70,6 +71,11 @@ public class ScheduleManagerImpl implements ScheduleManager {
   @Override
   public Week getCurrentWeek() {
     return currentWeek;
+  }
+
+  @Override
+  public int getCurrentWeekNum() {
+    return settings.getCurrentWeek();
   }
 
   @Override

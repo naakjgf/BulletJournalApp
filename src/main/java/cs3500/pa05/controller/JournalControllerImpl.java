@@ -11,15 +11,11 @@ import cs3500.pa05.model.file_manager.FileManagerImpl;
 import cs3500.pa05.view.EventView;
 import cs3500.pa05.view.TaskView;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Optional;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -37,7 +33,6 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -104,8 +99,8 @@ public class JournalControllerImpl implements JournalController {
         return;
       }
 
-      this.manager.setCurrentWeek(this.manager.getCurrentWeek().getWeekNumber() + 1);
-      renderWeeks();
+      this.manager.setCurrentWeek(this.manager.getCurrentWeekNum() + 1);
+      renderWeek();
     });
 
     prevWeek.setOnAction((e) -> {
@@ -113,8 +108,8 @@ public class JournalControllerImpl implements JournalController {
         return;
       }
 
-      this.manager.setCurrentWeek(this.manager.getCurrentWeek().getWeekNumber() + 1);
-      renderWeeks();
+      this.manager.setCurrentWeek(this.manager.getCurrentWeekNum() - 1);
+      renderWeek();
     });
 
     newWeek.setOnAction(e -> createNewWeek());
@@ -125,7 +120,7 @@ public class JournalControllerImpl implements JournalController {
    * Updates the week title to the current active week.
    */
   public void updateWeekTitle() {
-    weekTitle.setText("Week " + (this.manager.getCurrentWeek().getWeekNumber() + 1));
+    weekTitle.setText("Week " + (this.manager.getCurrentWeekNum() + 1));
   }
 
 
@@ -145,7 +140,7 @@ public class JournalControllerImpl implements JournalController {
 
   private void createNewWeek() {
     this.manager.createNewWeek();
-    renderWeeks();
+    renderWeek();
   }
 
   private MenuItem createMenuItem(MenuBarAction action, String name, boolean createKeybind) {
@@ -189,25 +184,26 @@ public class JournalControllerImpl implements JournalController {
     menuBarContainer.getChildren().addAll(menuBarVisible, menuBarHidden);
   }
 
-  public void renderWeeks() {
-    for (int i = 0; i < manager.getNumWeeks(); i++) {
-      for (Task t : manager.getWeek(i).getTasks()) {
-        TaskView tView = new TaskView(t);
-        //Add tView to GUI
-        VBox myVBox = (VBox) weekView.getChildren().get(t.getDayOfWeek().getNumVal());
-        myVBox.getChildren().add(tView);
-        //Add checkbox to sidebar
-        sideBar.getChildren().add(new CheckBox(t.getName()));
-      }
-      manager.getWeek(i).getEvents().sort(Comparator.comparingLong(Event::getStartTime));
-      for (Event e : manager.getWeek(i).getEvents()) {
-        EventView eView = new EventView(e);
-        VBox myVBox = (VBox) weekView.getChildren().get(e.getDayOfWeek().getNumVal());
-        myVBox.getChildren().add(eView);
-      }
+  private void clearWeek() {
 
+  }
 
+  public void renderWeek() {
+    for (Task t : manager.getCurrentWeek().getTasks()) {
+      TaskView tView = new TaskView(t);
+      //Add tView to GUI
+      VBox myVBox = (VBox) weekView.getChildren().get(t.getDayOfWeek().getNumVal());
+      myVBox.getChildren().add(tView);
+      //Add checkbox to sidebar
+      sideBar.getChildren().add(new CheckBox(t.getName()));
     }
+    manager.getCurrentWeek().getEvents().sort(Comparator.comparingLong(Event::getStartTime));
+    for (Event e : manager.getCurrentWeek().getEvents()) {
+      EventView eView = new EventView(e);
+      VBox myVBox = (VBox) weekView.getChildren().get(e.getDayOfWeek().getNumVal());
+      myVBox.getChildren().add(eView);
+    }
+
     updateWeekTitle();
   }
 
@@ -279,7 +275,7 @@ public class JournalControllerImpl implements JournalController {
     result.ifPresent(task -> {
       // handle task object here
       this.manager.getCurrentWeek().addTask(task);
-      renderWeeks();
+      renderWeek();
     });
   }
 
