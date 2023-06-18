@@ -146,7 +146,6 @@ public class JournalControllerImpl implements JournalController {
   private void createNewWeek() {
     this.manager.createNewWeek();
     renderWeeks();
-    updateWeekTitle();
   }
 
   private MenuItem createMenuItem(MenuBarAction action, String name, boolean createKeybind) {
@@ -209,6 +208,7 @@ public class JournalControllerImpl implements JournalController {
 
 
     }
+    updateWeekTitle();
   }
 
   public void saveFile(boolean saveAs) {
