@@ -6,28 +6,38 @@ import cs3500.pa05.model.file_manager.FileManager;
 import cs3500.pa05.model.file_manager.FileManagerImpl;
 import cs3500.pa05.view.GuiView;
 import cs3500.pa05.view.GuiViewImpl;
+import java.util.Objects;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-/**
- * Driver for the application.
- */
 public class Driver extends Application {
-  @Override
-  public void start(Stage stage) {
-    ScheduleManagerImpl manager = new ScheduleManagerImpl();
+  public static void main(String[] args) {
+    launch(args);
+  }
 
+  @Override
+  public void start(Stage primaryStage) {
+    try {
+      Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("gui.fxml")));
+      primaryStage.setTitle("Bullet Journal");
+      primaryStage.setScene(new Scene(root, 800, 800));
+      primaryStage.show();
+    } catch (Exception e) {
+      System.out.println("Error loading GUI; Please reference the stack trace below:");
+      e.printStackTrace();
+    }
+
+    //having it take a ScheduleManager as a parameter may not be the best way to go about this?
+    //especially considering it isn't used yet in the impl it isn't too late to adjust this,
+    //achieves the same thing making an instance in the constructor instead of the driver, up to you
+    // though as you have been the one designing it, dealers' choice.
+    ScheduleManagerImpl manager = new ScheduleManagerImpl();
     JournalControllerImpl controller = new JournalControllerImpl(manager);
 
     GuiView view = new GuiViewImpl(controller);
-  }
 
-  /**
-   * Main method.
-   *
-   * @param args input args.
-   */
-  public static void main(String[] args) {
-    launch();
   }
 }
