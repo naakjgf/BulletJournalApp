@@ -9,12 +9,32 @@ import java.util.List;
 public class ScheduleManagerImpl implements ScheduleManager {
   private List<Week> weeks;
   private Week currentWeek;
+  private int currentWeekNumber;
   private FileManager fileManager;
 
+  /**
+   * Constructor for a ScheduleManager.
+   *
+   * @param fileManager FileManager instance to use for file management.
+   */
   public ScheduleManagerImpl(FileManager fileManager) {
     this.fileManager = fileManager;
+  }
 
+  /**
+   * Constructor for a ScheduleManager.
+   */
+  public ScheduleManagerImpl() {
 
+  }
+
+  /**
+   * Sets FileManager object.
+   *
+   * @param fileManager File Manager object to set to.
+   */
+  public void setFileManager(FileManager fileManager) {
+    this.fileManager = fileManager;
   }
 
   @Override
@@ -29,17 +49,21 @@ public class ScheduleManagerImpl implements ScheduleManager {
 
   @Override
   public void saveWeeks() {
-
+    this.fileManager.saveWeeksToFile(weeks, currentWeekNumber);
   }
 
   @Override
   public void setCurrentWeek(int week) {
-
+    this.currentWeekNumber = week;
+    this.currentWeek = weeks.stream()
+        .filter(w -> w.getWeekNumber() == currentWeekNumber)
+        .findAny()
+        .orElse(null);
   }
 
   @Override
   public Week getCurrentWeek() {
-    return null;
+    return currentWeek;
   }
 
   @Override
