@@ -16,6 +16,7 @@ import java.util.Optional;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -189,6 +190,15 @@ public class JournalControllerImpl implements JournalController {
   }
 
   public void renderWeek() {
+    for (Node node : weekView.getChildren()) {
+      // Check if this child is a VBox
+      if (node instanceof VBox) {
+        VBox vBox = (VBox) node;
+        // Now, we can remove specific children from the VBox
+        vBox.getChildren().removeIf(child -> child instanceof TaskView || child instanceof EventView);
+      }
+    }
+    sideBar.getChildren().clear();
     for (Task t : manager.getCurrentWeek().getTasks()) {
       TaskView tView = new TaskView(t);
       //Add tView to GUI
