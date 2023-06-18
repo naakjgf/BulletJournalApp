@@ -130,10 +130,7 @@ public class JournalControllerImpl implements JournalController {
 
   private void handleMenuAction(ActionEvent e, MenuBarAction action) {
     switch (action) {
-      case OPEN -> {
-        loadFile();
-        updateWeekTitle();
-      }
+      case OPEN -> loadFile();
       case SAVE -> saveFile(false);
       case SAVE_AS -> saveFile(true);
       case NEW_WEEK -> createNewWeek();
@@ -258,6 +255,8 @@ public class JournalControllerImpl implements JournalController {
     this.fileManager = new FileManagerImpl(filePath);
     this.manager.setFileManager(this.fileManager);
     this.manager.loadData();
+
+    renderWeek();
   }
 
 

@@ -20,21 +20,31 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 import javafx.util.StringConverter;
 
 public class ItemCreationController {
 
-  /**
-   * Constructs a dialogue for task creation, shows it to the user, and then passes the created task back up to the caller.
-   *
-   * @param f Consumer callback function to pass Task back up to.
-   */
-  public void createNewTask(Consumer<Task> f) {
-    Dialog<Task> dialog = new Dialog<>();
-    dialog.setTitle("Create a new Task");
-
+  private DialogPane setupDialogPane(Dialog<?> dialog, String title) {
+    dialog.setTitle(title);
     DialogPane dialogPane = new DialogPane();
     dialog.setDialogPane(dialogPane);
+    return dialogPane;
+  }
+
+  private void validateInput(String name, String description, DayOfWeek day,
+                             javafx.event.ActionEvent ev) {
+    if (name.isEmpty() || description.isEmpty() || day == null) {
+      ev.consume();
+      Alert alert = new Alert(Alert.AlertType.WARNING);
+      alert.setContentText("Please fill all fields!");
+      alert.showAndWait();
+    }
+  }
+
+  public void createNewTask(Consumer<Task> f) {
+    Dialog<Task> dialog = new Dialog<>();
+    DialogPane dialogPane = setupDialogPane(dialog, "Create a new Task");
 
     TextField nameField = new TextField();
     nameField.setPromptText("Name");
@@ -49,28 +59,12 @@ public class ItemCreationController {
     dialogPane.getButtonTypes().addAll(createBtnType, ButtonType.CANCEL);
 
     dialogPane.lookupButton(createBtnType).addEventFilter(javafx.event.ActionEvent.ACTION, ev -> {
-      String name = nameField.getText();
-      String description = descriptionField.getText();
-      DayOfWeek day = dayOfWeekComboBox.getValue();
-
-      if (name.isEmpty() || description.isEmpty() || day == null) {
-        ev.consume();  // stop the dialog from closing
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setContentText("Please fill all fields!");
-        alert.showAndWait();
-      }
+      validateInput(nameField.getText(), descriptionField.getText(), dayOfWeekComboBox.getValue(),
+          ev);
     });
 
-    dialog.setResultConverter(buttonType -> {
-      if (buttonType == createBtnType) {
-        String name = nameField.getText();
-        String description = descriptionField.getText();
-        DayOfWeek day = dayOfWeekComboBox.getValue();
-
-        return new Task(name, description, day);
-      }
-      return null;
-    });
+    dialog.setResultConverter(
+        createTaskResultConverter(nameField, descriptionField, dayOfWeekComboBox, createBtnType));
 
     VBox dialogVbox = new VBox(10);
     dialogVbox.setPadding(new Insets(20, 20, 20, 20));
@@ -83,17 +77,22 @@ public class ItemCreationController {
     result.ifPresent(f);
   }
 
-  /**
-   * Constructs a dialogue for event creation, shows it to the user, and then passes the created event back up to the caller.
-   *
-   * @param f Consumer callback function to pass Event back up to.
-   */
+  private Callback<ButtonType, Task> createTaskResultConverter(TextField nameField,
+                                                               TextField descriptionField,
+                                                               ComboBox<DayOfWeek> dayOfWeekComboBox,
+                                                               ButtonType createBtnType) {
+    return buttonType -> {
+      if (buttonType == createBtnType) {
+        return new Task(nameField.getText(), descriptionField.getText(),
+            dayOfWeekComboBox.getValue());
+      }
+      return null;
+    };
+  }
+
   public void createNewEvent(Consumer<Event> f) {
     Dialog<Event> dialog = new Dialog<>();
-    dialog.setTitle("Create a new Event");
-
-    DialogPane dialogPane = new DialogPane();
-    dialog.setDialogPane(dialogPane);
+    DialogPane dialogPane = setupDialogPane(dialog, "Create a new Event");
 
     TextField nameField = new TextField();
     nameField.setPromptText("Name");
@@ -101,6 +100,66 @@ public class ItemCreationController {
     TextField descriptionField = new TextField();
     descriptionField.setPromptText("Description");
 
+    DatePicker startTimePicker = setupDatePicker();
+
+    TextField durationField = new TextField();
+    durationField.setPromptText("Duration (in minutes)");
+
+    ComboBox<DayOfWeek> dayOfWeekComboBox = new ComboBox<>();
+    dayOfWeekComboBox.getItems().addAll(DayOfWeek.values());
+
+    ButtonType createBtnType = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
+    dialogPane.getButtonTypes().addAll(createBtnType, ButtonType.CANCEL);
+
+    dialogPane.lookupButton(createBtnType).addEventFilter(javafx.event.ActionEvent.ACTION, ev -> {
+      validateInput(nameField.getText(), descriptionField.getText(), dayOfWeekComboBox.getValue(),
+          ev);
+
+      try {
+        Long.parseLong(durationField.getText());
+      } catch (NumberFormatException ex) {
+        ev.consume();
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setContentText("Invalid number format for duration!");
+        alert.showAndWait();
+      }
+    });
+
+    dialog.setResultConverter(
+        createEventResultConverter(nameField, descriptionField, dayOfWeekComboBox, startTimePicker,
+            durationField, createBtnType));
+
+    VBox dialogVbox = new VBox(10);
+    dialogVbox.setPadding(new Insets(20, 20, 20, 20));
+    dialogVbox.getChildren()
+        .addAll(nameField, descriptionField, dayOfWeekComboBox, startTimePicker, durationField);
+
+    dialogPane.setContent(dialogVbox);
+
+    Optional<Event> result = dialog.showAndWait();
+
+    result.ifPresent(f);
+  }
+
+  private Callback<ButtonType, Event> createEventResultConverter(TextField nameField,
+                                                                 TextField descriptionField,
+                                                                 ComboBox<DayOfWeek> dayOfWeekComboBox,
+                                                                 DatePicker startTimePicker,
+                                                                 TextField durationField,
+                                                                 ButtonType createBtnType) {
+    return buttonType -> {
+      if (buttonType == createBtnType) {
+        Instant startTime =
+            startTimePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant();
+        return new Event(nameField.getText(), descriptionField.getText(),
+            dayOfWeekComboBox.getValue(), startTime.getEpochSecond(),
+            Long.parseLong(durationField.getText()));
+      }
+      return null;
+    };
+  }
+
+  private DatePicker setupDatePicker() {
     DatePicker startTimePicker = new DatePicker();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     startTimePicker.setConverter(new StringConverter<>() {
@@ -117,62 +176,7 @@ public class ItemCreationController {
       }
     });
     startTimePicker.setPromptText("Start Date");
-
-    TextField durationField = new TextField();
-    durationField.setPromptText("Duration (in minutes)");
-
-    ComboBox<DayOfWeek> dayOfWeekComboBox = new ComboBox<>();
-    dayOfWeekComboBox.getItems().addAll(DayOfWeek.values());
-
-    ButtonType createBtnType = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
-    dialogPane.getButtonTypes().addAll(createBtnType, ButtonType.CANCEL);
-
-    dialogPane.lookupButton(createBtnType).addEventFilter(javafx.event.ActionEvent.ACTION, ev -> {
-      String name = nameField.getText();
-      String description = descriptionField.getText();
-      DayOfWeek day = dayOfWeekComboBox.getValue();
-      LocalDate startTime = startTimePicker.getValue();
-
-      long duration;
-      try {
-        duration = Long.parseLong(durationField.getText());
-      } catch (NumberFormatException ex) {
-        ev.consume();  // stop the dialog from closing
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setContentText("Invalid number format for duration!");
-        alert.showAndWait();
-        return;
-      }
-
-      if (name.isEmpty() || description.isEmpty() || day == null || startTime == null) {
-        ev.consume();  // stop the dialog from closing
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setContentText("Please fill all fields!");
-        alert.showAndWait();
-      }
-    });
-
-    dialog.setResultConverter(buttonType -> {
-      if (buttonType == createBtnType) {
-        String name = nameField.getText();
-        String description = descriptionField.getText();
-        DayOfWeek day = dayOfWeekComboBox.getValue();
-        Instant startTime = startTimePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant();
-        long duration = Long.parseLong(durationField.getText());
-
-        return new Event(name, description, day, startTime.getEpochSecond(), duration);
-      }
-      return null;
-    });
-
-    VBox dialogVbox = new VBox(10);
-    dialogVbox.setPadding(new Insets(20, 20, 20, 20));
-    dialogVbox.getChildren().addAll(nameField, descriptionField, dayOfWeekComboBox, startTimePicker, durationField);
-
-    dialogPane.setContent(dialogVbox);
-
-    Optional<Event> result = dialog.showAndWait();
-
-    result.ifPresent(f);
+    return startTimePicker;
   }
 }
+
