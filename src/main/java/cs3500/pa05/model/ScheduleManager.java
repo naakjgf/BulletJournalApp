@@ -17,8 +17,6 @@ public interface ScheduleManager {
 
   /**
    * Load a list of weeks into the model.
-   *
-   * @param weeks List of weeks to load into the model.
    */
   void loadWeeks();
 
@@ -59,4 +57,9 @@ public interface ScheduleManager {
    * @return boolean determining whether the filemanager has been set already or not.
    */
   boolean hasFileManager();
+
+  /**
+   * @return total number of weeks in schedule manager.
+   */
+  int getNumWeeks();
 }

@@ -1,12 +1,18 @@
 package cs3500.pa05.controller;
 
+import cs3500.pa05.model.Event;
 import cs3500.pa05.model.ScheduleManager;
 import cs3500.pa05.model.Settings;
+import cs3500.pa05.model.Task;
 import cs3500.pa05.model.file_manager.FileManager;
 import cs3500.pa05.model.file_manager.FileManagerImpl;
+import cs3500.pa05.view.EventView;
+import cs3500.pa05.view.TaskView;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Collections;
+import java.util.Comparator;
 import javafx.fxml.FXML;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -48,6 +54,27 @@ public class JournalControllerImpl implements JournalController {
 
   }
 
+  public void renderWeek() {
+    for (int i = 0; i < manager.getNumWeeks(); i++) {
+      for(Task t : manager.getWeek(i).getTasks())
+      {
+        TaskView tView = new TaskView(t);
+        //TODO:
+        //Add tView to GUI
+        //Add checkbox somewhere
+      }
+      manager.getWeek(i).getEvents().sort(Comparator.comparingLong(Event::getStartTime));
+      for (Event e: manager.getWeek(i).getEvents())
+      {
+        EventView eView = new EventView(e);
+        //TODO:
+        //add eView to GUI
+      }
+
+
+    }
+  }
+
   public void saveFile() {
     if (!this.manager.hasFileManager()) {
       String filePath = saveBujoFile();
@@ -85,6 +112,7 @@ public class JournalControllerImpl implements JournalController {
 
     return fileChooser;
   }
+
   private String chooseBujoFile() {
     FileChooser fileChooser = getBujoChooser();
 

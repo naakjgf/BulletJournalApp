@@ -77,4 +77,9 @@ public class ScheduleManagerImpl implements ScheduleManager {
 
     return newWeekNumber;
   }
+  @Override
+  public int getNumWeeks()
+  {
+    return weeks.size();
+  }
 }
