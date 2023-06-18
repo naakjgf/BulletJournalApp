@@ -15,10 +15,10 @@ public class TaskView extends VBox {
     id = task.getId();
     this.dayOfWeek = task.getDayOfWeek();
     Label nameLabel = new Label("Task: " + task.getName());
+    nameLabel.setFont();
     Label descLabel = new Label("Description: " + task.getDescription());
     Label statusLabel = new Label("Status: " + (task.isComplete() ? "Completed" : "Incomplete"));
 
     this.getChildren().addAll(nameLabel, descLabel, statusLabel);
-    this.setSpacing(10);
   }
 }
