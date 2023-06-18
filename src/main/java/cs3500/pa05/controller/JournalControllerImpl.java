@@ -63,8 +63,7 @@ public class JournalControllerImpl implements JournalController {
 
   public void renderWeeks() {
     for (int i = 0; i < manager.getNumWeeks(); i++) {
-      for(Task t : manager.getWeek(i).getTasks())
-      {
+      for (Task t : manager.getWeek(i).getTasks()) {
         TaskView tView = new TaskView(t);
         //Add tView to GUI
         VBox myVBox = (VBox) weekView.getChildren().get(t.getDayOfWeek().getNumVal());
@@ -73,8 +72,7 @@ public class JournalControllerImpl implements JournalController {
         sidebar.getChildren().add(new CheckBox(t.getName()));
       }
       manager.getWeek(i).getEvents().sort(Comparator.comparingLong(Event::getStartTime));
-      for (Event e: manager.getWeek(i).getEvents())
-      {
+      for (Event e : manager.getWeek(i).getEvents()) {
         EventView eView = new EventView(e);
         //TODO:
         VBox myVBox = (VBox) weekView.getChildren().get(e.getDayOfWeek().getNumVal());
