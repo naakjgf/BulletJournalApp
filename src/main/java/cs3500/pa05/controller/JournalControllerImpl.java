@@ -38,10 +38,6 @@ public class JournalControllerImpl implements JournalController {
 
   }
 
-  public void setManager(ScheduleManager manager) {
-    this.manager = manager;
-  }
-
   @Override
   public void updateCurrentWeek() {
 
