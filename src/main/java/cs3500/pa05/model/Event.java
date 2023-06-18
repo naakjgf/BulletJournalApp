@@ -27,14 +27,9 @@ public class Event implements EventInterface {
    * @param duration    The duration the event lasts, in milliseconds.
    */
   @JsonCreator
-  public Event(
-      @JsonProperty("name") String name,
-      @JsonProperty("description") String description,
-      @JsonProperty("day") DayOfWeek day,
-      @JsonProperty("startTime") long startTime,
-      @JsonProperty("duration") long duration,
-      @JsonProperty("id") String id
-  ) {
+  public Event(@JsonProperty("name") String name, @JsonProperty("description") String description,
+               @JsonProperty("day") DayOfWeek day, @JsonProperty("startTime") long startTime,
+               @JsonProperty("duration") long duration, @JsonProperty("id") String id) {
     this.day = day;
     this.name = name;
     this.description = description;
@@ -52,13 +47,7 @@ public class Event implements EventInterface {
    * @param startTime   The epoch time for the event starts
    * @param duration    The duration the event lasts, in milliseconds.
    */
-  public Event(
-      String name,
-      String description,
-      DayOfWeek day,
-      long startTime,
-      long duration
-  ) {
+  public Event(String name, String description, DayOfWeek day, long startTime, long duration) {
     this.day = day;
     this.name = name;
     this.description = description;
@@ -67,6 +56,11 @@ public class Event implements EventInterface {
     this.id = UUID.randomUUID().toString();
   }
 
+  /**
+   * Constructor for an Event object without id.
+   *
+   * @return String of the ID for this event.
+   */
   public String getId() {
     return id;
   }

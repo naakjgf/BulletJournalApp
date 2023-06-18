@@ -26,6 +26,9 @@ public class FileManagerImpl implements FileManager {
     this.serializer = new BujoSerializer();
   }
 
+  /**
+   * Updates the jsonContent field with the contents of the file.
+   */
   private void updateJsonContent() {
     this.jsonContent = FileReaderWriter.readFileContents(this.filepath);
   }
