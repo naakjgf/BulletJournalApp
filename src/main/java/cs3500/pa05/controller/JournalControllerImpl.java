@@ -56,16 +56,14 @@ public class JournalControllerImpl implements JournalController {
 
   public void renderWeek() {
     for (int i = 0; i < manager.getNumWeeks(); i++) {
-      for(Task t : manager.getWeek(i).getTasks())
-      {
+      for (Task t : manager.getWeek(i).getTasks()) {
         TaskView tView = new TaskView(t);
         //TODO:
         //Add tView to GUI
         //Add checkbox somewhere
       }
       manager.getWeek(i).getEvents().sort(Comparator.comparingLong(Event::getStartTime));
-      for (Event e: manager.getWeek(i).getEvents())
-      {
+      for (Event e : manager.getWeek(i).getEvents()) {
         EventView eView = new EventView(e);
         //TODO:
         //add eView to GUI
