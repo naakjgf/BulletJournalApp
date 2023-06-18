@@ -46,21 +46,16 @@ public class JournalControllerImpl implements JournalController {
   private HBox weekView;
   @FXML
   private VBox sideBar;
-
   @FXML
   private VBox menuBarContainer;
-
   @FXML
   private Label weekTitle;
-
   @FXML
   private Button prevWeek;
   @FXML
   private Button nextWeek;
   @FXML
   private Button newWeek;
-
-
   private Stage stage;
 
   /**
@@ -85,6 +80,9 @@ public class JournalControllerImpl implements JournalController {
 
   }
 
+  /**
+   * Runs the program and sets up the GUI with the appropriate data contained in weeks.
+   */
   @FXML
   public void run() {
     attachMenuHandlers();
@@ -93,14 +91,17 @@ public class JournalControllerImpl implements JournalController {
     updateWeekTitle();
   }
 
+  /**
+   * Attaches functionality to the buttons to move between weeks as well as create a new one.
+   */
   private void attachWeekHandlers() {
     nextWeek.setOnAction((e) -> {
       if (this.manager.getCurrentWeek().getWeekNumber() >= this.manager.getNumWeeks() - 1) {
         return;
       }
 
-      this.manager.setCurrentWeek(this.manager.getCurrentWeekNum() + 1);
-      renderWeek();
+      this.manager.setCurrentWeek(this.manager.getCurrentWeek().getWeekNumber() + 1);
+      renderWeeks();
     });
 
     prevWeek.setOnAction((e) -> {
@@ -108,8 +109,8 @@ public class JournalControllerImpl implements JournalController {
         return;
       }
 
-      this.manager.setCurrentWeek(this.manager.getCurrentWeekNum() - 1);
-      renderWeek();
+      this.manager.setCurrentWeek(this.manager.getCurrentWeek().getWeekNumber() + 1);
+      renderWeeks();
     });
 
     newWeek.setOnAction(e -> createNewWeek());
@@ -120,10 +121,16 @@ public class JournalControllerImpl implements JournalController {
    * Updates the week title to the current active week.
    */
   public void updateWeekTitle() {
-    weekTitle.setText("Week " + (this.manager.getCurrentWeekNum() + 1));
+    weekTitle.setText("Week " + (this.manager.getCurrentWeek().getWeekNumber() + 1));
   }
 
 
+  /**
+   * handles the different types of menu bar actions.
+   *
+   * @param e the action event.
+   * @param action the action to handle.
+   */
   private void handleMenuAction(ActionEvent e, MenuBarAction action) {
     switch (action) {
       case OPEN -> {
@@ -138,11 +145,24 @@ public class JournalControllerImpl implements JournalController {
 
   }
 
+  /**
+   * Creates a new week in the manager and renders the weeks again with this included.
+   */
   private void createNewWeek() {
     this.manager.createNewWeek();
-    renderWeek();
+    renderWeeks();
+    updateWeekTitle();
   }
 
+  /**
+   * Creates a menu item which handles the given action when clicked and creates a keybind for the
+   * action if createKeybind is true.
+   *
+   * @param action the action to handle when the menu item is clicked.
+   * @param name the name of the menu item.
+   * @param createKeybind whether to create a keybind for the menu item.
+   * @return a MenuItem with the given action and name.
+   */
   private MenuItem createMenuItem(MenuBarAction action, String name, boolean createKeybind) {
     MenuItem menuItem = new MenuItem(name);
     menuItem.setOnAction(e -> handleMenuAction(e, action));
@@ -154,6 +174,13 @@ public class JournalControllerImpl implements JournalController {
     return menuItem;
   }
 
+  /**
+   * Programmatically creates a menu bar with the given MenuItems and specific keybinds attached
+   * to them to be called when the keybind is pressed.
+   *
+   * @param createKeybinds whether to create keybinds for the menu items
+   * @return a MenuBar with the given MenuItems
+   */
   private MenuBar createMenuBar(boolean createKeybinds) {
     Menu menuFile = new Menu("File");
     MenuItem itemSave = createMenuItem(MenuBarAction.SAVE, "Save", createKeybinds);
@@ -175,6 +202,10 @@ public class JournalControllerImpl implements JournalController {
     return menubar;
   }
 
+  /**
+   * Attaches the handlers for the menu bar, including keybinds, depending on the visibility of the
+   * menu bar.
+   */
   private void attachMenuHandlers() {
     MenuBar menuBarVisible = createMenuBar(true);
     MenuBar menuBarHidden = createMenuBar(false);
@@ -184,29 +215,34 @@ public class JournalControllerImpl implements JournalController {
     menuBarContainer.getChildren().addAll(menuBarVisible, menuBarHidden);
   }
 
-  private void clearWeek() {
-
+  /**
+   * Displays the weeks currently contained in the ScheduleManager.
+   */
+  public void renderWeeks() {
+    for (int i = 0; i < manager.getNumWeeks(); i++) {
+      for (Task t : manager.getWeek(i).getTasks()) {
+        TaskView tView = new TaskView(t);
+        //Add tView to GUI
+        VBox myVBox = (VBox) weekView.getChildren().get(t.getDayOfWeek().getNumVal());
+        myVBox.getChildren().add(tView);
+        //Add checkbox to sidebar
+        sideBar.getChildren().add(new CheckBox(t.getName()));
+      }
+      manager.getWeek(i).getEvents().sort(Comparator.comparingLong(Event::getStartTime));
+      for (Event e : manager.getWeek(i).getEvents()) {
+        EventView eView = new EventView(e);
+        VBox myVBox = (VBox) weekView.getChildren().get(e.getDayOfWeek().getNumVal());
+        myVBox.getChildren().add(eView);
+      }
+    }
   }
 
-  public void renderWeek() {
-    for (Task t : manager.getCurrentWeek().getTasks()) {
-      TaskView tView = new TaskView(t);
-      //Add tView to GUI
-      VBox myVBox = (VBox) weekView.getChildren().get(t.getDayOfWeek().getNumVal());
-      myVBox.getChildren().add(tView);
-      //Add checkbox to sidebar
-      sideBar.getChildren().add(new CheckBox(t.getName()));
-    }
-    manager.getCurrentWeek().getEvents().sort(Comparator.comparingLong(Event::getStartTime));
-    for (Event e : manager.getCurrentWeek().getEvents()) {
-      EventView eView = new EventView(e);
-      VBox myVBox = (VBox) weekView.getChildren().get(e.getDayOfWeek().getNumVal());
-      myVBox.getChildren().add(eView);
-    }
-
-    updateWeekTitle();
-  }
-
+  /**
+   * Saves bujo file information back into a file.
+   *
+   * @param saveAs true if the user wants to save the file as a new file, false if the user wants to
+   *               save the file as the current file. ???
+   */
   public void saveFile(boolean saveAs) {
     if (!this.manager.hasFileManager() || saveAs) {
       String filePath = saveBujoFile();
@@ -221,6 +257,10 @@ public class JournalControllerImpl implements JournalController {
     this.manager.saveData();
   }
 
+  /**
+   * Creates a new task when the specific menu item is clicked. Prompts the user through a dialog
+   * to create this task item.
+   */
   private void createNewTask() {
     Dialog<Task> dialog = new Dialog<>();
     dialog.setTitle("Create a new Task");
@@ -275,10 +315,13 @@ public class JournalControllerImpl implements JournalController {
     result.ifPresent(task -> {
       // handle task object here
       this.manager.getCurrentWeek().addTask(task);
-      renderWeek();
+      renderWeeks();
     });
   }
 
+  /**
+   * Loads in a bujo file to take information from and display.
+   */
   public void loadFile() {
     String filePath = chooseBujoFile();
     if (filePath == null) {
@@ -291,6 +334,11 @@ public class JournalControllerImpl implements JournalController {
   }
 
 
+  /**
+   * Creates a file chooser for the user to select a bujo file.
+   *
+   * @return the file chooser to be used.
+   */
   private FileChooser getBujoChooser() {
     FileChooser fileChooser = new FileChooser();
 
@@ -302,6 +350,11 @@ public class JournalControllerImpl implements JournalController {
     return fileChooser;
   }
 
+  /**
+   * Allows the user to choose in a dialog which specific bujo file to open.
+   *
+   * @return the path to the bujo file.
+   */
   private String chooseBujoFile() {
     FileChooser fileChooser = getBujoChooser();
 
@@ -314,6 +367,11 @@ public class JournalControllerImpl implements JournalController {
     return file.getAbsolutePath();
   }
 
+  /**
+   * Allows the user to choose in a dialog which specific bujo file to save their changes to.
+   *
+   * @return the path to the bujo file.
+   */
   private String saveBujoFile() {
     FileChooser fileChooser = getBujoChooser();
 
