@@ -9,6 +9,7 @@ import cs3500.pa05.model.Task;
 import cs3500.pa05.model.file_manager.FileManager;
 import cs3500.pa05.model.file_manager.FileManagerImpl;
 import cs3500.pa05.view.EventView;
+import cs3500.pa05.view.ScheduleObjectButton;
 import cs3500.pa05.view.TaskView;
 import java.io.File;
 import java.util.Comparator;
@@ -199,12 +200,12 @@ public class JournalControllerImpl implements JournalController {
       if (node instanceof VBox) {
         VBox vBox = (VBox) node;
         // Now, we can remove specific children from the VBox
-        vBox.getChildren().removeIf(child -> child instanceof TaskView || child instanceof EventView);
+        vBox.getChildren().removeIf(child -> child instanceof TaskView || child instanceof EventView || child instanceof ScheduleObjectButton);
       }
     }
     sideBar.getChildren().clear();
     for (Task t : manager.getCurrentWeek().getTasks()) {
-      TaskView tView = new TaskView(t);
+      ScheduleObjectButton tView = new ScheduleObjectButton(t);
       //Add tView to GUI
       VBox myVBox = (VBox) weekView.getChildren().get(t.getDayOfWeek().getNumVal());
       myVBox.getChildren().add(tView);
