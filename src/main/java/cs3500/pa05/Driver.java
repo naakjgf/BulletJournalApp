@@ -38,9 +38,7 @@ public class Driver extends Application {
       e.printStackTrace();
     }
 
-
-    FileManager fileManager = new FileManagerImpl(filepath);
-    ScheduleManagerImpl scheduleManager = new ScheduleManagerImpl(fileManager);
+    ScheduleManagerImpl scheduleManager = new ScheduleManagerImpl();
     JournalControllerImpl controller = new JournalControllerImpl(primaryStage, scheduleManager);
 
     GuiView view = new GuiViewImpl(controller);
