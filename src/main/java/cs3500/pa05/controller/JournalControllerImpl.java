@@ -41,6 +41,8 @@ import javafx.stage.Stage;
 public class JournalControllerImpl implements JournalController {
   private ScheduleManager manager;
   private FileManager fileManager;
+  private ItemCreationController itemCreator;
+
   private Settings settings;
   @FXML
   private HBox weekView;
@@ -71,6 +73,7 @@ public class JournalControllerImpl implements JournalController {
   public JournalControllerImpl(Stage stage, ScheduleManager manager) {
     this.manager = manager;
     this.stage = stage;
+    this.itemCreator = new ItemCreationController();
   }
 
   /**
@@ -134,6 +137,7 @@ public class JournalControllerImpl implements JournalController {
       case SAVE_AS -> saveFile(true);
       case NEW_WEEK -> createNewWeek();
       case NEW_TASK -> createNewTask();
+      case NEW_EVENT -> createNewEvent();
     }
 
   }
@@ -222,59 +226,15 @@ public class JournalControllerImpl implements JournalController {
   }
 
   private void createNewTask() {
-    Dialog<Task> dialog = new Dialog<>();
-    dialog.setTitle("Create a new Task");
-
-    DialogPane dialogPane = new DialogPane();
-    dialog.setDialogPane(dialogPane);
-
-    TextField nameField = new TextField();
-    nameField.setPromptText("Name");
-
-    TextField descriptionField = new TextField();
-    descriptionField.setPromptText("Description");
-
-    ComboBox<DayOfWeek> dayOfWeekComboBox = new ComboBox<>();
-    dayOfWeekComboBox.getItems().addAll(DayOfWeek.values());
-
-    ButtonType createBtnType = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
-    dialogPane.getButtonTypes().addAll(createBtnType, ButtonType.CANCEL);
-
-    dialogPane.lookupButton(createBtnType).addEventFilter(javafx.event.ActionEvent.ACTION, ev -> {
-      String name = nameField.getText();
-      String description = descriptionField.getText();
-      DayOfWeek day = dayOfWeekComboBox.getValue();
-
-      if (name.isEmpty() || description.isEmpty() || day == null) {
-        ev.consume();  // stop the dialog from closing
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setContentText("Please fill all fields!");
-        alert.showAndWait();
-      }
-    });
-
-    dialog.setResultConverter(buttonType -> {
-      if (buttonType == createBtnType) {
-        String name = nameField.getText();
-        String description = descriptionField.getText();
-        DayOfWeek day = dayOfWeekComboBox.getValue();
-
-        return new Task(name, description, day);
-      }
-      return null;
-    });
-
-    VBox dialogVbox = new VBox(10);
-    dialogVbox.setPadding(new Insets(20, 20, 20, 20));
-    dialogVbox.getChildren().addAll(nameField, descriptionField, dayOfWeekComboBox);
-
-    dialogPane.setContent(dialogVbox);
-
-    Optional<Task> result = dialog.showAndWait();
-
-    result.ifPresent(task -> {
-      // handle task object here
+    itemCreator.createNewTask(task -> {
       this.manager.getCurrentWeek().addTask(task);
+      renderWeek();
+    });
+  }
+
+  private void createNewEvent() {
+    itemCreator.createNewEvent(event -> {
+      this.manager.getCurrentWeek().addEvent(event);
       renderWeek();
     });
   }
