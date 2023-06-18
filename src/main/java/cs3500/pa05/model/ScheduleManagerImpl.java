@@ -23,13 +23,6 @@ public class ScheduleManagerImpl implements ScheduleManager {
   }
 
   /**
-   * Constructor for a ScheduleManager.
-   */
-  public ScheduleManagerImpl() {
-
-  }
-
-  /**
    * Sets FileManager object.
    *
    * @param fileManager File Manager object to set to.

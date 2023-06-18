@@ -34,8 +34,9 @@ public class Driver extends Application {
     //especially considering it isn't used yet in the impl it isn't too late to adjust this,
     //achieves the same thing making an instance in the constructor instead of the driver, up to you
     // though as you have been the one designing it, dealers' choice.
-    ScheduleManagerImpl manager = new ScheduleManagerImpl();
-    JournalControllerImpl controller = new JournalControllerImpl(manager);
+    FileManager fileManager = new FileManagerImpl(filepath);
+    ScheduleManagerImpl scheduleManager = new ScheduleManagerImpl(fileManager);
+    JournalControllerImpl controller = new JournalControllerImpl(scheduleManager);
 
     GuiView view = new GuiViewImpl(controller);
 
