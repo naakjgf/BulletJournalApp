@@ -9,11 +9,10 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class WelcomeScreenController {
-
-  private WelcomeScreenView view;
+  private final WelcomeScreenView view;
 
   private File currentFile;
-  private Stage stage;
+  private final Stage stage;
 
   public WelcomeScreenController(WelcomeScreenView view, Stage stage) {
     this.view = view;
