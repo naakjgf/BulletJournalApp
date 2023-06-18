@@ -5,25 +5,31 @@ import cs3500.pa05.model.Settings;
 import cs3500.pa05.model.Week;
 import cs3500.pa05.model.file_manager.json.BujoJson;
 import java.util.List;
-import java.util.Set;
 
+/**
+ * Implementation for a Bujo File Manager.
+ */
 public class FileManagerImpl implements FileManager {
-  private String fileName;
+  private final String filepath;
   private String jsonContent;
-  private BujoSerializer serializer;
-  private BujoDeserializer deserializer;
+  private final BujoSerializer serializer;
+  private final BujoDeserializer deserializer;
 
-
-  public FileManagerImpl(String filename) {
-    this.fileName = filename;
-    this.jsonContent = FileReader.readFileContents(fileName);
+  /**
+   * Constructor for a FileManager.
+   *
+   * @param filepath Filepath for Bujo file.
+   */
+  public FileManagerImpl(String filepath) {
+    this.filepath = filepath;
+    this.jsonContent = FileReaderWriter.readFileContents(this.filepath);
     this.deserializer = new BujoDeserializer();
     this.serializer = new BujoSerializer();
     updateJsonContent();
   }
 
   private void updateJsonContent() {
-    this.jsonContent = FileReader.readFileContents(fileName);
+    this.jsonContent = FileReaderWriter.readFileContents(this.filepath);
   }
 
   @Override
@@ -33,7 +39,7 @@ public class FileManagerImpl implements FileManager {
     try {
       weeks = deserializer.jsonToWeeks(this.jsonContent);
     } catch (JsonProcessingException e) {
-      throw new RuntimeException("Malformed Bujo file: " + this.fileName);
+      throw new RuntimeException("Malformed Bujo file: " + this.filepath);
     }
 
     return weeks;
@@ -46,7 +52,7 @@ public class FileManagerImpl implements FileManager {
     try {
       settings = deserializer.jsonToSettings(this.jsonContent);
     } catch (JsonProcessingException e) {
-      throw new RuntimeException("Malformed Bujo file: " + this.fileName);
+      throw new RuntimeException("Malformed Bujo file: " + this.filepath);
     }
 
     return settings;
@@ -54,13 +60,15 @@ public class FileManagerImpl implements FileManager {
 
   @Override
   public void saveSettingsToFile(Settings settings) {
-
+    BujoJson saveBujo = new BujoJson(loadWeeksFromFile(), settings);
+    String serializedBujo = serializer.bujoToJson(saveBujo);
+    FileReaderWriter.writeFileContents(filepath, serializedBujo);
   }
 
   @Override
   public void saveWeeksToFile(List<Week> weeks, int currentWeek) {
       BujoJson saveBujo = new BujoJson(weeks, loadSettingsFromFile());
-
-
+      String serializedBujo = serializer.bujoToJson(saveBujo);
+      FileReaderWriter.writeFileContents(filepath, serializedBujo);
   }
 }

@@ -14,7 +14,7 @@ public class Week {
   private int weekNumber;
 
   /**
-   * Constructor for a Week object.
+   * Constructor for rebuilding a Week object using Jackson.
    *
    * @param weekNumber Week number.
    * @param events List of Event objects.
@@ -26,6 +26,11 @@ public class Week {
     this.events = events;
   }
 
+  /**
+   * Constructor for creating a new Week object.
+   *
+   * @param weekNumber Week number
+   */
   public Week(int weekNumber) {
     this.weekNumber = weekNumber;
     this.tasks = new ArrayList<>();
