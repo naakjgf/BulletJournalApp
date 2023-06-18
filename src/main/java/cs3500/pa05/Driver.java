@@ -29,20 +29,18 @@ public class Driver extends Application {
   @Override
   public void start(Stage primaryStage) {
     try {
-      Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("gui.fxml")));
+      FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("gui.fxml"));
       primaryStage.setTitle("Bullet Journal");
-      primaryStage.setScene(new Scene(root, 800, 800));
+      primaryStage.setScene(new Scene(Objects.requireNonNull(loader.load())));
       primaryStage.show();
     } catch (Exception e) {
       System.out.println("Error loading GUI; Please reference the stack trace below:");
       e.printStackTrace();
     }
 
-    //having it take a ScheduleManager as a parameter may not be the best way to go about this?
-    //especially considering it isn't used yet in the impl it isn't too late to adjust this,
-    //achieves the same thing making an instance in the constructor instead of the driver, up to you
-    // though as you have been the one designing it, dealers' choice.
-    ScheduleManagerImpl scheduleManager = new ScheduleManagerImpl();
+
+    FileManager fileManager = new FileManagerImpl(filepath);
+    ScheduleManagerImpl scheduleManager = new ScheduleManagerImpl(fileManager);
     JournalControllerImpl controller = new JournalControllerImpl(primaryStage, scheduleManager);
 
     GuiView view = new GuiViewImpl(controller);
