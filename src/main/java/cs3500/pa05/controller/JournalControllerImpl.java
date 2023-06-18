@@ -3,12 +3,14 @@ package cs3500.pa05.controller;
 import cs3500.pa05.enums.DayOfWeek;
 import cs3500.pa05.enums.MenuBarAction;
 import cs3500.pa05.model.Event;
+import cs3500.pa05.model.ScheduleItem;
 import cs3500.pa05.model.ScheduleManager;
 import cs3500.pa05.model.Settings;
 import cs3500.pa05.model.Task;
 import cs3500.pa05.model.file_manager.FileManager;
 import cs3500.pa05.model.file_manager.FileManagerImpl;
 import cs3500.pa05.view.EventView;
+import cs3500.pa05.view.ScheduleItemAlert;
 import cs3500.pa05.view.ScheduleObjectButton;
 import cs3500.pa05.view.TaskView;
 import java.io.File;
@@ -214,7 +216,7 @@ public class JournalControllerImpl implements JournalController {
     }
     manager.getCurrentWeek().getEvents().sort(Comparator.comparingLong(Event::getStartTime));
     for (Event e : manager.getCurrentWeek().getEvents()) {
-      EventView eView = new EventView(e);
+      ScheduleObjectButton eView = new ScheduleObjectButton(e);
       VBox myVBox = (VBox) weekView.getChildren().get(e.getDayOfWeek().getNumVal());
       myVBox.getChildren().add(eView);
     }
