@@ -1,6 +1,7 @@
 package cs3500.pa05.controller;
 
 import cs3500.pa05.model.ScheduleManager;
+import cs3500.pa05.model.Settings;
 import cs3500.pa05.model.file_manager.FileManager;
 import cs3500.pa05.model.file_manager.FileManagerImpl;
 import java.io.File;
@@ -16,6 +17,7 @@ import javafx.stage.Stage;
 public class JournalControllerImpl implements JournalController {
   private ScheduleManager manager;
   private FileManager fileManager;
+  private Settings settings;
 
   private Stage stage;
 
@@ -52,7 +54,7 @@ public class JournalControllerImpl implements JournalController {
 
   public void saveFile() {
     if (!this.manager.hasFileManager()) {
-      String filePath = chooseBujoFile();
+      String filePath = saveBujoFile();
       if (filePath == null) {
         System.out.println("User did not choose save file. Operation cancelled!");
         return;
@@ -72,9 +74,12 @@ public class JournalControllerImpl implements JournalController {
     }
     this.fileManager = new FileManagerImpl(filePath);
     this.manager.setFileManager(this.fileManager);
+    this.manager.loadWeeks();
+    this.settings = this.fileManager.loadSettingsFromFile();
   }
 
-  private String chooseBujoFile() {
+
+  private FileChooser getBujoChooser() {
     FileChooser fileChooser = new FileChooser();
 
     fileChooser.setTitle("Open Bujo File");
@@ -82,8 +87,24 @@ public class JournalControllerImpl implements JournalController {
     fileChooser.getExtensionFilters().addAll(
         new FileChooser.ExtensionFilter("Bujo Files", "*.bujo"));
 
+    return fileChooser;
+  }
+  private String chooseBujoFile() {
+    FileChooser fileChooser = getBujoChooser();
+
     File file = fileChooser.showOpenDialog(stage);
 
+    if (file == null) {
+      return null;
+    }
+
+    return file.getAbsolutePath();
+  }
+
+  private String saveBujoFile() {
+    FileChooser fileChooser = getBujoChooser();
+
+    File file = fileChooser.showSaveDialog(stage);
 
     if (file == null) {
       return null;
