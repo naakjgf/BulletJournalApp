@@ -64,11 +64,30 @@ public class Week {
     return weekNumber;
   }
 
+
+  /**
+   * Adds a task to the task list.
+   * @param task task to add.
+   */
   public void addTask(Task task) {
     tasks.add(task);
   }
 
+  /**
+   * Adds and event to the event list.
+   * @param event Event to add.
+   */
   public void addEvent(Event event) {
     events.add(event);
   }
+
+  /**
+   * Delete an item from the tasks or event list if the ID mathes.
+   * @param id ID of item to delete.
+   */
+  public void deleteItem(String id) {
+    tasks.removeIf(task -> task.getId().equals(id));
+    events.removeIf(event -> event.getId().equals(id));
+  }
+
 }

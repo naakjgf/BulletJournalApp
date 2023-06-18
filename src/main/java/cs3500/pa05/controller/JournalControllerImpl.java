@@ -249,7 +249,7 @@ public class JournalControllerImpl implements JournalController {
     });
   }
 
-  public void loadFile() {
+  private void loadFile() {
     String filePath = chooseBujoFile();
     if (filePath == null) {
       System.out.println("User did not choose save file. Operation cancelled!");

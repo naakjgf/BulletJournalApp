@@ -43,6 +43,10 @@ public class ItemCreationController {
     }
   }
 
+  /**
+   * Constructs a dialogue for task creation and passes the task back using a Consumer.
+   * @param f Consumer to callback with created task.
+   */
   public void createNewTask(Consumer<Task> f) {
     Dialog<Task> dialog = new Dialog<>();
     DialogPane dialogPane = setupDialogPane(dialog, "Create a new Task");
@@ -91,6 +95,10 @@ public class ItemCreationController {
     };
   }
 
+  /**
+   * Constructs a dialogue for event creation and passes the event back using a Consumer.
+   * @param f Consumer to callback with created event.
+   */
   public void createNewEvent(Consumer<Event> f) {
     Dialog<Event> dialog = new Dialog<>();
     DialogPane dialogPane = setupDialogPane(dialog, "Create a new Event");
