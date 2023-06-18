@@ -60,9 +60,4 @@ public class Week {
   public int getWeekNumber() {
     return weekNumber;
   }
-
-
-
-
-
 }

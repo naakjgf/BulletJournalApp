@@ -24,7 +24,6 @@ import javafx.stage.Stage;
  * Implementation of a Journal Controller.
  */
 public class JournalControllerImpl implements JournalController {
-  /*private static JournalControllerImpl instance;*/
   private ScheduleManager manager;
   private FileManager fileManager;
   private Settings settings;
@@ -53,15 +52,6 @@ public class JournalControllerImpl implements JournalController {
   public void setOriginalScene(Scene scene) {
     this.originalScene = scene;
   }
-
-  /**
-   * Method to get the instance of JournalControllerImpl.
-  public static JournalControllerImpl getInstance(Stage stage, ScheduleManager manager) {
-    if (instance == null) {
-      instance = new JournalControllerImpl(stage, manager);
-    }
-    return instance;
-  }*/
 
   @Override
   public void updateCurrentWeek() {
