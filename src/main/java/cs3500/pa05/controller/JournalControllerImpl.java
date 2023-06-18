@@ -58,6 +58,13 @@ public class JournalControllerImpl implements JournalController {
   @FXML
   private Label weekTitle;
 
+  @FXML
+  private Button prevWeek;
+  @FXML
+  private Button nextWeek;
+  @FXML
+  private Button newWeek;
+
 
   private Stage stage;
 
@@ -86,8 +93,31 @@ public class JournalControllerImpl implements JournalController {
   @FXML
   public void run() {
     attachMenuHandlers();
+    attachWeekHandlers();
     this.manager.createNewWeek();
     updateWeekTitle();
+  }
+
+  private void attachWeekHandlers() {
+    nextWeek.setOnAction((e) -> {
+      if (this.manager.getCurrentWeek().getWeekNumber() >= this.manager.getNumWeeks() - 1) {
+        return;
+      }
+
+      this.manager.setCurrentWeek(this.manager.getCurrentWeek().getWeekNumber() + 1);
+      renderWeeks();
+    });
+
+    prevWeek.setOnAction((e) -> {
+      if (this.manager.getCurrentWeek().getWeekNumber() <= 0) {
+        return;
+      }
+
+      this.manager.setCurrentWeek(this.manager.getCurrentWeek().getWeekNumber() + 1);
+      renderWeeks();
+    });
+
+    newWeek.setOnAction(e -> createNewWeek());
   }
 
 
@@ -107,13 +137,16 @@ public class JournalControllerImpl implements JournalController {
       }
       case SAVE -> saveFile(false);
       case SAVE_AS -> saveFile(true);
-      case NEW_WEEK -> {
-        this.manager.createNewWeek();
-        updateWeekTitle();
-      }
+      case NEW_WEEK -> createNewWeek();
       case NEW_TASK -> createNewTask();
     }
 
+  }
+
+  private void createNewWeek() {
+    this.manager.createNewWeek();
+    renderWeeks();
+    updateWeekTitle();
   }
 
   private MenuItem createMenuItem(MenuBarAction action, String name, boolean createKeybind) {

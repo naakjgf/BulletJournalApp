@@ -23,7 +23,7 @@
                            <center>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <Button alignment="CENTER_RIGHT" mnemonicParsing="false" styleClass="roundedButton" text="Prev">
+                                    <Button fx:id="prevWeek" alignment="CENTER_RIGHT" mnemonicParsing="false" styleClass="roundedButton" text="Prev">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
@@ -39,7 +39,7 @@
                                           <Font size="22.0" />
                                        </font>
                                     </Label>
-                                    <Button alignment="CENTER_RIGHT" mnemonicParsing="false" styleClass="roundedButton" text="Next">
+                                    <Button fx:id="nextWeek" alignment="CENTER_RIGHT" mnemonicParsing="false" styleClass="roundedButton" text="Next">
                                        <font>
                                           <Font size="25.0" />
                                        </font>
@@ -48,7 +48,7 @@
                               </HBox>
                            </center>
                            <right>
-                              <Button mnemonicParsing="false" styleClass="normalButton" text="+ Week" BorderPane.alignment="CENTER">
+                              <Button fx:id="newWeek" mnemonicParsing="false" styleClass="normalButton" text="+ Week" BorderPane.alignment="CENTER">
                                  <BorderPane.margin>
                                     <Insets right="5.0" />
                                  </BorderPane.margin>
