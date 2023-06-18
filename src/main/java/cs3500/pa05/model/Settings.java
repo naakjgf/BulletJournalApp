@@ -14,8 +14,8 @@ public class Settings {
   /**
    * Constructor for a Settings object
    *
-   * @param maximumTasks Maximum number of tasks a user can create per week.
-   * @param maximumEvents Maximum number of events a user can create per week.
+   * @param maximumTasks The Maximum number of tasks a user can create per week.
+   * @param maximumEvents The Maximum number of events a user can create per week.
    */
   public Settings(@JsonProperty int maximumTasks, @JsonProperty int maximumEvents) {
     this.maximumEvents = maximumEvents;
