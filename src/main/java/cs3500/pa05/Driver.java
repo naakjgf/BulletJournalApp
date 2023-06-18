@@ -2,9 +2,14 @@ package cs3500.pa05;
 
 import cs3500.pa05.controller.JournalControllerImpl;
 import cs3500.pa05.model.ScheduleManagerImpl;
+import cs3500.pa05.model.file_manager.FileManager;
+import cs3500.pa05.model.file_manager.FileManagerImpl;
 import cs3500.pa05.view.GuiView;
 import cs3500.pa05.view.GuiViewImpl;
+import java.util.Objects;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -32,9 +37,7 @@ public class Driver extends Application {
 //      FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("gui.fxml"));
 //      primaryStage.setTitle("Bullet Journal");
 
-      Scene originalScene = view.load();
-      controller.setOriginalScene(originalScene);
-      primaryStage.setScene(originalScene);
+      primaryStage.setScene(view.load());
       primaryStage.show();
     } catch (Exception e) {
       System.out.println("Error loading GUI; Please reference the stack trace below:");
