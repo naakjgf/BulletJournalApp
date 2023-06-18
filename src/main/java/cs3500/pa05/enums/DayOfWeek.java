@@ -7,35 +7,46 @@ public enum DayOfWeek {
   /**
    * Monday, first day of the week.
    */
-  MONDAY,
+  MONDAY(0),
 
   /**
    * Tuesday, second day of the week
    */
-  TUESDAY,
+  TUESDAY(1),
 
   /**
    * Wednesday, third day of the week.
    */
-  WEDNESDAY,
+  WEDNESDAY(2),
 
   /**
    * Thursday, fourth day of the week.
    */
-  THURSDAY,
+  THURSDAY(3),
 
   /**
    * Friday, fifth day of the week.
    */
-  FRIDAY,
+  FRIDAY(4),
 
   /**
    * Saturday, sixth day of the week.
    */
-  SATURDAY,
+  SATURDAY(5),
 
   /**
    * Sunday, seventh and last day of the week.
    */
-  SUNDAY
+  SUNDAY(6);
+
+  private int numVal;
+  DayOfWeek(int numVal)
+  {
+    this.numVal = numVal;
+  }
+
+  public int getNumVal()
+  {
+    return this.numVal;
+  }
 }

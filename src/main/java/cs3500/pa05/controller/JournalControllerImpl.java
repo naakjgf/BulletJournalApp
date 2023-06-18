@@ -14,6 +14,9 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Comparator;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -24,6 +27,10 @@ public class JournalControllerImpl implements JournalController {
   private ScheduleManager manager;
   private FileManager fileManager;
   private Settings settings;
+  @FXML
+  private HBox weekView;
+  @FXML
+  private VBox sidebar;
 
   private Stage stage;
 
@@ -54,21 +61,24 @@ public class JournalControllerImpl implements JournalController {
 
   }
 
-  public void renderWeek() {
+  public void renderWeeks() {
     for (int i = 0; i < manager.getNumWeeks(); i++) {
       for(Task t : manager.getWeek(i).getTasks())
       {
         TaskView tView = new TaskView(t);
-        //TODO:
         //Add tView to GUI
-        //Add checkbox somewhere
+        VBox myVBox = (VBox) weekView.getChildren().get(t.getDayOfWeek().getNumVal());
+        myVBox.getChildren().add(tView);
+        //Add checkbox to sidebar
+        sidebar.getChildren().add(new CheckBox(t.getName()));
       }
       manager.getWeek(i).getEvents().sort(Comparator.comparingLong(Event::getStartTime));
       for (Event e: manager.getWeek(i).getEvents())
       {
         EventView eView = new EventView(e);
         //TODO:
-        //add eView to GUI
+        VBox myVBox = (VBox) weekView.getChildren().get(e.getDayOfWeek().getNumVal());
+        myVBox.getChildren().add(eView);
       }
 
 
