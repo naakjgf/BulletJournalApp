@@ -1,5 +1,6 @@
 package cs3500.pa05.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +27,30 @@ public class Week {
   }
 
   /**
+   * @return List of events belonging to week.
+   */
+  @JsonGetter("events")
+  public List<Event> getEvents() {
+    return events;
+  }
+
+  /**
+   * @return List of tasks belonging to week.
+   */
+  @JsonGetter("tasks")
+  public List<Task> getTasks() {
+    return tasks;
+  }
+
+
+  /**
    * @return Current week number
    */
   public int getWeekNumber() {
     return weekNumber;
   }
+
+
 
 
 

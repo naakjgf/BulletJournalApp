@@ -1,32 +1,74 @@
 package cs3500.pa05.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import cs3500.pa05.enums.DayOfWeek;
+import java.util.UUID;
 
 /**
  * An object representing an Event on the Weekly schedule.
  */
 public class Event implements EventInterface {
+  private final String id;
+  private final String name;
   private long startTime;
   private long duration;
-  private final String name;
   private String description;
   private DayOfWeek day;
 
   /**
-   * Constructor for an Event object.
+   * JSON Constructor for an Event object with id.
    *
-   * @param name Name of the event.
+   * @param name        Name of the event.
    * @param description Description.
-   * @param day Day of the week the event belongs to.
-   * @param startTime The epoch time for the event starts
-   * @param duration The duration the event lasts, in milliseconds.
+   * @param day         Day of the week the event belongs to.
+   * @param startTime   The epoch time for the event starts
+   * @param duration    The duration the event lasts, in milliseconds.
    */
-  public Event(String name, String description, DayOfWeek day, long startTime, long duration) {
+  @JsonCreator
+  public Event(
+      @JsonProperty String name,
+      @JsonProperty String description,
+      @JsonProperty("day") DayOfWeek day,
+      @JsonProperty("startTime") long startTime,
+      @JsonProperty("duration") long duration,
+      @JsonProperty("id") String id
+  ) {
     this.day = day;
     this.name = name;
     this.description = description;
     this.duration = duration;
     this.startTime = startTime;
+    this.id = id;
+  }
+
+  /**
+   * Constructor for an Event object without id.
+   *
+   * @param name        Name of the event.
+   * @param description Description.
+   * @param day         Day of the week the event belongs to.
+   * @param startTime   The epoch time for the event starts
+   * @param duration    The duration the event lasts, in milliseconds.
+   */
+  public Event(
+      String name,
+      String description,
+      DayOfWeek day,
+      long startTime,
+      long duration
+  ) {
+    this.day = day;
+    this.name = name;
+    this.description = description;
+    this.duration = duration;
+    this.startTime = startTime;
+    this.id = UUID.randomUUID().toString();
+  }
+
+  public String getId() {
+    return id;
   }
 
   @Override
@@ -35,13 +77,13 @@ public class Event implements EventInterface {
   }
 
   @Override
-  public long getDuration() {
-    return duration;
+  public void setStartTime(long startTimeEpoch) {
+    this.startTime = startTimeEpoch;
   }
 
   @Override
-  public void setStartTime(long startTimeEpoch) {
-    this.startTime = startTimeEpoch;
+  public long getDuration() {
+    return duration;
   }
 
   @Override
@@ -60,13 +102,13 @@ public class Event implements EventInterface {
   }
 
   @Override
-  public DayOfWeek getDayOfWeek() {
-    return day;
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   @Override
-  public void setDescription(String description) {
-    this.description = description;
+  public DayOfWeek getDayOfWeek() {
+    return day;
   }
 
   @Override

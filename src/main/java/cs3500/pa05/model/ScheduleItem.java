@@ -41,4 +41,10 @@ public interface ScheduleItem {
    */
   void setDayOfWeek(DayOfWeek day);
 
+  /**
+   * Retrieves the ID of the Schedule Item.
+   * @return UUID string id
+   */
+  String getId();
+
 }
