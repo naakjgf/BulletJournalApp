@@ -13,10 +13,20 @@ public enum MenuBarAction {
 
   private final String keyCombination;
 
+  /**
+   * Constructor for MenuBarAction.
+   *
+   * @param keyCombination Key combination for the action.
+   */
   MenuBarAction(String keyCombination) {
     this.keyCombination = keyCombination;
   }
 
+  /**
+   * getter for the key combination.
+   *
+   * @return key combination.
+   */
   public String getKeyCombination() {
     return keyCombination;
   }

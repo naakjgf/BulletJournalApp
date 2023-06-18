@@ -40,13 +40,22 @@ public enum DayOfWeek {
   SUNDAY(6);
 
   private int numVal;
-  DayOfWeek(int numVal)
-  {
+
+  /**
+   * Constructor for DayOfWeek enum.
+   *
+   * @param numVal The number value of the day of the week.
+   */
+  DayOfWeek(int numVal) {
     this.numVal = numVal;
   }
 
-  public int getNumVal()
-  {
+  /**
+   * Returns the number value of the day of the week.
+   *
+   * @return The number value of the day of the week.
+   */
+  public int getNumVal() {
     return this.numVal;
   }
 }
