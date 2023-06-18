@@ -2,8 +2,6 @@ package cs3500.pa05;
 
 import cs3500.pa05.controller.JournalControllerImpl;
 import cs3500.pa05.model.ScheduleManagerImpl;
-import cs3500.pa05.model.file_manager.FileManager;
-import cs3500.pa05.model.file_manager.FileManagerImpl;
 import cs3500.pa05.view.GuiView;
 import cs3500.pa05.view.GuiViewImpl;
 import java.util.Objects;
@@ -13,7 +11,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * Driver for the Bullet Journal application.
+ */
 public class Driver extends Application {
+  /**
+   * Main method for the Bullet Journal application.
+   *
+   * @param args Command line arguments.
+    */
   public static void main(String[] args) {
     launch(args);
   }
