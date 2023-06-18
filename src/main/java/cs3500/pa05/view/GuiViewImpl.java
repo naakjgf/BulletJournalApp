@@ -3,6 +3,7 @@ package cs3500.pa05.view;
 import cs3500.pa05.controller.JournalControllerImpl;
 import cs3500.pa05.enums.DayOfWeek;
 import java.io.IOException;
+import java.net.URL;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -32,9 +33,17 @@ public class GuiViewImpl implements GuiView {
   @Override
   public Scene load() throws IllegalStateException {
     try {
-      return this.loader.load();
+      Scene scene = this.loader.load();
+      URL stylesheet = getClass().getClassLoader().getResource("styles.css");
+      scene.getStylesheets().add(stylesheet.toString());
+
+      return scene;
     } catch (IOException exc) {
+      exc.printStackTrace();
       throw new IllegalStateException("Unable to load layout.");
+    } catch (NullPointerException exc) {
+      exc.printStackTrace();
+      throw new IllegalStateException("Unable to load stylesheet.");
     }
   }
 }
