@@ -36,8 +36,8 @@ public class Driver extends Application {
     try {
 //      FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("gui.fxml"));
 //      primaryStage.setTitle("Bullet Journal");
-
       primaryStage.setScene(view.load());
+      controller.run();
       primaryStage.show();
     } catch (Exception e) {
       System.out.println("Error loading GUI; Please reference the stack trace below:");

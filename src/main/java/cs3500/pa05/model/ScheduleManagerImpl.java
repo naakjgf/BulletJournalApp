@@ -1,6 +1,7 @@
 package cs3500.pa05.model;
 
 import cs3500.pa05.model.file_manager.FileManager;
+import cs3500.pa05.model.file_manager.json.BujoJson;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,20 +11,17 @@ import java.util.List;
 public class ScheduleManagerImpl implements ScheduleManager {
   private List<Week> weeks;
   private Week currentWeek;
-  private int currentWeekNumber;
   private FileManager fileManager;
 
+  private Settings settings;
+
+
   /**
-   * Constructor for a ScheduleManager.
-   *
-   * @param fileManager FileManager instance to use for file management.
+   * Constructor for a ScheduleManager
    */
-  public ScheduleManagerImpl(FileManager fileManager) {
-    this.fileManager = fileManager;
-  }
-
   public ScheduleManagerImpl() {
-
+    this.weeks = new ArrayList<>();
+    this.settings = new Settings(0, 0, 0);
   }
 
 
@@ -43,22 +41,28 @@ public class ScheduleManagerImpl implements ScheduleManager {
   }
 
   @Override
-  public void loadWeeks() {
-    this.weeks = this.fileManager.loadWeeksFromFile();
+  public void loadData() {
+    BujoJson bujo = this.fileManager.loadFromFile();
+    this.weeks = bujo.weeks();
+    this.settings = bujo.settings();
+
+    this.setCurrentWeek(this.settings.getCurrentWeek());
   }
 
   @Override
-  public void saveWeeks() {
+  public void saveData() {
     if (this.fileManager != null) {
-      this.fileManager.saveWeeksToFile(weeks, currentWeekNumber);
+      BujoJson bujo = new BujoJson(weeks, settings);
+
+      this.fileManager.saveToFile(bujo);
     }
   }
 
   @Override
   public void setCurrentWeek(int week) {
-    this.currentWeekNumber = week;
+    this.settings.setCurrentWeek(week);
     this.currentWeek = weeks.stream()
-        .filter(w -> w.getWeekNumber() == currentWeekNumber)
+        .filter(w -> w.getWeekNumber() == settings.getCurrentWeek())
         .findAny()
         .orElse(null);
   }

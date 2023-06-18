@@ -1,5 +1,6 @@
 package cs3500.pa05.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -18,7 +19,10 @@ public class Settings {
    * @param maximumTasks The Maximum number of tasks a user can create per week.
    * @param maximumEvents The Maximum number of events a user can create per week.
    */
-  public Settings(@JsonProperty int maximumTasks, @JsonProperty int maximumEvents, @JsonProperty int currentWeek) {
+  @JsonCreator
+  public Settings(@JsonProperty("maximumTasks") int maximumTasks,
+                  @JsonProperty("maximumEvents") int maximumEvents,
+                  @JsonProperty("currentWeek") int currentWeek) {
     this.maximumEvents = maximumEvents;
     this.maximumTasks = maximumTasks;
     this.currentWeek = currentWeek;

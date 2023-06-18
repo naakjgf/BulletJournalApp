@@ -22,10 +22,8 @@ public class FileManagerImpl implements FileManager {
    */
   public FileManagerImpl(String filepath) {
     this.filepath = filepath;
-    this.jsonContent = FileReaderWriter.readFileContents(this.filepath);
     this.deserializer = new BujoDeserializer();
     this.serializer = new BujoSerializer();
-    updateJsonContent();
   }
 
   private void updateJsonContent() {
@@ -33,44 +31,24 @@ public class FileManagerImpl implements FileManager {
   }
 
   @Override
-  public List<Week> loadWeeksFromFile() {
-    List<Week> weeks;
+  public BujoJson loadFromFile() {
+    updateJsonContent();
+    BujoJson bujoJson;
 
     try {
-      weeks = deserializer.jsonToWeeks(this.jsonContent);
+      System.out.println("CONTENT: " + this.jsonContent);
+      bujoJson = deserializer.jsonToBujo(this.jsonContent);
     } catch (JsonProcessingException e) {
+      e.printStackTrace();
       throw new RuntimeException("Malformed Bujo file: " + this.filepath);
     }
 
-    return weeks;
+    return bujoJson;
   }
 
-  @Override
-  public Settings loadSettingsFromFile() {
-    Settings settings;
-
-    try {
-      settings = deserializer.jsonToSettings(this.jsonContent);
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException("Malformed Bujo file: " + this.filepath);
-    }
-
-    return settings;
-  }
 
   @Override
-  public void saveSettingsToFile(Settings settings) {
-    BujoJson saveBujo = new BujoJson(loadWeeksFromFile(), settings);
-    String serializedBujo = serializer.bujoToJson(saveBujo);
-    FileReaderWriter.writeFileContents(filepath, serializedBujo);
-  }
-
-  @Override
-  public void saveWeeksToFile(List<Week> weeks, int currentWeek) {
-    Settings settings = loadSettingsFromFile();
-    settings.setCurrentWeek(currentWeek);
-
-    BujoJson saveBujo = new BujoJson(weeks, settings);
+  public void saveToFile(BujoJson saveBujo) {
     String serializedBujo = serializer.bujoToJson(saveBujo);
     FileReaderWriter.writeFileContents(filepath, serializedBujo);
   }

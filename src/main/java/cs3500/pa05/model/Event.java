@@ -28,8 +28,8 @@ public class Event implements EventInterface {
    */
   @JsonCreator
   public Event(
-      @JsonProperty String name,
-      @JsonProperty String description,
+      @JsonProperty("name") String name,
+      @JsonProperty("description") String description,
       @JsonProperty("day") DayOfWeek day,
       @JsonProperty("startTime") long startTime,
       @JsonProperty("duration") long duration,

@@ -16,14 +16,14 @@ public interface ScheduleManager {
   Week getWeek(int week);
 
   /**
-   * Load a list of weeks into the model.
+   * Load data from bujo file into the model.
    */
-  void loadWeeks();
+  void loadData();
 
   /**
-   * Save weeks to File using FileManager.
+   * Save data to Bujo file using FileManager.
    */
-  void saveWeeks();
+  void saveData();
 
   /**
    * Sets the current week to given week number.

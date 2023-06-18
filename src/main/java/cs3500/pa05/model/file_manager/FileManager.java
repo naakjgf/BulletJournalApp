@@ -2,6 +2,7 @@ package cs3500.pa05.model.file_manager;
 
 import cs3500.pa05.model.Settings;
 import cs3500.pa05.model.Week;
+import cs3500.pa05.model.file_manager.json.BujoJson;
 import java.util.List;
 
 /**
@@ -9,29 +10,14 @@ import java.util.List;
  */
 public interface FileManager {
   /**
-   * Load List of weeks from a Bujo File
-   * @return List of Week objects
+   * Loads Bujo data from a Bujo File
+   * @return BujoJson object
    */
-  List<Week> loadWeeksFromFile();
+  BujoJson loadFromFile();
 
   /**
-   * Load a Settings object from the settings of a bujo file.
-   *
-   * @return Settings object.
+   * Save Bujo data to a bujo file.
+   * @param bujoJson bujo data object to save to file.
    */
-  Settings loadSettingsFromFile();
-
-  /**
-   * Save settings from a Settings object to the settings of a bujo file.
-   * @param settings Settings object to save to file
-   */
-  void saveSettingsToFile(Settings settings);
-
-
-  /**
-   * Save list of Weeks to Bujo file.
-   *
-   * @param weeks List of weeks to save
-   */
-  void saveWeeksToFile(List<Week> weeks, int currentWeek);
+  void saveToFile(BujoJson bujoJson);
 }

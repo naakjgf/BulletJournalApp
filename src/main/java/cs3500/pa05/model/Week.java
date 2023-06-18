@@ -1,5 +1,6 @@
 package cs3500.pa05.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
@@ -9,9 +10,9 @@ import java.util.List;
  * Represents a Week in a Bujo Schedule.
  */
 public class Week {
-  private final List<Task> tasks;
-  private final List<Event> events;
-  private final int weekNumber;
+  private List<Task> tasks;
+  private List<Event> events;
+  private int weekNumber;
 
   /**
    * Constructor for rebuilding a Week object using Jackson.
@@ -20,7 +21,8 @@ public class Week {
    * @param events List of Event objects.
    * @param tasks List of task objects.
    */
-  public Week(@JsonProperty int weekNumber, @JsonProperty("events") List<Event> events, @JsonProperty List<Task> tasks) {
+  @JsonCreator
+  public Week(@JsonProperty("weekNumber") int weekNumber, @JsonProperty("events") List<Event> events, @JsonProperty("tasks") List<Task> tasks) {
     this.weekNumber = weekNumber;
     this.tasks = tasks;
     this.events = events;
@@ -57,6 +59,7 @@ public class Week {
   /**
    * @return Current week number
    */
+  @JsonGetter("weekNumber")
   public int getWeekNumber() {
     return weekNumber;
   }

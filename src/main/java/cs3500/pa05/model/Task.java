@@ -25,9 +25,11 @@ public class Task implements TaskInterface {
    * @param id          ID of task
    */
   @JsonCreator
-  public Task(@JsonProperty String name, @JsonProperty String description,
-              @JsonProperty DayOfWeek day, @JsonProperty boolean complete,
-              @JsonProperty String id) {
+  public Task(@JsonProperty("name") String name,
+              @JsonProperty("description") String description,
+              @JsonProperty("day") DayOfWeek day,
+              @JsonProperty("complete") boolean complete,
+              @JsonProperty("id") String id) {
     this.day = day;
     this.name = name;
     this.description = description;
