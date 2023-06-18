@@ -9,7 +9,6 @@ import cs3500.pa05.model.Task;
 import cs3500.pa05.model.file_manager.FileManager;
 import cs3500.pa05.model.file_manager.FileManagerImpl;
 import cs3500.pa05.view.EventView;
-import cs3500.pa05.view.ScheduleObjectButton;
 import cs3500.pa05.view.TaskView;
 import java.io.File;
 import java.util.Comparator;
@@ -17,7 +16,6 @@ import java.util.Optional;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -43,28 +41,21 @@ import javafx.stage.Stage;
 public class JournalControllerImpl implements JournalController {
   private ScheduleManager manager;
   private FileManager fileManager;
-  private ItemCreationController itemCreator;
-
   private Settings settings;
   @FXML
   private HBox weekView;
   @FXML
   private VBox sideBar;
-
   @FXML
   private VBox menuBarContainer;
-
   @FXML
   private Label weekTitle;
-
   @FXML
   private Button prevWeek;
   @FXML
   private Button nextWeek;
   @FXML
   private Button newWeek;
-
-
   private Stage stage;
 
   /**
@@ -75,7 +66,6 @@ public class JournalControllerImpl implements JournalController {
   public JournalControllerImpl(Stage stage, ScheduleManager manager) {
     this.manager = manager;
     this.stage = stage;
-    this.itemCreator = new ItemCreationController();
   }
 
   /**
@@ -90,6 +80,9 @@ public class JournalControllerImpl implements JournalController {
 
   }
 
+  /**
+   * Runs the program and sets up the GUI with the appropriate data contained in weeks.
+   */
   @FXML
   public void run() {
     attachMenuHandlers();
@@ -98,14 +91,17 @@ public class JournalControllerImpl implements JournalController {
     updateWeekTitle();
   }
 
+  /**
+   * Attaches functionality to the buttons to move between weeks as well as create a new one.
+   */
   private void attachWeekHandlers() {
     nextWeek.setOnAction((e) -> {
       if (this.manager.getCurrentWeek().getWeekNumber() >= this.manager.getNumWeeks() - 1) {
         return;
       }
 
-      this.manager.setCurrentWeek(this.manager.getCurrentWeekNum() + 1);
-      renderWeek();
+      this.manager.setCurrentWeek(this.manager.getCurrentWeek().getWeekNumber() + 1);
+      renderWeeks();
     });
 
     prevWeek.setOnAction((e) -> {
@@ -113,8 +109,8 @@ public class JournalControllerImpl implements JournalController {
         return;
       }
 
-      this.manager.setCurrentWeek(this.manager.getCurrentWeekNum() - 1);
-      renderWeek();
+      this.manager.setCurrentWeek(this.manager.getCurrentWeek().getWeekNumber() + 1);
+      renderWeeks();
     });
 
     newWeek.setOnAction(e -> createNewWeek());
@@ -125,10 +121,16 @@ public class JournalControllerImpl implements JournalController {
    * Updates the week title to the current active week.
    */
   public void updateWeekTitle() {
-    weekTitle.setText("Week " + (this.manager.getCurrentWeekNum() + 1));
+    weekTitle.setText("Week " + (this.manager.getCurrentWeek().getWeekNumber() + 1));
   }
 
 
+  /**
+   * handles the different types of menu bar actions.
+   *
+   * @param e the action event.
+   * @param action the action to handle.
+   */
   private void handleMenuAction(ActionEvent e, MenuBarAction action) {
     switch (action) {
       case OPEN -> {
@@ -139,16 +141,28 @@ public class JournalControllerImpl implements JournalController {
       case SAVE_AS -> saveFile(true);
       case NEW_WEEK -> createNewWeek();
       case NEW_TASK -> createNewTask();
-      case NEW_EVENT -> createNewEvent();
     }
 
   }
 
+  /**
+   * Creates a new week in the manager and renders the weeks again with this included.
+   */
   private void createNewWeek() {
     this.manager.createNewWeek();
-    renderWeek();
+    renderWeeks();
+    updateWeekTitle();
   }
 
+  /**
+   * Creates a menu item which handles the given action when clicked and creates a keybind for the
+   * action if createKeybind is true.
+   *
+   * @param action the action to handle when the menu item is clicked.
+   * @param name the name of the menu item.
+   * @param createKeybind whether to create a keybind for the menu item.
+   * @return a MenuItem with the given action and name.
+   */
   private MenuItem createMenuItem(MenuBarAction action, String name, boolean createKeybind) {
     MenuItem menuItem = new MenuItem(name);
     menuItem.setOnAction(e -> handleMenuAction(e, action));
@@ -160,6 +174,13 @@ public class JournalControllerImpl implements JournalController {
     return menuItem;
   }
 
+  /**
+   * Programmatically creates a menu bar with the given MenuItems and specific keybinds attached
+   * to them to be called when the keybind is pressed.
+   *
+   * @param createKeybinds whether to create keybinds for the menu items
+   * @return a MenuBar with the given MenuItems
+   */
   private MenuBar createMenuBar(boolean createKeybinds) {
     Menu menuFile = new Menu("File");
     MenuItem itemSave = createMenuItem(MenuBarAction.SAVE, "Save", createKeybinds);
@@ -181,6 +202,10 @@ public class JournalControllerImpl implements JournalController {
     return menubar;
   }
 
+  /**
+   * Attaches the handlers for the menu bar, including keybinds, depending on the visibility of the
+   * menu bar.
+   */
   private void attachMenuHandlers() {
     MenuBar menuBarVisible = createMenuBar(true);
     MenuBar menuBarHidden = createMenuBar(false);
@@ -190,38 +215,34 @@ public class JournalControllerImpl implements JournalController {
     menuBarContainer.getChildren().addAll(menuBarVisible, menuBarHidden);
   }
 
-  private void clearWeek() {
-
-  }
-
-  public void renderWeek() {
-    for (Node node : weekView.getChildren()) {
-      // Check if this child is a VBox
-      if (node instanceof VBox) {
-        VBox vBox = (VBox) node;
-        // Now, we can remove specific children from the VBox
-        vBox.getChildren().removeIf(child -> child instanceof TaskView || child instanceof EventView || child instanceof ScheduleObjectButton);
+  /**
+   * Displays the weeks currently contained in the ScheduleManager.
+   */
+  public void renderWeeks() {
+    for (int i = 0; i < manager.getNumWeeks(); i++) {
+      for (Task t : manager.getWeek(i).getTasks()) {
+        TaskView tView = new TaskView(t);
+        //Add tView to GUI
+        VBox myVBox = (VBox) weekView.getChildren().get(t.getDayOfWeek().getNumVal());
+        myVBox.getChildren().add(tView);
+        //Add checkbox to sidebar
+        sideBar.getChildren().add(new CheckBox(t.getName()));
+      }
+      manager.getWeek(i).getEvents().sort(Comparator.comparingLong(Event::getStartTime));
+      for (Event e : manager.getWeek(i).getEvents()) {
+        EventView eView = new EventView(e);
+        VBox myVBox = (VBox) weekView.getChildren().get(e.getDayOfWeek().getNumVal());
+        myVBox.getChildren().add(eView);
       }
     }
-    sideBar.getChildren().clear();
-    for (Task t : manager.getCurrentWeek().getTasks()) {
-      ScheduleObjectButton tView = new ScheduleObjectButton(t);
-      //Add tView to GUI
-      VBox myVBox = (VBox) weekView.getChildren().get(t.getDayOfWeek().getNumVal());
-      myVBox.getChildren().add(tView);
-      //Add checkbox to sidebar
-      sideBar.getChildren().add(new CheckBox(t.getName()));
-    }
-    manager.getCurrentWeek().getEvents().sort(Comparator.comparingLong(Event::getStartTime));
-    for (Event e : manager.getCurrentWeek().getEvents()) {
-      EventView eView = new EventView(e);
-      VBox myVBox = (VBox) weekView.getChildren().get(e.getDayOfWeek().getNumVal());
-      myVBox.getChildren().add(eView);
-    }
-
-    updateWeekTitle();
   }
 
+  /**
+   * Saves bujo file information back into a file.
+   *
+   * @param saveAs true if the user wants to save the file as a new file, false if the user wants to
+   *               save the file as the current file. ???
+   */
   public void saveFile(boolean saveAs) {
     if (!this.manager.hasFileManager() || saveAs) {
       String filePath = saveBujoFile();
@@ -236,20 +257,71 @@ public class JournalControllerImpl implements JournalController {
     this.manager.saveData();
   }
 
+  /**
+   * Creates a new task when the specific menu item is clicked. Prompts the user through a dialog
+   * to create this task item.
+   */
   private void createNewTask() {
-    itemCreator.createNewTask(task -> {
+    Dialog<Task> dialog = new Dialog<>();
+    dialog.setTitle("Create a new Task");
+
+    DialogPane dialogPane = new DialogPane();
+    dialog.setDialogPane(dialogPane);
+
+    TextField nameField = new TextField();
+    nameField.setPromptText("Name");
+
+    TextField descriptionField = new TextField();
+    descriptionField.setPromptText("Description");
+
+    ComboBox<DayOfWeek> dayOfWeekComboBox = new ComboBox<>();
+    dayOfWeekComboBox.getItems().addAll(DayOfWeek.values());
+
+    ButtonType createBtnType = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
+    dialogPane.getButtonTypes().addAll(createBtnType, ButtonType.CANCEL);
+
+    dialogPane.lookupButton(createBtnType).addEventFilter(javafx.event.ActionEvent.ACTION, ev -> {
+      String name = nameField.getText();
+      String description = descriptionField.getText();
+      DayOfWeek day = dayOfWeekComboBox.getValue();
+
+      if (name.isEmpty() || description.isEmpty() || day == null) {
+        ev.consume();  // stop the dialog from closing
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setContentText("Please fill all fields!");
+        alert.showAndWait();
+      }
+    });
+
+    dialog.setResultConverter(buttonType -> {
+      if (buttonType == createBtnType) {
+        String name = nameField.getText();
+        String description = descriptionField.getText();
+        DayOfWeek day = dayOfWeekComboBox.getValue();
+
+        return new Task(name, description, day);
+      }
+      return null;
+    });
+
+    VBox dialogVbox = new VBox(10);
+    dialogVbox.setPadding(new Insets(20, 20, 20, 20));
+    dialogVbox.getChildren().addAll(nameField, descriptionField, dayOfWeekComboBox);
+
+    dialogPane.setContent(dialogVbox);
+
+    Optional<Task> result = dialog.showAndWait();
+
+    result.ifPresent(task -> {
+      // handle task object here
       this.manager.getCurrentWeek().addTask(task);
-      renderWeek();
+      renderWeeks();
     });
   }
 
-  private void createNewEvent() {
-    itemCreator.createNewEvent(event -> {
-      this.manager.getCurrentWeek().addEvent(event);
-      renderWeek();
-    });
-  }
-
+  /**
+   * Loads in a bujo file to take information from and display.
+   */
   public void loadFile() {
     String filePath = chooseBujoFile();
     if (filePath == null) {
@@ -262,6 +334,11 @@ public class JournalControllerImpl implements JournalController {
   }
 
 
+  /**
+   * Creates a file chooser for the user to select a bujo file.
+   *
+   * @return the file chooser to be used.
+   */
   private FileChooser getBujoChooser() {
     FileChooser fileChooser = new FileChooser();
 
@@ -273,6 +350,11 @@ public class JournalControllerImpl implements JournalController {
     return fileChooser;
   }
 
+  /**
+   * Allows the user to choose in a dialog which specific bujo file to open.
+   *
+   * @return the path to the bujo file.
+   */
   private String chooseBujoFile() {
     FileChooser fileChooser = getBujoChooser();
 
@@ -285,6 +367,11 @@ public class JournalControllerImpl implements JournalController {
     return file.getAbsolutePath();
   }
 
+  /**
+   * Allows the user to choose in a dialog which specific bujo file to save their changes to.
+   *
+   * @return the path to the bujo file.
+   */
   private String saveBujoFile() {
     FileChooser fileChooser = getBujoChooser();
 

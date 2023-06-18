@@ -46,5 +46,4 @@ public interface ScheduleItem {
    * @return UUID string id
    */
   String getId();
-
 }

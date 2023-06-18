@@ -46,6 +46,13 @@ public class BujoDeserializer {
   }
 
 
+  /**
+   * Processes the Json contents of a Bujo file into a BujoJson object.
+   *
+   * @param json Bujo file contents
+   * @return BujoJson object which represents the contents of the file.
+   * @throws JsonProcessingException If error processing input JSON.
+   */
   public BujoJson jsonToBujo(String json) throws JsonProcessingException {
     return this.mapper.readValue(json, BujoJson.class);
   }
