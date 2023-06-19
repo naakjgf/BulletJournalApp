@@ -28,7 +28,7 @@ public class BujoSerializer {
    * @return the JsonNode representation of the given record
    * @throws IllegalArgumentException if the record could not be converted correctly
    */
-  public JsonNode serializeRecord(Record record) throws IllegalArgumentException {
+  public JsonNode serializeRecord(Record record) {
     try {
       return this.mapper.convertValue(record, JsonNode.class);
     } catch (IllegalArgumentException e) {

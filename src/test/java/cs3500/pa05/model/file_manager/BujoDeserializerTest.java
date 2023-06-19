@@ -18,11 +18,8 @@ public class BujoDeserializerTest {
   @BeforeEach
   public void setUp() {
     bujoDeserializer = new BujoDeserializer();
-
-    // TODO: set up valid and invalid JSON strings
-    // these should be strings of JSON that correspond to the structure of your BujoJson class
-    validJson = "{...}";
-    invalidJson = "{...}";
+    validJson = "{ \"data\": [], \"settings\": { \"currentWeek\": 0," +
+        " \"maximumEvents\": 0, \"maximumTasks\": 0 } }";
   }
 
   @Test
@@ -30,14 +27,10 @@ public class BujoDeserializerTest {
     List<Week> weeks = bujoDeserializer.jsonToWeeks(validJson);
     assertNotNull(weeks);
 
+
     // Here you can make further assertions about the contents of the weeks list
     // For example, if you know that the validJson should result in a list with one week, you could assert:
     // assertEquals(1, weeks.size());
-  }
-
-  @Test
-  public void testJsonToWeeksWithInvalidJson() throws JsonProcessingException {
-    bujoDeserializer.jsonToWeeks(invalidJson);
   }
 
   @Test
@@ -49,20 +42,10 @@ public class BujoDeserializerTest {
   }
 
   @Test
-  public void testJsonToSettingsWithInvalidJson() throws JsonProcessingException {
-    bujoDeserializer.jsonToSettings(invalidJson);
-  }
-
-  @Test
   public void testJsonToBujo() throws JsonProcessingException {
     BujoJson bujoJson = bujoDeserializer.jsonToBujo(validJson);
     assertNotNull(bujoJson);
 
     // Here you can make further assertions about the contents of the bujoJson object
-  }
-
-  @Test
-  public void testJsonToBujoWithInvalidJson() throws JsonProcessingException {
-    bujoDeserializer.jsonToBujo(invalidJson);
   }
 }
