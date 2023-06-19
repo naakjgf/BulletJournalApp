@@ -82,4 +82,10 @@ public class WeekTest {
       e.printStackTrace();
     }
   }
+
+  @Test
+  void getAndSetWeekName() {
+    week.setWeekName("Test Week");
+    assertEquals("Test Week", week.getWeekName());
+  }
 }

@@ -56,5 +56,4 @@ public class BujoDeserializer {
   public BujoJson jsonToBujo(String json) throws JsonProcessingException {
     return this.mapper.readValue(json, BujoJson.class);
   }
-
 }

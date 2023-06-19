@@ -1,6 +1,5 @@
 package cs3500.pa05.model.file_manager;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
@@ -37,5 +36,19 @@ public class FileReaderWriterTest {
       e.printStackTrace();
     }
     assertEquals(content, readContent);
+  }
+
+  @Test
+  public void testReadFileContentsThrowsIOException() {
+    // An invalid file path
+    String filePath = "/invalid/file/path.txt";
+    FileReaderWriter.readFileContents(filePath);
+  }
+
+  @Test
+  public void testWriteFileContentsThrowsIOException() {
+    // An invalid file path
+    String filePath = "/invalid/file/path.txt";
+    FileReaderWriter.writeFileContents(filePath, "Some content");
   }
 }
