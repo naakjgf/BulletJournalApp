@@ -21,6 +21,8 @@ public class ScheduleItemAlert extends Dialog<Void> {
     ButtonType closeButtonType = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
     getDialogPane().getButtonTypes().addAll(editButtonType, deleteButtonType, closeButtonType);
 
+    // RUN callback WITH ItemAction ENUM TYPE FOR EVENT
+
     // Set Content
     Label label = new Label(item.getDescription());
     label.setWrapText(true);

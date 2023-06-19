@@ -1,6 +1,7 @@
 package cs3500.pa05.controller;
 
 import cs3500.pa05.enums.DayOfWeek;
+import cs3500.pa05.enums.ItemAction;
 import cs3500.pa05.enums.MenuBarAction;
 import cs3500.pa05.model.Event;
 import cs3500.pa05.model.ScheduleItem;
@@ -181,9 +182,6 @@ public class JournalControllerImpl implements JournalController {
     return menubar;
   }
 
-  private void deleteItem(Week w, ScheduleItem item) {
-    w.deleteItem(item.getId());
-  }
 
   private void attachMenuHandlers() {
     MenuBar menuBarVisible = createMenuBar(true);
@@ -198,6 +196,13 @@ public class JournalControllerImpl implements JournalController {
 
   }
 
+  private void handleItemAction(ItemAction action, Week w, ScheduleItem item) {
+    switch (action) {
+      case DELETE -> w.deleteItem(item.getId());
+      case EDIT -> itemCreator.editItem(item);
+    }
+  }
+
   public void renderWeek() {
     for (Node node : weekView.getChildren()) {
       // Check if this child is a VBox
@@ -209,16 +214,19 @@ public class JournalControllerImpl implements JournalController {
     }
 
     sideBar.getChildren().removeIf(child -> !(child instanceof Label));
-    for (Task t : manager.getCurrentWeek().getTasks()) {
-      ScheduleObjectButton tView = new ScheduleObjectButton(t);
+
+    Week currentWeek = manager.getCurrentWeek();
+
+    for (Task t : currentWeek.getTasks()) {
+      ScheduleObjectButton tView = new ScheduleObjectButton(t, (ItemAction action) -> handleItemAction(action, currentWeek, t.getId()));
       //Add tView to GUI
       VBox myVBox = (VBox) weekView.getChildren().get(t.getDayOfWeek().getNumVal());
       myVBox.getChildren().add(tView);
       //Add checkbox to sidebar
       sideBar.getChildren().add(new CheckBox(t.getName()));
     }
-    manager.getCurrentWeek().getEvents().sort(Comparator.comparingLong(Event::getStartTime));
-    for (Event e : manager.getCurrentWeek().getEvents()) {
+    currentWeek.getEvents().sort(Comparator.comparingLong(Event::getStartTime));
+    for (Event e : currentWeek.getEvents()) {
       ScheduleObjectButton eView = new ScheduleObjectButton(e);
       VBox myVBox = (VBox) weekView.getChildren().get(e.getDayOfWeek().getNumVal());
       myVBox.getChildren().add(eView);

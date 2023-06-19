@@ -2,6 +2,7 @@ package cs3500.pa05.controller;
 
 import cs3500.pa05.enums.DayOfWeek;
 import cs3500.pa05.model.Event;
+import cs3500.pa05.model.ScheduleItem;
 import cs3500.pa05.model.Task;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -41,6 +42,10 @@ public class ItemCreationController {
       alert.setContentText("Please fill all fields!");
       alert.showAndWait();
     }
+  }
+
+  public void editItem(ScheduleItem item) {
+    // TODO
   }
 
   /**
