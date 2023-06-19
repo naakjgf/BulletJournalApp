@@ -197,7 +197,7 @@ public class JournalControllerImpl implements JournalController {
 
   private void handleItemAction(ItemAction action, Week w, ScheduleItem item) {
     switch (action) {
-      case DELETE -> w.deleteItem(item.getId());
+      case DELETE -> w.deleteItem(item);
       case EDIT -> itemCreator.editItem(item);
     }
 

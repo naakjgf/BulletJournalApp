@@ -3,6 +3,7 @@ package cs3500.pa05.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,18 +86,11 @@ public class Week {
    * Delete an item from the tasks or event list if the ID mathes.
    * @param id ID of item to delete.
    */
-  public void deleteItem(String id) {
-    tasks.removeIf(task -> {
-      if (task.getId() == null) {
-        return false;
-      }
-      return task.getId().equals(id);
-    });
-    events.removeIf(event -> {
-      if (event.getId() == null) {
-        return false;
-      }
-      return event.getId().equals(id);
-    });
+  public void deleteItem(ScheduleItem item) {
+    if (item instanceof Task) {
+      tasks.remove(item);
+    } else if (item instanceof Event) {
+      events.remove(item)
+    }
   }
 }

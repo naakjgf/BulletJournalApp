@@ -63,10 +63,10 @@ public class WeekTest {
     assertTrue(week.getTasks().contains(task));
     assertTrue(week.getEvents().contains(event));
 
-    week.deleteItem(task.getId());
+    week.deleteItem(task);
     assertFalse(week.getTasks().contains(task));
 
-    week.deleteItem(event.getId());
+    week.deleteItem(event);
     assertFalse(week.getEvents().contains(event));
   }
 
