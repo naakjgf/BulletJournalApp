@@ -206,8 +206,7 @@ public class JournalControllerImpl implements JournalController {
   public void renderWeek() {
     for (Node node : weekView.getChildren()) {
       // Check if this child is a VBox
-      if (node instanceof VBox) {
-        VBox vBox = (VBox) node;
+      if (node instanceof VBox vBox) {
         // Now, we can remove specific children from the VBox
         vBox.getChildren().removeIf(
             child -> child instanceof TaskView || child instanceof EventView ||
