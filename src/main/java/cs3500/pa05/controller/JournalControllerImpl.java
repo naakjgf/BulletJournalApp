@@ -201,6 +201,8 @@ public class JournalControllerImpl implements JournalController {
       case DELETE -> w.deleteItem(item.getId());
       case EDIT -> itemCreator.editItem(item);
     }
+
+    renderWeek();
   }
 
   public void renderWeek() {

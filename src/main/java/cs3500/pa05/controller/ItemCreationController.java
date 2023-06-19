@@ -58,33 +58,31 @@ public class ItemCreationController {
 
   private void editTask(Task task) {
     Dialog<Task> dialog = new Dialog<>();
-    DialogPane dialogPane = setupDialogPane(dialog, "Edit Task: " + task.getName());
+    DialogPane dialogPane = setupDialogPane(dialog, "Edit Task");
 
     TextField nameField = new TextField(task.getName());
     nameField.setPromptText("Name");
-    nameField.setEditable(true);
 
     TextField descriptionField = new TextField(task.getDescription());
     descriptionField.setPromptText("Description");
-    descriptionField.setEditable(true);
 
     ComboBox<DayOfWeek> dayOfWeekComboBox = new ComboBox<>();
     dayOfWeekComboBox.getItems().addAll(DayOfWeek.values());
     dayOfWeekComboBox.setValue(task.getDayOfWeek());
-    dayOfWeekComboBox.setEditable(true);
 
-    ButtonType saveBtnType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+    ButtonType createBtnType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
 
-    dialogPane.getButtonTypes().addAll(saveBtnType, ButtonType.CANCEL);
+    dialogPane.getButtonTypes().addAll(createBtnType, ButtonType.CANCEL);
 
-    createTaskModal(dialog, dialogPane, nameField, descriptionField, dayOfWeekComboBox, saveBtnType);
+    createTaskModal(dialog, dialogPane, nameField, descriptionField, dayOfWeekComboBox,
+        createBtnType);
 
     Optional<Task> result = dialog.showAndWait();
 
     result.ifPresent(taskResult -> {
+      task.setName(taskResult.getName());
       task.setDescription(taskResult.getDescription());
       task.setDayOfWeek(taskResult.getDayOfWeek());
-      task.setName(taskResult.getName());
     });
   }
 
