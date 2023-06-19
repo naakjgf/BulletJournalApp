@@ -41,7 +41,6 @@ public class FileManagerImpl implements FileManager {
     try {
       bujoJson = deserializer.jsonToBujo(this.jsonContent);
     } catch (JsonProcessingException e) {
-      e.printStackTrace();
       throw new RuntimeException("Malformed Bujo file: " + this.filepath);
     }
 

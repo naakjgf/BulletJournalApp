@@ -39,7 +39,7 @@ public class FileManagerImplTest {
 
     fileManager = new FileManagerImpl("temp2.txt");
 
-    assertThrows(JsonMappingException.class, () -> fileManager.loadFromFile());
+    assertThrows(RuntimeException.class, () -> fileManager.loadFromFile(), "");
   }
 
   @Test
@@ -52,7 +52,7 @@ public class FileManagerImplTest {
 
     String savedContent = FileReaderWriter.readFileContents("temp.txt");
 
-    String expectedContent = "{\"data\":[{\"weekNumber\":0,\"events\":[],\"tasks\":[]}]," +
+    String expectedContent = "{\"data\":[{\"weekNumber\":0,\"events\":[],\"tasks\":[],\"weekName\":null}]," +
         "\"settings\":{\"maximumTasks\":0,\"maximumEvents\":0,\"currentWeek\":0}}";
     assertEquals(expectedContent, savedContent.trim());
   }
