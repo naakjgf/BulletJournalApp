@@ -36,7 +36,10 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -225,7 +228,16 @@ public class JournalControllerImpl implements JournalController {
       VBox myVBox = (VBox) weekView.getChildren().get(t.getDayOfWeek().getNumVal());
       myVBox.getChildren().add(tView);
       //Add checkbox to sidebar
-      sideBar.getChildren().add(new CheckBox(t.getName()));
+      VBox sidebarTask = new VBox(5);
+      sidebarTask.getStyleClass().add("sidebarTask");
+      Label nameLabel = new Label(t.getName());
+      nameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+      Label completeLabel = new Label(t.isComplete() ? "Completed" : "Incomplete");
+      completeLabel.setFont(Font.font("Arial", 12));
+
+      sidebarTask.getChildren().addAll(nameLabel, completeLabel);
+
+      sideBar.getChildren().add(sidebarTask);
     }
     currentWeek.getEvents().sort(Comparator.comparingLong(Event::getStartTime));
     for (Event e : currentWeek.getEvents()) {
