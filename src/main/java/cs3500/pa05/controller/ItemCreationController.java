@@ -61,15 +61,21 @@ public class ItemCreationController {
 
     TextField nameField = new TextField(task.getName());
     nameField.setPromptText("Name");
+    nameField.setEditable(true);
 
     TextField descriptionField = new TextField(task.getDescription());
     descriptionField.setPromptText("Description");
+    descriptionField.setEditable(true);
 
     ComboBox<DayOfWeek> dayOfWeekComboBox = new ComboBox<>();
     dayOfWeekComboBox.getItems().addAll(DayOfWeek.values());
     dayOfWeekComboBox.setValue(task.getDayOfWeek());
+    dayOfWeekComboBox.setEditable(true);
 
     ButtonType saveBtnType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+
+    dialogPane.getButtonTypes().addAll(saveBtnType, ButtonType.CANCEL);
+
     createTaskModal(dialog, dialogPane, nameField, descriptionField, dayOfWeekComboBox, saveBtnType);
 
     Optional<Task> result = dialog.showAndWait();
@@ -87,14 +93,18 @@ public class ItemCreationController {
 
     TextField nameField = new TextField(event.getName());
     nameField.setPromptText("Name");
+    nameField.setEditable(true);
 
     TextField descriptionField = new TextField(event.getDescription());
     descriptionField.setPromptText("Description");
+    descriptionField.setEditable(true);
 
     DatePicker startTimePicker = setupDatePicker(Optional.of(event.getStartTime()));
+    startTimePicker.setEditable(true);
 
     TextField durationField = new TextField(String.valueOf(event.getDuration()));
     durationField.setPromptText("Duration (in minutes)");
+    durationField.setEditable(true);
 
     ComboBox<DayOfWeek> dayOfWeekComboBox = new ComboBox<>();
     dayOfWeekComboBox.getItems().addAll(DayOfWeek.values());
@@ -120,8 +130,6 @@ public class ItemCreationController {
   private void createTaskModal(Dialog<Task> dialog, DialogPane dialogPane, TextField nameField,
                                TextField descriptionField, ComboBox<DayOfWeek> dayOfWeekComboBox,
                                ButtonType saveBtnType) {
-    dialogPane.getButtonTypes().addAll(saveBtnType, ButtonType.CANCEL);
-
     dialogPane.lookupButton(saveBtnType).addEventFilter(javafx.event.ActionEvent.ACTION, ev -> {
       validateInput(nameField.getText(), descriptionField.getText(), dayOfWeekComboBox.getValue(),
           ev);
