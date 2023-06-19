@@ -1,6 +1,7 @@
 package cs3500.pa05.view;
 
 import cs3500.pa05.enums.DayOfWeek;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 
 import javafx.scene.layout.VBox;
@@ -20,6 +21,7 @@ public class TaskView extends VBox {
     nameLabel.setFont(new Font("Roboto", 16));
     nameLabel.setTextFill(Color.BLACK);
     Label descLabel = new Label(task.getDescription());
+    nameLabel.setAlignment(Pos.CENTER);
     Label statusLabel = new Label("Status: " + (task.isComplete() ? "Completed" : "Incomplete"));
 
     this.getChildren().addAll(nameLabel, descLabel, statusLabel);

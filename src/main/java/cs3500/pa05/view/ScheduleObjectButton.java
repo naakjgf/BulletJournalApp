@@ -27,7 +27,9 @@ public class ScheduleObjectButton extends Button {
       throw new IllegalArgumentException();
     }
     this.setGraphic(vbox);
-    this.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+    this.setStyle("-fx-background-color: #D8BFD8; -fx-text-fill: #4B0082; -fx-border-color: #8A2BE2; -fx-border-width: 2px; -fx-padding: 5px; -fx-border-radius: 5px; -fx-background-radius: 5px;");
+    this.setOnMouseEntered(e -> this.setStyle("-fx-background-color: #8A2BE2; -fx-text-fill: white; -fx-border-color: #8A2BE2; -fx-border-width: 2px; -fx-padding: 5px; -fx-border-radius: 5px; -fx-background-radius: 5px;"));
+    this.setOnMouseExited(e -> this.setStyle("-fx-background-color: #D8BFD8; -fx-text-fill: #4B0082; -fx-border-color: #8A2BE2; -fx-border-width: 2px; -fx-padding: 5px; -fx-border-radius: 5px; -fx-background-radius: 5px;"));
     this.setOnAction(e -> {
       ScheduleItemAlert alert = new ScheduleItemAlert(item, callback);
       alert.showAndWait();
