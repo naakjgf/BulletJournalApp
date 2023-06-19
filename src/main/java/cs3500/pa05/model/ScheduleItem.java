@@ -14,6 +14,12 @@ public interface ScheduleItem {
   String getName();
 
   /**
+   * Sets the name of the ScheduleItem to the specified name.
+   * @param name Name to set.
+   */
+  void setName(String name);
+
+  /**
    * Returns description of ScheduleItem.
    *
    * @return description String

@@ -9,7 +9,7 @@ import java.util.UUID;
  * An object representing a Task on the Weekly schedule.
  */
 public class Task implements TaskInterface {
-  private final String name;
+  private String name;
   private String id;
   private boolean complete;
   private String description;
@@ -56,6 +56,11 @@ public class Task implements TaskInterface {
   @Override
   public String getName() {
     return name;
+  }
+
+  @Override
+  public void setName(String name) {
+    this.name = name;
   }
 
   @Override

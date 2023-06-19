@@ -11,7 +11,7 @@ import java.util.UUID;
  */
 public class Event implements EventInterface {
   private final String id;
-  private final String name;
+  private String name;
   private long startTime;
   private long duration;
   private String description;
@@ -63,6 +63,11 @@ public class Event implements EventInterface {
    */
   public String getId() {
     return id;
+  }
+
+  @Override
+  public void setName(String name) {
+    this.name = name;
   }
 
   @Override

@@ -10,7 +10,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
@@ -44,12 +43,103 @@ public class ItemCreationController {
     }
   }
 
+  /**
+   * Edit an item with a dialogue box.
+   * @param item Item to edit.
+   */
   public void editItem(ScheduleItem item) {
-    // TODO
+    if (item instanceof Task) {
+      editTask((Task) item);
+    } else if (item instanceof Event) {
+      editEvent((Event) item);
+    }
+  }
+
+  private void editTask(Task task) {
+    Dialog<Task> dialog = new Dialog<>();
+    DialogPane dialogPane = setupDialogPane(dialog, "Edit Task: " + task.getName());
+
+    TextField nameField = new TextField(task.getName());
+    nameField.setPromptText("Name");
+
+    TextField descriptionField = new TextField(task.getDescription());
+    descriptionField.setPromptText("Description");
+
+    ComboBox<DayOfWeek> dayOfWeekComboBox = new ComboBox<>();
+    dayOfWeekComboBox.getItems().addAll(DayOfWeek.values());
+    dayOfWeekComboBox.setValue(task.getDayOfWeek());
+
+    ButtonType saveBtnType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+    createTaskModal(dialog, dialogPane, nameField, descriptionField, dayOfWeekComboBox, saveBtnType);
+
+    Optional<Task> result = dialog.showAndWait();
+
+    result.ifPresent(taskResult -> {
+      task.setDescription(taskResult.getDescription());
+      task.setDayOfWeek(taskResult.getDayOfWeek());
+      task.setName(taskResult.getName());
+    });
+  }
+
+  private void editEvent(Event event) {
+    Dialog<Event> dialog = new Dialog<>();
+    DialogPane dialogPane = setupDialogPane(dialog, "Edit Event: " + event.getName());
+
+    TextField nameField = new TextField(event.getName());
+    nameField.setPromptText("Name");
+
+    TextField descriptionField = new TextField(event.getDescription());
+    descriptionField.setPromptText("Description");
+
+    DatePicker startTimePicker = setupDatePicker(Optional.of(event.getStartTime()));
+
+    TextField durationField = new TextField(String.valueOf(event.getDuration()));
+    durationField.setPromptText("Duration (in minutes)");
+
+    ComboBox<DayOfWeek> dayOfWeekComboBox = new ComboBox<>();
+    dayOfWeekComboBox.getItems().addAll(DayOfWeek.values());
+    dayOfWeekComboBox.setValue(event.getDayOfWeek());
+
+    ButtonType createBtnType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+    dialogPane.getButtonTypes().addAll(createBtnType, ButtonType.CANCEL);
+
+    createEventModal(dialog, dialogPane, nameField, descriptionField, startTimePicker, durationField,
+        dayOfWeekComboBox, createBtnType);
+
+    Optional<Event> result = dialog.showAndWait();
+
+    result.ifPresent((eventResult) -> {
+      event.setName(eventResult.getName());
+      event.setDescription(eventResult.getDescription());
+      event.setDayOfWeek(eventResult.getDayOfWeek());
+      event.setDuration(eventResult.getDuration());
+      event.setStartTime(eventResult.getStartTime());
+    });
+  }
+
+  private void createTaskModal(Dialog<Task> dialog, DialogPane dialogPane, TextField nameField,
+                               TextField descriptionField, ComboBox<DayOfWeek> dayOfWeekComboBox,
+                               ButtonType saveBtnType) {
+    dialogPane.getButtonTypes().addAll(saveBtnType, ButtonType.CANCEL);
+
+    dialogPane.lookupButton(saveBtnType).addEventFilter(javafx.event.ActionEvent.ACTION, ev -> {
+      validateInput(nameField.getText(), descriptionField.getText(), dayOfWeekComboBox.getValue(),
+          ev);
+    });
+
+    dialog.setResultConverter(createTaskResultConverter(nameField, descriptionField,
+        dayOfWeekComboBox, saveBtnType));
+
+    VBox dialogVbox = new VBox(10);
+    dialogVbox.setPadding(new Insets(20, 20, 20, 20));
+    dialogVbox.getChildren().addAll(nameField, descriptionField, dayOfWeekComboBox);
+
+    dialogPane.setContent(dialogVbox);
   }
 
   /**
    * Constructs a dialogue for task creation and passes the task back using a Consumer.
+   *
    * @param f Consumer to callback with created task.
    */
   public void createNewTask(Consumer<Task> f) {
@@ -66,21 +156,8 @@ public class ItemCreationController {
     dayOfWeekComboBox.getItems().addAll(DayOfWeek.values());
 
     ButtonType createBtnType = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
-    dialogPane.getButtonTypes().addAll(createBtnType, ButtonType.CANCEL);
-
-    dialogPane.lookupButton(createBtnType).addEventFilter(javafx.event.ActionEvent.ACTION, ev -> {
-      validateInput(nameField.getText(), descriptionField.getText(), dayOfWeekComboBox.getValue(),
-          ev);
-    });
-
-    dialog.setResultConverter(
-        createTaskResultConverter(nameField, descriptionField, dayOfWeekComboBox, createBtnType));
-
-    VBox dialogVbox = new VBox(10);
-    dialogVbox.setPadding(new Insets(20, 20, 20, 20));
-    dialogVbox.getChildren().addAll(nameField, descriptionField, dayOfWeekComboBox);
-
-    dialogPane.setContent(dialogVbox);
+    createTaskModal(dialog, dialogPane, nameField, descriptionField, dayOfWeekComboBox,
+        createBtnType);
 
     Optional<Task> result = dialog.showAndWait();
 
@@ -100,8 +177,10 @@ public class ItemCreationController {
     };
   }
 
+
   /**
    * Constructs a dialogue for event creation and passes the event back using a Consumer.
+   *
    * @param f Consumer to callback with created event.
    */
   public void createNewEvent(Consumer<Event> f) {
@@ -114,7 +193,7 @@ public class ItemCreationController {
     TextField descriptionField = new TextField();
     descriptionField.setPromptText("Description");
 
-    DatePicker startTimePicker = setupDatePicker();
+    DatePicker startTimePicker = setupDatePicker(Optional.empty());
 
     TextField durationField = new TextField();
     durationField.setPromptText("Duration (in minutes)");
@@ -125,6 +204,18 @@ public class ItemCreationController {
     ButtonType createBtnType = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
     dialogPane.getButtonTypes().addAll(createBtnType, ButtonType.CANCEL);
 
+    createEventModal(dialog, dialogPane, nameField, descriptionField, startTimePicker, durationField,
+        dayOfWeekComboBox, createBtnType);
+
+    Optional<Event> result = dialog.showAndWait();
+
+    result.ifPresent(f);
+  }
+
+  private void createEventModal(Dialog<Event> dialog, DialogPane dialogPane, TextField nameField,
+                         TextField descriptionField, DatePicker startTimePicker,
+                         TextField durationField, ComboBox<DayOfWeek> dayOfWeekComboBox,
+                         ButtonType createBtnType) {
     dialogPane.lookupButton(createBtnType).addEventFilter(javafx.event.ActionEvent.ACTION, ev -> {
       validateInput(nameField.getText(), descriptionField.getText(), dayOfWeekComboBox.getValue(),
           ev);
@@ -149,10 +240,6 @@ public class ItemCreationController {
         .addAll(nameField, descriptionField, dayOfWeekComboBox, startTimePicker, durationField);
 
     dialogPane.setContent(dialogVbox);
-
-    Optional<Event> result = dialog.showAndWait();
-
-    result.ifPresent(f);
   }
 
   private Callback<ButtonType, Event> createEventResultConverter(TextField nameField,
@@ -173,9 +260,10 @@ public class ItemCreationController {
     };
   }
 
-  private DatePicker setupDatePicker() {
+  private DatePicker setupDatePicker(Optional<Long> epochTimeOpt) {
     DatePicker startTimePicker = new DatePicker();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     startTimePicker.setConverter(new StringConverter<>() {
       @Override
       public String toString(LocalDate localDate) {
@@ -190,6 +278,13 @@ public class ItemCreationController {
       }
     });
     startTimePicker.setPromptText("Start Date");
+
+    // If the Optional contains a value, convert it to a LocalDate and set it as the value for the DatePicker
+    epochTimeOpt.ifPresent(epochTime -> {
+      LocalDate date = Instant.ofEpochMilli(epochTime).atZone(ZoneId.systemDefault()).toLocalDate();
+      startTimePicker.setValue(date);
+    });
+
     return startTimePicker;
   }
 }
