@@ -1,10 +1,14 @@
 package cs3500.pa05.view;
 
 import cs3500.pa05.enums.ItemAction;
+import cs3500.pa05.model.Event;
 import cs3500.pa05.model.ScheduleItem;
+import cs3500.pa05.model.Task;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.function.Consumer;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -13,37 +17,67 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 public class ScheduleItemAlert extends Dialog<Void> {
   public ScheduleItemAlert(ScheduleItem item, Consumer<ItemAction> callback) {
     super();
-    setTitle(item.getName());
-    setHeaderText(null);
-
-    // Create buttons
-    ButtonType editButtonType = new ButtonType("Edit", ButtonBar.ButtonData.APPLY);
-    ButtonType deleteButtonType = new ButtonType("Delete", ButtonBar.ButtonData.OK_DONE);
-    ButtonType closeButtonType = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
-    getDialogPane().getButtonTypes().addAll(editButtonType, deleteButtonType, closeButtonType);
+    setTitle("Manage " + (item instanceof Task ? "Task" : "Event") + ": " + item.getName());
+    setHeaderText(item.getName());
 
     // RUN callback WITH ItemAction ENUM TYPE FOR EVENT
-
+    createDialogue(callback);
 
     // Set Content
-    Label label = new Label(item.getDescription());
-    label.setWrapText(true);
+
+    Label descriptionLabel = new Label("Description");
+    descriptionLabel.setFont(new Font(15));
+    Label description = new Label(item.getDescription());
+    description.setWrapText(true);
+
+    VBox vbox = new VBox();
+    addField(vbox, "Description", item.getDescription());
+    addField(vbox, "Day", item.getDayOfWeek().toString());
+
+    if (item instanceof Task) {
+      addField(vbox, "Completed", String.valueOf(((Task) item).isComplete()));
+    } else if (item instanceof Event) {
+      addField(vbox, "Start Time", EventView.formatTime(((Event) item).getStartTime()));
+      addField(vbox, "Duration", ((Event) item).getDuration() + " minutes");
+    }
+
+
+    getDialogPane().setContent(vbox);
+  }
+
+  private void createDialogue(Consumer<ItemAction> callback) {
+    ButtonType editButtonType = new ButtonType("Edit", ButtonBar.ButtonData.OTHER);
+    ButtonType deleteButtonType = new ButtonType("Delete", ButtonBar.ButtonData.LEFT);
+    ButtonType closeButtonType = new ButtonType("Close", ButtonBar.ButtonData.OK_DONE);
+    getDialogPane().getButtonTypes().addAll(editButtonType, deleteButtonType, closeButtonType);
+
     Button deleteButton = (Button) getDialogPane().lookupButton(deleteButtonType);
     deleteButton.setOnAction(e -> {
       close();
       callback.accept(ItemAction.DELETE);
     });
+
     Button editButton = (Button) getDialogPane().lookupButton(editButtonType);
     editButton.setOnAction(e -> {
       close();
       callback.accept(ItemAction.EDIT);
     });
-    GridPane grid = new GridPane();
-    grid.add(label, 0, 0);
-    getDialogPane().setContent(grid);
+  }
+
+  private void addField(Pane parent, String title, String value) {
+    Label label = new Label(title);
+    label.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+    Label content = new Label(value);
+    content.setWrapText(true);
+    content.setStyle("-fx-padding: 0px 0px 12px 0px");
+    parent.getChildren().addAll(label, content);
   }
 }

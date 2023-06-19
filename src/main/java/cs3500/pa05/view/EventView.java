@@ -33,9 +33,10 @@ public class EventView extends VBox {
   }
 
 
-  public String formatTime(long epochTime) {
-    LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(epochTime), ZoneId.systemDefault());
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+  public static String formatTime(long epochTime) {
+    LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(epochTime), ZoneId.systemDefault());
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
     return dateTime.format(formatter);
   }
 }

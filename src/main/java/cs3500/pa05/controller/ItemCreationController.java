@@ -353,14 +353,24 @@ public class ItemCreationController {
 
           @Override
           public void decrement(int steps) {
-            LocalTime time = getValue();
-            setValue(time.minusMinutes(steps));
+            try {
+              LocalTime time = getValue();
+
+              setValue(time.minusMinutes(steps));
+            } catch (Exception e) {
+              setValue(LocalTime.now());
+            }
           }
 
           @Override
           public void increment(int steps) {
-            LocalTime time = getValue();
-            setValue(time.plusMinutes(steps));
+            try {
+              LocalTime time = getValue();
+
+              setValue(time.plusMinutes(steps));
+            } catch (Exception e) {
+              setValue(LocalTime.now());
+            }
           }
         });
 
