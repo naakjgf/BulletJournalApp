@@ -1,7 +1,7 @@
 /**
  * This is the module info for the project. It requires javaFX and Jackson.
  */
-module cs.pa {
+module cs3500.pa05 {
   requires javafx.controls;
   requires javafx.fxml;
   requires com.fasterxml.jackson.annotation;
