@@ -7,6 +7,7 @@ import cs3500.pa05.model.ScheduleItem;
 import cs3500.pa05.model.ScheduleManager;
 import cs3500.pa05.model.Settings;
 import cs3500.pa05.model.Task;
+import cs3500.pa05.model.Week;
 import cs3500.pa05.model.file_manager.FileManager;
 import cs3500.pa05.model.file_manager.FileManagerImpl;
 import cs3500.pa05.view.EventView;
@@ -180,6 +181,10 @@ public class JournalControllerImpl implements JournalController {
     return menubar;
   }
 
+  private void deleteItem(Week w, ScheduleItem item) {
+    w.deleteItem(item.getId());
+  }
+
   private void attachMenuHandlers() {
     MenuBar menuBarVisible = createMenuBar(true);
     MenuBar menuBarHidden = createMenuBar(false);
@@ -202,7 +207,8 @@ public class JournalControllerImpl implements JournalController {
         vBox.getChildren().removeIf(child -> child instanceof TaskView || child instanceof EventView || child instanceof ScheduleObjectButton);
       }
     }
-    sideBar.getChildren().clear();
+
+    sideBar.getChildren().removeIf(child -> !(child instanceof Label));
     for (Task t : manager.getCurrentWeek().getTasks()) {
       ScheduleObjectButton tView = new ScheduleObjectButton(t);
       //Add tView to GUI
