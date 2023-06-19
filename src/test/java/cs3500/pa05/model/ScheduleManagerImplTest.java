@@ -115,4 +115,31 @@ public class ScheduleManagerImplTest {
     assertEquals(week1, scheduleManager.getWeek(0));
     assertEquals(week2, scheduleManager.getWeek(1));
   }
+
+  @Test
+  void getSettings() {
+    Settings settings = new Settings(3, 4, 0);
+
+    List<Week> weeks = new ArrayList<>();
+
+    BujoJson bujoJson = new BujoJson(weeks, settings);
+    when(fileManager.loadFromFile()).thenReturn(bujoJson);
+
+    scheduleManager.setFileManager(fileManager);
+    scheduleManager.loadData();
+
+    assertEquals(settings, scheduleManager.getSettings());
+  }
+
+  @Test
+  void setMaximumTasks() {
+    scheduleManager.setMaximumTasks(5);
+    assertEquals(5, scheduleManager.getSettings().getMaximumTasks());
+  }
+
+  @Test
+  void setMaximumEvents() {
+    scheduleManager.setMaximumEvents(7);
+    assertEquals(7, scheduleManager.getSettings().getMaximumEvents());
+  }
 }

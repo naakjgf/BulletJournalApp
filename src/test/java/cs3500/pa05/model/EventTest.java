@@ -96,4 +96,10 @@ public class EventTest {
     event.setDayOfWeek(DayOfWeek.TUESDAY);
     assertEquals(DayOfWeek.TUESDAY, event.getDayOfWeek());
   }
+
+  @Test
+  void setName() {
+    event.setName("Updated Meeting");
+    assertEquals("Updated Meeting", event.getName());
+  }
 }

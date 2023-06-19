@@ -82,4 +82,10 @@ public class TaskTest {
       e.printStackTrace();
     }
   }
+
+  @Test
+  void setName() {
+    task.setName("New Name");
+    assertEquals("New Name", task.getName());
+  }
 }
