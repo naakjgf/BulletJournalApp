@@ -26,13 +26,13 @@ public class TaskView extends VBox {
     this.dayOfWeek = task.getDayOfWeek();
     Label nameLabel = new Label(task.getName());
     nameLabel.setFont(new Font("Roboto", 16));
-    nameLabel.setTextFill(Color.BLACK);
+    nameLabel.getStyleClass().add("label-hover-effect");
     Label descLabel = new Label(task.getDescription());
     nameLabel.setAlignment(Pos.CENTER);
     Label statusLabel = new Label("Status: " + (task.isComplete() ? "Completed" : "Incomplete"));
     this.getStyleClass().add("task");
     this.getChildren().addAll(nameLabel, descLabel, statusLabel);
-    this.setOnMouseClicked((MouseEvent e) -> {ScheduleItemAlert alert = new ScheduleItemAlert(
+    nameLabel.setOnMouseClicked((MouseEvent e) -> {ScheduleItemAlert alert = new ScheduleItemAlert(
         (ScheduleItem) task, callback);
       alert.show();});
   }

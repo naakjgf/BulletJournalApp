@@ -15,6 +15,17 @@
     -fx-font-size: 15px;
 }
 
+.label-hover-effect {
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+    -fx-font-family: 'Roboto';
+    -fx-font-size: 18px;
+}
+
+.label-hover-effect:hover {
+    -fx-text-fill: white;
+}
+
 .roundedButton {
     -fx-background-radius: 15px;
     -fx-padding: 5px 10px 5px 10px;
@@ -36,7 +47,7 @@
 }
 
 .task:hover {
-    -fx-background-color: #8A2BE2;
+    -fx-background-color: #d2b4ed;
     -fx-text-fill: white;
     -fx-border-color: #8A2BE2;
     -fx-border-width: 2px;
@@ -54,7 +65,7 @@
 }
 
 .event:hover {
-    -fx-background-color: #1C6EA4;
+    -fx-background-color: #c1e8f5;
     -fx-text-fill: white;
     -fx-border-color: #1C6EA4;
     -fx-border-width: 2px;
