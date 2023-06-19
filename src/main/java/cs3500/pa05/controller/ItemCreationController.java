@@ -18,6 +18,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
@@ -161,9 +162,13 @@ public class ItemCreationController {
     descriptionField.setPromptText("Description");
 
     ComboBox<DayOfWeek> dayOfWeekComboBox = new ComboBox<>();
+    dayOfWeekComboBox.setPlaceholder(new Label("Day"));
     dayOfWeekComboBox.getItems().addAll(DayOfWeek.values());
 
     ButtonType createBtnType = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
+
+    dialogPane.getButtonTypes().addAll(createBtnType, ButtonType.CANCEL);
+
     createTaskModal(dialog, dialogPane, nameField, descriptionField, dayOfWeekComboBox,
         createBtnType);
 
@@ -207,6 +212,7 @@ public class ItemCreationController {
     durationField.setPromptText("Duration (in minutes)");
 
     ComboBox<DayOfWeek> dayOfWeekComboBox = new ComboBox<>();
+    dayOfWeekComboBox.setPlaceholder(new Label("Day"));
     dayOfWeekComboBox.getItems().addAll(DayOfWeek.values());
 
     ButtonType createBtnType = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);

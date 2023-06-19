@@ -39,7 +39,6 @@ public class FileManagerImpl implements FileManager {
     BujoJson bujoJson;
 
     try {
-      System.out.println("CONTENT: " + this.jsonContent);
       bujoJson = deserializer.jsonToBujo(this.jsonContent);
     } catch (JsonProcessingException e) {
       e.printStackTrace();
