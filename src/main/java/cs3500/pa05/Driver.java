@@ -37,6 +37,8 @@ public class Driver extends Application {
 //      FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("gui.fxml"));
 //      primaryStage.setTitle("Bullet Journal");
       primaryStage.setScene(view.load());
+      primaryStage.setMinHeight(500.0);
+      primaryStage.setMinWidth(1000.0);
       controller.run();
       primaryStage.show();
     } catch (Exception e) {

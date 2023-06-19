@@ -6,8 +6,11 @@ import cs3500.pa05.model.ScheduleItem;
 import cs3500.pa05.model.Task;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Optional;
 import java.util.function.Consumer;
 import javafx.geometry.Insets;
@@ -19,10 +22,13 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import javafx.util.converter.LocalTimeStringConverter;
 
 public class ItemCreationController {
 
@@ -34,9 +40,18 @@ public class ItemCreationController {
     return dialogPane;
   }
 
-  private void validateInput(String name, String description, DayOfWeek day,
-                             javafx.event.ActionEvent ev) {
-    if (name.isEmpty() || description.isEmpty() || day == null) {
+  private void validateTaskInput(String name, DayOfWeek day, javafx.event.ActionEvent ev) {
+    if (name.isEmpty() || day == null) {
+      ev.consume();
+      Alert alert = new Alert(Alert.AlertType.WARNING);
+      alert.setContentText("Please fill all fields!");
+      alert.showAndWait();
+    }
+  }
+
+  private void validateEventInput(String name, DayOfWeek day, LocalDate date, LocalTime time,
+                                  javafx.event.ActionEvent ev) {
+    if (name.isEmpty() || day == null || date == null || time == null) {
       ev.consume();
       Alert alert = new Alert(Alert.AlertType.WARNING);
       alert.setContentText("Please fill all fields!");
@@ -46,6 +61,7 @@ public class ItemCreationController {
 
   /**
    * Edit an item with a dialogue box.
+   *
    * @param item Item to edit.
    */
   public void editItem(ScheduleItem item) {
@@ -98,7 +114,10 @@ public class ItemCreationController {
     descriptionField.setPromptText("Description");
     descriptionField.setEditable(true);
 
-    DatePicker startTimePicker = setupDatePicker(Optional.of(event.getStartTime()));
+    DatePicker startDatePicker = setupDatePicker(Optional.of(event.getStartTime()));
+    startDatePicker.setEditable(true);
+
+    Spinner<LocalTime> startTimePicker = setupTimePicker(Optional.of(event.getStartTime()));
     startTimePicker.setEditable(true);
 
     TextField durationField = new TextField(String.valueOf(event.getDuration()));
@@ -112,7 +131,9 @@ public class ItemCreationController {
     ButtonType createBtnType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
     dialogPane.getButtonTypes().addAll(createBtnType, ButtonType.CANCEL);
 
-    createEventModal(dialog, dialogPane, nameField, descriptionField, startTimePicker, durationField,
+    createEventModal(dialog, dialogPane, nameField, descriptionField, startDatePicker,
+        startTimePicker,
+        durationField,
         dayOfWeekComboBox, createBtnType);
 
     Optional<Event> result = dialog.showAndWait();
@@ -130,9 +151,9 @@ public class ItemCreationController {
                                TextField descriptionField, ComboBox<DayOfWeek> dayOfWeekComboBox,
                                ButtonType saveBtnType) {
     dialogPane.lookupButton(saveBtnType).addEventFilter(javafx.event.ActionEvent.ACTION, ev -> {
-      validateInput(nameField.getText(), descriptionField.getText(), dayOfWeekComboBox.getValue(),
-          ev);
+      validateTaskInput(nameField.getText(), dayOfWeekComboBox.getValue(), ev);
     });
+
 
     dialog.setResultConverter(createTaskResultConverter(nameField, descriptionField,
         dayOfWeekComboBox, saveBtnType));
@@ -204,7 +225,10 @@ public class ItemCreationController {
     TextField descriptionField = new TextField();
     descriptionField.setPromptText("Description");
 
-    DatePicker startTimePicker = setupDatePicker(Optional.empty());
+    DatePicker startDatePicker = setupDatePicker(Optional.empty());
+
+    Spinner<LocalTime> startTimePicker = createTimePicker();
+    startTimePicker.setEditable(true);
 
     TextField durationField = new TextField();
     durationField.setPromptText("Duration (in minutes)");
@@ -216,7 +240,9 @@ public class ItemCreationController {
     ButtonType createBtnType = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
     dialogPane.getButtonTypes().addAll(createBtnType, ButtonType.CANCEL);
 
-    createEventModal(dialog, dialogPane, nameField, descriptionField, startTimePicker, durationField,
+    createEventModal(dialog, dialogPane, nameField, descriptionField, startDatePicker,
+        startTimePicker,
+        durationField,
         dayOfWeekComboBox, createBtnType);
 
     Optional<Event> result = dialog.showAndWait();
@@ -225,12 +251,13 @@ public class ItemCreationController {
   }
 
   private void createEventModal(Dialog<Event> dialog, DialogPane dialogPane, TextField nameField,
-                         TextField descriptionField, DatePicker startTimePicker,
-                         TextField durationField, ComboBox<DayOfWeek> dayOfWeekComboBox,
-                         ButtonType createBtnType) {
+                                TextField descriptionField, DatePicker startDatePicker,
+                                Spinner<LocalTime> startTimePicker,
+                                TextField durationField, ComboBox<DayOfWeek> dayOfWeekComboBox,
+                                ButtonType createBtnType) {
     dialogPane.lookupButton(createBtnType).addEventFilter(javafx.event.ActionEvent.ACTION, ev -> {
-      validateInput(nameField.getText(), descriptionField.getText(), dayOfWeekComboBox.getValue(),
-          ev);
+      validateEventInput(nameField.getText(), dayOfWeekComboBox.getValue(),
+          startDatePicker.getValue(), startTimePicker.getValue(), ev);
 
       try {
         Long.parseLong(durationField.getText());
@@ -243,13 +270,15 @@ public class ItemCreationController {
     });
 
     dialog.setResultConverter(
-        createEventResultConverter(nameField, descriptionField, dayOfWeekComboBox, startTimePicker,
+        createEventResultConverter(nameField, descriptionField, dayOfWeekComboBox, startDatePicker,
+            startTimePicker,
             durationField, createBtnType));
 
     VBox dialogVbox = new VBox(10);
     dialogVbox.setPadding(new Insets(20, 20, 20, 20));
     dialogVbox.getChildren()
-        .addAll(nameField, descriptionField, dayOfWeekComboBox, startTimePicker, durationField);
+        .addAll(nameField, descriptionField, dayOfWeekComboBox, startDatePicker, startTimePicker,
+            durationField);
 
     dialogPane.setContent(dialogVbox);
   }
@@ -257,15 +286,18 @@ public class ItemCreationController {
   private Callback<ButtonType, Event> createEventResultConverter(TextField nameField,
                                                                  TextField descriptionField,
                                                                  ComboBox<DayOfWeek> dayOfWeekComboBox,
-                                                                 DatePicker startTimePicker,
+                                                                 DatePicker startDatePicker,
+                                                                 Spinner<LocalTime> startTimePicker,
                                                                  TextField durationField,
                                                                  ButtonType createBtnType) {
     return buttonType -> {
       if (buttonType == createBtnType) {
-        Instant startTime =
-            startTimePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant();
+        LocalDate startDate = startDatePicker.getValue();
+        LocalTime startTime = startTimePicker.getValue();
+        Instant startInstant =
+            LocalDateTime.of(startDate, startTime).atZone(ZoneId.systemDefault()).toInstant();
         return new Event(nameField.getText(), descriptionField.getText(),
-            dayOfWeekComboBox.getValue(), startTime.getEpochSecond(),
+            dayOfWeekComboBox.getValue(), startInstant.getEpochSecond(),
             Long.parseLong(durationField.getText()));
       }
       return null;
@@ -293,11 +325,50 @@ public class ItemCreationController {
 
     // If the Optional contains a value, convert it to a LocalDate and set it as the value for the DatePicker
     epochTimeOpt.ifPresent(epochTime -> {
-      LocalDate date = Instant.ofEpochMilli(epochTime).atZone(ZoneId.systemDefault()).toLocalDate();
+      LocalDate date =
+          Instant.ofEpochSecond(epochTime).atZone(ZoneId.systemDefault()).toLocalDate();
       startTimePicker.setValue(date);
     });
 
     return startTimePicker;
   }
+
+  private Spinner<LocalTime> setupTimePicker(Optional<Long> startTime) {
+    Spinner<LocalTime> timeSpinner = createTimePicker(); // the method we previously defined
+    startTime.ifPresent(time -> {
+      LocalTime localTime =
+          Instant.ofEpochSecond(time).atZone(ZoneId.systemDefault()).toLocalTime();
+      timeSpinner.getValueFactory().setValue(localTime);
+    });
+    return timeSpinner;
+  }
+
+  private Spinner<LocalTime> createTimePicker() {
+    Spinner<LocalTime> timeSpinner = new Spinner<>();
+    timeSpinner.setValueFactory(
+        new SpinnerValueFactory<LocalTime>() {
+          {
+            setConverter(new LocalTimeStringConverter(FormatStyle.SHORT));
+          }
+
+          @Override
+          public void decrement(int steps) {
+            LocalTime time = getValue();
+            setValue(time.minusMinutes(steps));
+          }
+
+          @Override
+          public void increment(int steps) {
+            LocalTime time = getValue();
+            setValue(time.plusMinutes(steps));
+          }
+        });
+
+    timeSpinner.getValueFactory().setValue(LocalTime.now());
+
+    return timeSpinner;
+  }
+
+
 }
 

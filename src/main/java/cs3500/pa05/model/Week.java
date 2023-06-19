@@ -84,13 +84,13 @@ public class Week {
 
   /**
    * Delete an item from the tasks or event list if the ID mathes.
-   * @param id ID of item to delete.
+   * @param item item to delete.
    */
   public void deleteItem(ScheduleItem item) {
     if (item instanceof Task) {
       tasks.remove(item);
     } else if (item instanceof Event) {
-      events.remove(item)
+      events.remove(item);
     }
   }
 }

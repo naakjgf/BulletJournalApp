@@ -12,9 +12,9 @@
 
 <Scene xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <root>
-      <AnchorPane prefHeight="589.0" prefWidth="1037.0">
+      <AnchorPane minHeight="300.0" minWidth="600.0" prefHeight="589.0" prefWidth="1037.0">
          <children>
-            <VBox maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="503.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <VBox fx:id="menuBarContainer" />
                   <BorderPane maxWidth="1.7976931348623157E308" prefHeight="55.0">
@@ -63,11 +63,11 @@
                         </BorderPane>
                      </center>
                   </BorderPane>
-                  <HBox maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="441.0">
+                  <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" VBox.vgrow="ALWAYS">
                      <children>
-                        <HBox fx:id="weekView" maxWidth="1.7976931348623157E308" prefHeight="100.0" HBox.hgrow="ALWAYS">
+                        <HBox fx:id="weekView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" HBox.hgrow="ALWAYS">
                            <children>
-                              <VBox maxWidth="1.7976931348623157E308" minWidth="120.0" prefHeight="200.0" styleClass="weekSection" HBox.hgrow="ALWAYS">
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="120.0" styleClass="weekSection" HBox.hgrow="ALWAYS">
                                  <children>
                                     <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Monday">
                                        <font>
@@ -76,7 +76,7 @@
                                     </Label>
                                  </children>
                               </VBox>
-                              <VBox maxWidth="1.7976931348623157E308" minWidth="120.0" prefHeight="200.0" styleClass="weekSection" HBox.hgrow="ALWAYS">
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="120.0" styleClass="weekSection" HBox.hgrow="ALWAYS">
                                  <children>
                                     <Label alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" styleClass="weekLabel" text="Tuesday" VBox.vgrow="ALWAYS">
                                        <font>
@@ -85,7 +85,7 @@
                                     </Label>
                                  </children>
                               </VBox>
-                              <VBox maxWidth="1.7976931348623157E308" minWidth="120.0" prefHeight="200.0" styleClass="weekSection" HBox.hgrow="ALWAYS">
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="120.0" styleClass="weekSection" HBox.hgrow="ALWAYS">
                                  <children>
                                     <Label maxWidth="1.7976931348623157E308" minWidth="0.0" prefHeight="15.0" styleClass="weekLabel" text="Wednesday">
                                        <font>
@@ -94,7 +94,7 @@
                                     </Label>
                                  </children>
                               </VBox>
-                              <VBox maxWidth="1.7976931348623157E308" minWidth="120.0" prefHeight="200.0" styleClass="weekSection" HBox.hgrow="ALWAYS">
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="120.0" styleClass="weekSection" HBox.hgrow="ALWAYS">
                                  <children>
                                     <Label maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Thursday">
                                        <font>
@@ -103,7 +103,7 @@
                                     </Label>
                                  </children>
                               </VBox>
-                              <VBox maxWidth="1.7976931348623157E308" minWidth="120.0" prefHeight="200.0" styleClass="weekSection" HBox.hgrow="ALWAYS">
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="120.0" styleClass="weekSection" HBox.hgrow="ALWAYS">
                                  <children>
                                     <Label maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Friday">
                                        <font>
@@ -112,7 +112,7 @@
                                     </Label>
                                  </children>
                               </VBox>
-                              <VBox maxWidth="1.7976931348623157E308" minWidth="120.0" prefHeight="200.0" styleClass="weekSection" HBox.hgrow="ALWAYS">
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="120.0" styleClass="weekSection" HBox.hgrow="ALWAYS">
                                  <children>
                                     <Label maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Saturday">
                                        <font>
@@ -121,7 +121,7 @@
                                     </Label>
                                  </children>
                               </VBox>
-                              <VBox maxWidth="1.7976931348623157E308" minWidth="120.0" prefHeight="200.0" styleClass="weekSection" HBox.hgrow="ALWAYS">
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="120.0" styleClass="weekSection" HBox.hgrow="ALWAYS">
                                  <children>
                                     <Label maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Sunday">
                                        <font>
