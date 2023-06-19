@@ -11,12 +11,11 @@
 ## Section 3: Power Ups
 - Weekly Overview
 - Takesie-Backsies
-- Progress Bar
-
-## Section 3: Power Ups
-
+- Mini-Viewer
 
 ## Section 4: Quality of Life
+- Mind Changes
+- Week tabs
 
 
 ## Section 5: Extra Credit

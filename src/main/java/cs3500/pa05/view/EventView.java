@@ -25,10 +25,8 @@ public class EventView extends VBox {
     nameLabel.getStyleClass().add("label-hover-effect");
     nameLabel.setFont(new Font("Roboto", 16));
     Label descLabel = new Label(event.getDescription());
-    Label startTimeLabel = new Label(formatTime(event.getStartTime()));
-    Label durationLabel = new Label("Duration: " + event.getDuration() + " minutes");
     this.getStyleClass().add("event");
-    this.getChildren().addAll(nameLabel, descLabel, startTimeLabel, durationLabel);
+    this.getChildren().addAll(nameLabel, descLabel);
     this.setSpacing(1);
     nameLabel.setOnMouseClicked((MouseEvent e) -> {ScheduleItemAlert alert = new ScheduleItemAlert(
         (ScheduleItem) event, callback);

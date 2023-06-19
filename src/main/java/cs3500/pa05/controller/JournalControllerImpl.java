@@ -36,9 +36,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -228,9 +231,11 @@ public class JournalControllerImpl implements JournalController {
 
     for (Node node : weekView.getChildren()) {
       // Check if this child is a VBox
-      if (node instanceof VBox vBox) {
+      if (node instanceof ScrollPane scrollPane) {
         // Now, we can remove specific children from the VBox
-        vBox.getChildren().removeIf(
+        VBox vbox = (VBox) scrollPane.getContent();
+
+        ((VBox) vbox).getChildren().removeIf(
             child -> child instanceof TaskView || child instanceof EventView);
       }
     }
@@ -250,8 +255,10 @@ public class JournalControllerImpl implements JournalController {
       }
 
       //Add tView to GUI
-      VBox myVBox = (VBox) weekView.getChildren().get(t.getDayOfWeek().getNumVal());
-      myVBox.getChildren().add(tView);
+      VBox vbox = (VBox) ((ScrollPane) weekView.getChildren()
+          .get(t.getDayOfWeek().getNumVal())).getContent();
+
+      vbox.getChildren().add(tView);
 
       //Add completion status to sidebar
       VBox sidebarTask = new VBox(5);
@@ -276,8 +283,11 @@ public class JournalControllerImpl implements JournalController {
 
       EventView eView = new EventView(e,
           (ItemAction action) -> handleItemAction(action, currentWeek, e));
-      VBox myVBox = (VBox) weekView.getChildren().get(e.getDayOfWeek().getNumVal());
-      myVBox.getChildren().add(eView);
+
+      VBox vbox = (VBox) ((ScrollPane) weekView.getChildren()
+          .get(e.getDayOfWeek().getNumVal())).getContent();
+
+      vbox.getChildren().add(eView);
     }
 
     alertMaximumItems(taskCountMap, eventCountMap);

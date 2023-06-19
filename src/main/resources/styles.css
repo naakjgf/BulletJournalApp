@@ -1,8 +1,8 @@
 .weekSection {
-    -fx-border-color: gray;
+    /*-fx-border-color: gray;*/
     -fx-background-size: 100% auto;
-    -fx-border-style: hidden dashed hidden hidden;
-    -fx-border-width: 1px;
+    /*-fx-border-style: hidden dashed hidden hidden;*/
+    /*-fx-border-width: 1px;*/
 }
 
 .weekSection > label {
