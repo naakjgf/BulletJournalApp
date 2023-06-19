@@ -3,6 +3,7 @@ package cs3500.pa05.view;
 import cs3500.pa05.enums.ItemAction;
 import cs3500.pa05.model.ScheduleItem;
 import java.util.function.Consumer;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -22,11 +23,19 @@ public class ScheduleItemAlert extends Dialog<Void> {
     getDialogPane().getButtonTypes().addAll(editButtonType, deleteButtonType, closeButtonType);
 
     // RUN callback WITH ItemAction ENUM TYPE FOR EVENT
-//    callback.accept(ItemAction.DELETE);
+
 
     // Set Content
     Label label = new Label(item.getDescription());
     label.setWrapText(true);
+    Button deleteButton = (Button) getDialogPane().lookupButton(deleteButtonType);
+    deleteButton.setOnAction(e -> {
+      callback.accept(ItemAction.DELETE);
+    });
+    Button editButton = (Button) getDialogPane().lookupButton(editButtonType);
+    editButton.setOnAction(e -> {
+      callback.accept(ItemAction.EDIT);
+    });
     GridPane grid = new GridPane();
     grid.add(label, 0, 0);
     getDialogPane().setContent(grid);
