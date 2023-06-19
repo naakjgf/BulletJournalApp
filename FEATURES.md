@@ -5,10 +5,13 @@
 - Persistence
 
 ## Section 2: Headlining Features
-
+- Tasks Queue
+- Menu Bar and Shortcuts
 
 ## Section 3: Power Ups
-
+- Weekly Overview
+- Takesie-Backsies
+- Progress Bar
 
 ## Section 3: Power Ups
 
