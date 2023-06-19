@@ -3,7 +3,6 @@ package cs3500.pa05.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,7 +50,7 @@ public class TaskTest {
 
   @Test
   public void getId() {
-    assertNull(task.getId());
+    assertNotNull(task.getId());
   }
 
   @Test
@@ -78,7 +77,7 @@ public class TaskTest {
       System.out.println(parsedTask.isComplete());
       System.out.println(json);
       assertFalse(parsedTask.isComplete());
-      assertEquals(null, parsedTask.getId());
+      assertEquals("123", parsedTask.getId());
     } catch (IOException e) {
       e.printStackTrace();
     }

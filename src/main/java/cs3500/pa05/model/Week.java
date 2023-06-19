@@ -89,5 +89,4 @@ public class Week {
     tasks.removeIf(task -> task.getId().equals(id));
     events.removeIf(event -> event.getId().equals(id));
   }
-
 }
