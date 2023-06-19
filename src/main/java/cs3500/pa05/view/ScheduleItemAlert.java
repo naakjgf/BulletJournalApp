@@ -22,6 +22,7 @@ public class ScheduleItemAlert extends Dialog<Void> {
     getDialogPane().getButtonTypes().addAll(editButtonType, deleteButtonType, closeButtonType);
 
     // RUN callback WITH ItemAction ENUM TYPE FOR EVENT
+//    callback.accept(ItemAction.DELETE);
 
     // Set Content
     Label label = new Label(item.getDescription());
