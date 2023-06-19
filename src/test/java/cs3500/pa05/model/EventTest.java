@@ -28,7 +28,7 @@ public class EventTest {
   public void jsonCreatorTest() {
     String json =
         "{ \"name\" : \"Meeting\", \"description\" : \"Project meeting\", \"day\" : \"MONDAY\"," +
-            " \"startTime\" : 1615972928, \"duration\" : 3600000, \"id\" : \"1\" }";
+            " \"startTime\" : 1615972928, \"duration\" : 3600000, \"id\" : \"123\" }";
     try {
       Event parsedEvent = objectMapper.readValue(json, Event.class);
 
@@ -37,7 +37,7 @@ public class EventTest {
       assertEquals(DayOfWeek.MONDAY, parsedEvent.getDayOfWeek());
       assertEquals(1615972928L, parsedEvent.getStartTime());
       assertEquals(3600000L, parsedEvent.getDuration());
-      assertEquals("1", parsedEvent.getId());
+      assertEquals("123", parsedEvent.getId());
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -55,8 +55,8 @@ public class EventTest {
 
   @Test
   public void setStartTime() {
-    event.setStartTime(1615973000L);
-    assertEquals(1615973000L, event.getStartTime());
+    event.setStartTime(1615000L);
+    assertEquals(1615000L, event.getStartTime());
   }
 
   @Test
