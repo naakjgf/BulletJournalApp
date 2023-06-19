@@ -86,7 +86,17 @@ public class Week {
    * @param id ID of item to delete.
    */
   public void deleteItem(String id) {
-    tasks.removeIf(task -> task.getId().equals(id));
-    events.removeIf(event -> event.getId().equals(id));
+    tasks.removeIf(task -> {
+      if (task.getId() == null) {
+        return false;
+      }
+      return task.getId().equals(id);
+    });
+    events.removeIf(event -> {
+      if (event.getId() == null) {
+        return false;
+      }
+      return event.getId().equals(id);
+    });
   }
 }
