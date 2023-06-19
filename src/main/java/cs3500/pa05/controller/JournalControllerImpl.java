@@ -209,7 +209,9 @@ public class JournalControllerImpl implements JournalController {
       if (node instanceof VBox) {
         VBox vBox = (VBox) node;
         // Now, we can remove specific children from the VBox
-        vBox.getChildren().removeIf(child -> child instanceof TaskView || child instanceof EventView || child instanceof ScheduleObjectButton);
+        vBox.getChildren().removeIf(
+            child -> child instanceof TaskView || child instanceof EventView ||
+                child instanceof ScheduleObjectButton);
       }
     }
 
@@ -218,7 +220,8 @@ public class JournalControllerImpl implements JournalController {
     Week currentWeek = manager.getCurrentWeek();
 
     for (Task t : currentWeek.getTasks()) {
-      ScheduleObjectButton tView = new ScheduleObjectButton(t, (ItemAction action) -> handleItemAction(action, currentWeek, t.getId()));
+      ScheduleObjectButton tView = new ScheduleObjectButton(t,
+          (ItemAction action) -> handleItemAction(action, currentWeek, t));
       //Add tView to GUI
       VBox myVBox = (VBox) weekView.getChildren().get(t.getDayOfWeek().getNumVal());
       myVBox.getChildren().add(tView);
@@ -227,7 +230,8 @@ public class JournalControllerImpl implements JournalController {
     }
     currentWeek.getEvents().sort(Comparator.comparingLong(Event::getStartTime));
     for (Event e : currentWeek.getEvents()) {
-      ScheduleObjectButton eView = new ScheduleObjectButton(e);
+      ScheduleObjectButton eView = new ScheduleObjectButton(e,
+          (ItemAction action) -> handleItemAction(action, currentWeek, e));
       VBox myVBox = (VBox) weekView.getChildren().get(e.getDayOfWeek().getNumVal());
       myVBox.getChildren().add(eView);
     }
