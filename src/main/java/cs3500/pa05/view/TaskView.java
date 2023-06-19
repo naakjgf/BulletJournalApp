@@ -3,6 +3,9 @@ package cs3500.pa05.view;
 import cs3500.pa05.enums.DayOfWeek;
 import cs3500.pa05.enums.ItemAction;
 import cs3500.pa05.model.ScheduleItem;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.function.Consumer;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -28,7 +31,6 @@ public class TaskView extends VBox {
     nameLabel.setAlignment(Pos.CENTER);
     Label statusLabel = new Label("Status: " + (task.isComplete() ? "Completed" : "Incomplete"));
     this.getStyleClass().add("task");
-
     this.getChildren().addAll(nameLabel, descLabel, statusLabel);
     this.setOnMouseClicked((MouseEvent e) -> {ScheduleItemAlert alert = new ScheduleItemAlert(
         (ScheduleItem) task, callback);
