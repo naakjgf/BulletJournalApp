@@ -50,6 +50,8 @@ public class ScheduleManagerImpl implements ScheduleManager {
     this.setCurrentWeek(this.settings.getCurrentWeek());
   }
 
+
+
   @Override
   public void saveData() {
     if (this.fileManager != null) {
@@ -57,6 +59,19 @@ public class ScheduleManagerImpl implements ScheduleManager {
 
       this.fileManager.saveToFile(bujo);
     }
+  }
+
+  @Override
+  public Settings getSettings() {
+    return settings;
+  }
+
+  public void setMaximumTasks(int maximumTasks) {
+    settings.setMaximumTasks(maximumTasks);
+  }
+
+  public void setMaximumEvents(int maximumEvents) {
+    settings.setMaximumEvents(maximumEvents);
   }
 
   @Override

@@ -63,6 +63,11 @@
                         </BorderPane>
                      </center>
                   </BorderPane>
+                  <HBox alignment="CENTER" maxWidth="1.7976931348623157E308">
+                     <children>
+                        <Label fx:id="warningLabel" disable="true" textFill="RED" />
+                     </children>
+                  </HBox>
                   <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" VBox.vgrow="ALWAYS">
                      <children>
                         <HBox fx:id="weekView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" HBox.hgrow="ALWAYS">

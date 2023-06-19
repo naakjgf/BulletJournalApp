@@ -15,7 +15,10 @@ import cs3500.pa05.view.EventView;
 import cs3500.pa05.view.ScheduleItemAlert;
 import cs3500.pa05.view.TaskView;
 import java.io.File;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -50,6 +53,7 @@ public class JournalControllerImpl implements JournalController {
   private ScheduleManager manager;
   private FileManager fileManager;
   private ItemCreationController itemCreator;
+  private SettingsController settingsController;
 
   private Settings settings;
   @FXML
@@ -70,6 +74,9 @@ public class JournalControllerImpl implements JournalController {
   @FXML
   private Button newWeek;
 
+  @FXML
+  private Label warningLabel;
+
 
   private Stage stage;
 
@@ -82,6 +89,7 @@ public class JournalControllerImpl implements JournalController {
     this.manager = manager;
     this.stage = stage;
     this.itemCreator = new ItemCreationController();
+    this.settingsController = new SettingsController();
   }
 
   /**
@@ -89,6 +97,14 @@ public class JournalControllerImpl implements JournalController {
    */
   public JournalControllerImpl() {
 
+  }
+
+  public static Map.Entry<DayOfWeek, Integer> findMax(Map<DayOfWeek, Integer> days) {
+    if (days == null || days.isEmpty()) {
+      return null;  // or throw an exception, depending on your requirements
+    }
+
+    return Collections.max(days.entrySet(), Map.Entry.comparingByValue());
   }
 
   @Override
@@ -126,14 +142,12 @@ public class JournalControllerImpl implements JournalController {
     newWeek.setOnAction(e -> createNewWeek());
   }
 
-
   /**
    * Updates the week title to the current active week.
    */
   public void updateWeekTitle() {
     weekTitle.setText("Week " + (this.manager.getCurrentWeekNum() + 1));
   }
-
 
   private void handleMenuAction(ActionEvent e, MenuBarAction action) {
     switch (action) {
@@ -143,8 +157,13 @@ public class JournalControllerImpl implements JournalController {
       case NEW_WEEK -> createNewWeek();
       case NEW_TASK -> createNewTask();
       case NEW_EVENT -> createNewEvent();
+      case OPEN_SETTINGS -> openSettings();
     }
+  }
 
+  private void openSettings() {
+    this.settingsController.openSettingsModal(this.manager.getSettings());
+    renderWeek();
   }
 
   private void createNewWeek() {
@@ -168,8 +187,9 @@ public class JournalControllerImpl implements JournalController {
     MenuItem itemSave = createMenuItem(MenuBarAction.SAVE, "Save", createKeybinds);
     MenuItem itemSaveAs = createMenuItem(MenuBarAction.SAVE_AS, "Save As", createKeybinds);
     MenuItem itemOpen = createMenuItem(MenuBarAction.OPEN, "Open", createKeybinds);
+    MenuItem itemSettings = createMenuItem(MenuBarAction.OPEN_SETTINGS, "Settings", createKeybinds);
 
-    menuFile.getItems().addAll(itemSave, itemSaveAs, itemOpen);
+    menuFile.getItems().addAll(itemSave, itemSaveAs, itemOpen, itemSettings);
 
     Menu menuInsert = new Menu("Insert");
     MenuItem itemEvent = createMenuItem(MenuBarAction.NEW_EVENT, "New Event", createKeybinds);
@@ -184,7 +204,6 @@ public class JournalControllerImpl implements JournalController {
     return menubar;
   }
 
-
   private void attachMenuHandlers() {
     MenuBar menuBarVisible = createMenuBar(true);
     MenuBar menuBarHidden = createMenuBar(false);
@@ -192,10 +211,6 @@ public class JournalControllerImpl implements JournalController {
     menuBarHidden.useSystemMenuBarProperty().set(true);
 
     menuBarContainer.getChildren().addAll(menuBarVisible, menuBarHidden);
-  }
-
-  private void clearWeek() {
-
   }
 
   private void handleItemAction(ItemAction action, Week w, ScheduleItem item) {
@@ -208,6 +223,9 @@ public class JournalControllerImpl implements JournalController {
   }
 
   public void renderWeek() {
+    Map<DayOfWeek, Integer> taskCountMap = new HashMap<>();
+    Map<DayOfWeek, Integer> eventCountMap = new HashMap<>();
+
     for (Node node : weekView.getChildren()) {
       // Check if this child is a VBox
       if (node instanceof VBox vBox) {
@@ -224,10 +242,18 @@ public class JournalControllerImpl implements JournalController {
     for (Task t : currentWeek.getTasks()) {
       TaskView tView = new TaskView(t,
           (ItemAction action) -> handleItemAction(action, currentWeek, t));
+
+      if (taskCountMap.containsKey(t.getDayOfWeek())) {
+        taskCountMap.put(t.getDayOfWeek(), taskCountMap.get(t.getDayOfWeek()) + 1);
+      } else {
+        taskCountMap.put(t.getDayOfWeek(), 1);
+      }
+
       //Add tView to GUI
       VBox myVBox = (VBox) weekView.getChildren().get(t.getDayOfWeek().getNumVal());
       myVBox.getChildren().add(tView);
-      //Add checkbox to sidebar
+
+      //Add completion status to sidebar
       VBox sidebarTask = new VBox(5);
       sidebarTask.getStyleClass().add("sidebarTask");
       Label nameLabel = new Label(t.getName());
@@ -235,19 +261,53 @@ public class JournalControllerImpl implements JournalController {
       Label completeLabel = new Label(t.isComplete() ? "Completed" : "Incomplete");
       completeLabel.setFont(Font.font("Arial", 12));
 
+
       sidebarTask.getChildren().addAll(nameLabel, completeLabel);
 
       sideBar.getChildren().add(sidebarTask);
     }
     currentWeek.getEvents().sort(Comparator.comparingLong(Event::getStartTime));
     for (Event e : currentWeek.getEvents()) {
+      if (eventCountMap.containsKey(e.getDayOfWeek())) {
+        eventCountMap.put(e.getDayOfWeek(), eventCountMap.get(e.getDayOfWeek()) + 1);
+      } else {
+        eventCountMap.put(e.getDayOfWeek(), 1);
+      }
+
       EventView eView = new EventView(e,
           (ItemAction action) -> handleItemAction(action, currentWeek, e));
       VBox myVBox = (VBox) weekView.getChildren().get(e.getDayOfWeek().getNumVal());
       myVBox.getChildren().add(eView);
     }
 
+    alertMaximumItems(taskCountMap, eventCountMap);
+
     updateWeekTitle();
+  }
+
+  private void alertMaximumItems(Map<DayOfWeek, Integer> taskCountMap,
+                                 Map<DayOfWeek, Integer> eventCountMap) {
+    Settings settings = this.manager.getSettings();
+
+    warningLabel.setText("");
+
+    Map.Entry<DayOfWeek, Integer> taskMax = findMax(taskCountMap);
+    Map.Entry<DayOfWeek, Integer> eventMax = findMax(eventCountMap);
+
+    if (taskMax != null && settings.getMaximumTasks() != 0) {
+      if (taskMax.getValue() > settings.getMaximumTasks()) {
+        warningLabel.setText("Maximum number of tasks exceeded for " + taskMax.getKey() + "    ");
+      }
+    }
+
+    if (eventMax != null && settings.getMaximumEvents() != 0) {
+      if (eventMax.getValue() > settings.getMaximumEvents()) {
+        warningLabel.setText(
+            warningLabel.getText() + "Maximum number of events exceeded for " + eventMax.getKey());
+      }
+    }
+
+
   }
 
   public void saveFile(boolean saveAs) {

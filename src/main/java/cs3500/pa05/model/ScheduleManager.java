@@ -68,4 +68,10 @@ public interface ScheduleManager {
    * @return total number of weeks in schedule manager.
    */
   int getNumWeeks();
+
+  /**
+   * Retrieves the settings from the schedule manager.
+   * @return Settings object.
+   */
+  Settings getSettings();
 }

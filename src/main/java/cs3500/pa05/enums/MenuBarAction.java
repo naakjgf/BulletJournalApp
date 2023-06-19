@@ -9,7 +9,8 @@ public enum MenuBarAction {
   OPEN("Shortcut+O"),
   NEW_EVENT("Shortcut+E"),
   NEW_TASK("Shortcut+T"),
-  NEW_WEEK("Shortcut+N");
+  NEW_WEEK("Shortcut+N"),
+  OPEN_SETTINGS("Shortcut+,");
 
   private final String keyCombination;
 
