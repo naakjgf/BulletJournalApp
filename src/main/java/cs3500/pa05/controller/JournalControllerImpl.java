@@ -13,7 +13,6 @@ import cs3500.pa05.model.file_manager.FileManager;
 import cs3500.pa05.model.file_manager.FileManagerImpl;
 import cs3500.pa05.view.EventView;
 import cs3500.pa05.view.ScheduleItemAlert;
-import cs3500.pa05.view.ScheduleObjectButton;
 import cs3500.pa05.view.TaskView;
 import java.io.File;
 import java.util.Comparator;
@@ -211,8 +210,7 @@ public class JournalControllerImpl implements JournalController {
       if (node instanceof VBox vBox) {
         // Now, we can remove specific children from the VBox
         vBox.getChildren().removeIf(
-            child -> child instanceof TaskView || child instanceof EventView ||
-                child instanceof ScheduleObjectButton);
+            child -> child instanceof TaskView || child instanceof EventView);
       }
     }
 
@@ -221,7 +219,7 @@ public class JournalControllerImpl implements JournalController {
     Week currentWeek = manager.getCurrentWeek();
 
     for (Task t : currentWeek.getTasks()) {
-      ScheduleObjectButton tView = new ScheduleObjectButton(t,
+      TaskView tView = new TaskView(t,
           (ItemAction action) -> handleItemAction(action, currentWeek, t));
       //Add tView to GUI
       VBox myVBox = (VBox) weekView.getChildren().get(t.getDayOfWeek().getNumVal());
@@ -231,7 +229,7 @@ public class JournalControllerImpl implements JournalController {
     }
     currentWeek.getEvents().sort(Comparator.comparingLong(Event::getStartTime));
     for (Event e : currentWeek.getEvents()) {
-      ScheduleObjectButton eView = new ScheduleObjectButton(e,
+      EventView eView = new EventView(e,
           (ItemAction action) -> handleItemAction(action, currentWeek, e));
       VBox myVBox = (VBox) weekView.getChildren().get(e.getDayOfWeek().getNumVal());
       myVBox.getChildren().add(eView);
