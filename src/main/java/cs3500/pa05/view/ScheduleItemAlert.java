@@ -30,10 +30,12 @@ public class ScheduleItemAlert extends Dialog<Void> {
     label.setWrapText(true);
     Button deleteButton = (Button) getDialogPane().lookupButton(deleteButtonType);
     deleteButton.setOnAction(e -> {
+      close();
       callback.accept(ItemAction.DELETE);
     });
     Button editButton = (Button) getDialogPane().lookupButton(editButtonType);
     editButton.setOnAction(e -> {
+      close();
       callback.accept(ItemAction.EDIT);
     });
     GridPane grid = new GridPane();
