@@ -1,0 +1,1 @@
+{ "data": [], "settings": { "currentWeek": 0, "maximumEvents": boof, "maximumTasks": 0 }
