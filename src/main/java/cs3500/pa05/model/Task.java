@@ -80,7 +80,7 @@ public class Task implements TaskInterface {
 
   @Override
   public String getId() {
-    return null;
+    return id;
   }
 
   @Override
