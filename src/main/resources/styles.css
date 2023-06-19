@@ -62,6 +62,9 @@
     -fx-border-color: #1C6EA4;
     -fx-border-width: 2px;
     -fx-padding: 5px;
+    -fx-start-margin: 10px;
+    -fx-end-margin: 10px;
+    -fx-gap-start-and-end: 10px;
 }
 
 .event:hover {

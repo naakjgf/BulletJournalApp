@@ -5,9 +5,11 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -32,14 +34,23 @@
                                           <Font size="25.0" />
                                        </font>
                                     </Button>
-                                    <Label fx:id="weekTitle" text="Week 4">
-                                       <padding>
-                                          <Insets left="15.0" right="15.0" />
-                                       </padding>
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Label>
+                                    <StackPane fx:id="weekTitleContainer">
+                                       <children>
+                                          <TextField fx:id="weekTitleField" prefColumnCount="8" promptText="Week Name" text="Week 4fgfredfgredfre" visible="false">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </TextField>
+                                          <Label fx:id="weekTitle" text="Week 4">
+                                             <padding>
+                                                <Insets left="15.0" right="15.0" />
+                                             </padding>
+                                             <font>
+                                                <Font size="22.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </StackPane>
                                     <Button fx:id="nextWeek" alignment="CENTER_RIGHT" mnemonicParsing="false" styleClass="roundedButton" text="Next">
                                        <font>
                                           <Font size="25.0" />
@@ -73,9 +84,9 @@
                      <children>
                         <HBox fx:id="weekView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" HBox.hgrow="ALWAYS">
                            <children>
-                              <ScrollPane hbarPolicy="NEVER" hmax="0.0" minHeight="400.0" minWidth="120.0" prefHeight="200.0" vbarPolicy="NEVER" HBox.hgrow="ALWAYS">
+                              <ScrollPane fitToWidth="true" hbarPolicy="NEVER" hmax="0.0" minHeight="400.0" minWidth="120.0" prefHeight="200.0" vbarPolicy="NEVER" HBox.hgrow="ALWAYS">
                                  <content>
-                                    <VBox minWidth="120.0" styleClass="weekSection">
+                                    <VBox minWidth="120.0" spacing="10.0" styleClass="weekSection">
                                        <children>
                                           <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Monday">
                                              <font>
@@ -83,12 +94,15 @@
                                              </font>
                                           </Label>
                                        </children>
+                                       <padding>
+                                          <Insets left="8.0" right="8.0" />
+                                       </padding>
                                     </VBox>
                                  </content>
                               </ScrollPane>
-                              <ScrollPane hbarPolicy="NEVER" hmax="0.0" minHeight="400.0" minWidth="120.0" prefHeight="200.0" vbarPolicy="NEVER" HBox.hgrow="ALWAYS">
+                              <ScrollPane fitToWidth="true" hbarPolicy="NEVER" hmax="0.0" minHeight="400.0" minWidth="120.0" prefHeight="200.0" vbarPolicy="NEVER" HBox.hgrow="ALWAYS">
                                  <content>
-                                    <VBox maxHeight="0.0" minWidth="120.0" prefHeight="0.0" styleClass="weekSection">
+                                    <VBox maxHeight="0.0" minWidth="120.0" prefHeight="0.0" spacing="10.0" styleClass="weekSection">
                                        <children>
                                           <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Tuesday">
                                              <font>
@@ -96,25 +110,31 @@
                                              </font>
                                           </Label>
                                        </children>
+                                       <padding>
+                                          <Insets left="8.0" right="8.0" />
+                                       </padding>
                                     </VBox>
                                  </content>
                               </ScrollPane>
-                              <ScrollPane hbarPolicy="NEVER" hmax="0.0" hvalue="1.0" minHeight="400.0" minWidth="120.0" prefHeight="200.0" vbarPolicy="NEVER" HBox.hgrow="ALWAYS">
+                              <ScrollPane fitToWidth="true" hbarPolicy="NEVER" hmax="0.0" hvalue="1.0" minHeight="400.0" minWidth="120.0" prefHeight="200.0" vbarPolicy="NEVER" HBox.hgrow="ALWAYS">
                                  <content>
-                                    <VBox minWidth="120.0" styleClass="weekSection">
+                                    <VBox minWidth="120.0" spacing="10.0" styleClass="weekSection">
                                        <children>
-                                          <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Wednesday">
+                                          <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Wednesday" VBox.vgrow="ALWAYS">
                                              <font>
                                                 <Font size="12.0" />
                                              </font>
                                           </Label>
                                        </children>
+                                       <padding>
+                                          <Insets left="8.0" right="8.0" />
+                                       </padding>
                                     </VBox>
                                  </content>
                               </ScrollPane>
-                              <ScrollPane hbarPolicy="NEVER" hmax="0.0" hvalue="1.0" minHeight="400.0" minWidth="120.0" prefHeight="200.0" vbarPolicy="NEVER" HBox.hgrow="ALWAYS">
+                              <ScrollPane fitToWidth="true" hbarPolicy="NEVER" hmax="0.0" hvalue="1.0" minHeight="400.0" minWidth="120.0" prefHeight="200.0" vbarPolicy="NEVER" HBox.hgrow="ALWAYS">
                                  <content>
-                                    <VBox minWidth="120.0" styleClass="weekSection">
+                                    <VBox minWidth="120.0" spacing="10.0" styleClass="weekSection">
                                        <children>
                                           <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Thursday">
                                              <font>
@@ -122,12 +142,15 @@
                                              </font>
                                           </Label>
                                        </children>
+                                       <padding>
+                                          <Insets left="8.0" right="8.0" />
+                                       </padding>
                                     </VBox>
                                  </content>
                               </ScrollPane>
-                              <ScrollPane hbarPolicy="NEVER" hmax="0.0" hvalue="1.0" minHeight="400.0" minWidth="120.0" prefHeight="200.0" vbarPolicy="NEVER" HBox.hgrow="ALWAYS">
+                              <ScrollPane fitToWidth="true" hbarPolicy="NEVER" hmax="0.0" hvalue="1.0" minHeight="400.0" minWidth="120.0" prefHeight="200.0" vbarPolicy="NEVER" HBox.hgrow="ALWAYS">
                                  <content>
-                                    <VBox minWidth="120.0" styleClass="weekSection">
+                                    <VBox maxWidth="1.7976931348623157E308" minWidth="120.0" spacing="10.0" styleClass="weekSection">
                                        <children>
                                           <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Friday">
                                              <font>
@@ -135,45 +158,62 @@
                                              </font>
                                           </Label>
                                        </children>
+                                       <padding>
+                                          <Insets left="8.0" right="8.0" />
+                                       </padding>
                                     </VBox>
                                  </content>
                               </ScrollPane>
-                              <ScrollPane hbarPolicy="NEVER" hmax="0.0" hvalue="1.0" minHeight="400.0" minWidth="120.0" prefHeight="200.0" vbarPolicy="NEVER" HBox.hgrow="ALWAYS">
+                              <ScrollPane fitToWidth="true" hbarPolicy="NEVER" hmax="0.0" hvalue="1.0" minHeight="400.0" minWidth="120.0" prefHeight="200.0" vbarPolicy="NEVER" HBox.hgrow="ALWAYS">
                                  <content>
-                                    <VBox minWidth="120.0" styleClass="weekSection">
+                                    <VBox minWidth="120.0" spacing="10.0" styleClass="weekSection">
                                        <children>
-                                          <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Saturday">
+                                          <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Saturday" VBox.vgrow="ALWAYS">
                                              <font>
                                                 <Font size="12.0" />
                                              </font>
                                           </Label>
                                        </children>
+                                       <padding>
+                                          <Insets left="8.0" right="8.0" />
+                                       </padding>
                                     </VBox>
                                  </content>
                               </ScrollPane>
-                              <ScrollPane hbarPolicy="NEVER" hmax="0.0" hvalue="1.0" minHeight="400.0" minWidth="120.0" prefHeight="200.0" vbarPolicy="NEVER" HBox.hgrow="ALWAYS">
+                              <ScrollPane fitToWidth="true" hbarPolicy="NEVER" hmax="0.0" hvalue="1.0" minHeight="400.0" minWidth="120.0" prefHeight="200.0" vbarPolicy="NEVER" HBox.hgrow="ALWAYS">
                                  <content>
-                                    <VBox minWidth="120.0" styleClass="weekSection">
+                                    <VBox minWidth="120.0" spacing="10.0" styleClass="weekSection">
                                        <children>
-                                          <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Sunday">
+                                          <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Sunday" VBox.vgrow="ALWAYS">
                                              <font>
                                                 <Font size="12.0" />
                                              </font>
                                           </Label>
                                        </children>
+                                       <padding>
+                                          <Insets left="8.0" right="8.0" />
+                                       </padding>
                                     </VBox>
                                  </content>
                               </ScrollPane>
                            </children>
                         </HBox>
-                        <VBox fx:id="sideBar" maxWidth="1.7976931348623157E308" minWidth="120.0" prefHeight="435.0" HBox.hgrow="ALWAYS">
-                           <children>
-                              <Label maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Week Tasks">
-                                 <font>
-                                    <Font size="12.0" />
-                                 </font>
-                              </Label>
-                           </children></VBox>
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" hmax="0.0" hvalue="1.0" minHeight="400.0" minWidth="120.0" prefHeight="200.0" vbarPolicy="NEVER">
+                           <content>
+                              <VBox fx:id="sideBar" minWidth="120.0" spacing="10.0">
+                                 <children>
+                                    <Label maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Week Tasks" VBox.vgrow="ALWAYS">
+                                       <font>
+                                          <Font size="12.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <padding>
+                                    <Insets left="8.0" right="8.0" />
+                                 </padding>
+                              </VBox>
+                           </content>
+                        </ScrollPane>
                      </children>
                   </HBox>
                </children>

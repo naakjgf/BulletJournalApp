@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Represents a Week in a Bujo Schedule.
@@ -14,6 +15,7 @@ public class Week {
   private List<Task> tasks;
   private List<Event> events;
   private int weekNumber;
+  private String weekName;
 
   /**
    * Constructor for rebuilding a Week object using Jackson.
@@ -23,10 +25,11 @@ public class Week {
    * @param tasks List of task objects.
    */
   @JsonCreator
-  public Week(@JsonProperty("weekNumber") int weekNumber, @JsonProperty("events") List<Event> events, @JsonProperty("tasks") List<Task> tasks) {
+  public Week(@JsonProperty("weekNumber") int weekNumber, @JsonProperty("events") List<Event> events, @JsonProperty("tasks") List<Task> tasks, @JsonProperty("weekName") String weekName) {
     this.weekNumber = weekNumber;
     this.tasks = tasks;
     this.events = events;
+    this.weekName = weekName;
   }
 
   /**
@@ -38,6 +41,14 @@ public class Week {
     this.weekNumber = weekNumber;
     this.tasks = new ArrayList<>();
     this.events = new ArrayList<>();
+  }
+
+  /**
+   * @return Name of the week.
+   */
+  @JsonGetter("weekName")
+  public String getWeekName() {
+    return weekName;
   }
 
   /**
@@ -80,6 +91,15 @@ public class Week {
    */
   public void addEvent(Event event) {
     events.add(event);
+  }
+
+  /**
+   * Sets the name of the Week.
+   *
+   * @param name name to set.
+   */
+  public void setWeekName(String name) {
+    this.weekName = name;
   }
 
   /**
