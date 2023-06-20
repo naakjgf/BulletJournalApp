@@ -15,10 +15,14 @@ import cs3500.pa05.model.file_manager.FileManagerImpl;
 import cs3500.pa05.view.EventView;
 import cs3500.pa05.view.TaskView;
 import java.io.File;
+import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -81,6 +85,9 @@ public class JournalControllerImpl implements JournalController {
 
   @FXML
   private Label warningLabel;
+
+  @FXML
+  private VBox weeklyOverview;
 
 
   private Stage stage;
@@ -180,40 +187,52 @@ public class JournalControllerImpl implements JournalController {
   private void createCloseHandler() {
     this.stage.setOnCloseRequest(event -> {
       if (modificationCount > 0) {
-        event.consume();
+        boolean result = showSaveRequest();
 
-        // create a confirmation dialog
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Unsaved changes");
-        alert.setHeaderText("You have unsaved changes");
-        alert.setContentText("Choose your option.");
-
-        ButtonType buttonSave = new ButtonType("Save");
-        ButtonType buttonCancel = new ButtonType("Cancel");
-        ButtonType buttonDontSave = new ButtonType("Don't save");
-
-        alert.getButtonTypes().setAll(buttonSave, buttonCancel, buttonDontSave);
-
-        alert.showAndWait().ifPresent(type -> {
-          if (type == buttonSave) {
-            if (saveFile(false)) {
-              this.stage.close();
-            } else {
-              showAlert("Unable to save file", "User cancelled operation!");
-            }
-          } else if (type == buttonDontSave) {
-            this.stage.close();
-          }
-        });
+        if (result) {
+          this.stage.close();
+        }
       }
     });
   }
 
+  private boolean showSaveRequest() {
+    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    alert.setTitle("Unsaved changes");
+    alert.setHeaderText("You have unsaved changes");
+    alert.setContentText("Choose your option.");
+
+    ButtonType buttonSave = new ButtonType("Save");
+    ButtonType buttonCancel = new ButtonType("Cancel");
+    ButtonType buttonDontSave = new ButtonType("Don't save");
+
+    alert.getButtonTypes().setAll(buttonSave, buttonCancel, buttonDontSave);
+
+    Optional<ButtonType> result = alert.showAndWait();
+
+    if (result.isPresent()) {
+      if (result.get() == buttonSave) {
+        if (saveFile(false)) {
+          return true;
+        } else {
+          showAlert("Unable to save file", "User cancelled operation!");
+          return false;
+        }
+      } else if (result.get() == buttonDontSave) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   private void createNewJournal() {
-    if (modificationCount > 0 && !saveFile(false)) {
-      showAlert("Error saving current bujo!",
-          "Please save the current working bujo before creating a new one.");
-      return;
+    if (modificationCount > 0) {
+      boolean saveResult = showSaveRequest();
+
+      if (!saveResult) {
+        return;
+      }
     }
 
     this.manager = new ScheduleManagerImpl();
@@ -361,9 +380,51 @@ public class JournalControllerImpl implements JournalController {
       vbox.getChildren().add(eView);
     }
 
+    renderWeeklyOverview(currentWeek.getTasks(), currentWeek.getEvents());
+
     alertMaximumItems(taskCountMap, eventCountMap);
 
     updateWeekTitle();
+  }
+
+  private VBox createWeeklyOverviewValue(String labelVal, String value) {
+    VBox vbox = new VBox();
+    Label label = new Label(labelVal);
+    label.setFont(Font.font("Verdana", FontWeight.BOLD, 13));
+
+    Label valLabel = new Label(value);
+    valLabel.setFont(Font.font("Verdana", 13));
+    vbox.getChildren().addAll(label, valLabel);
+
+    return vbox;
+  }
+
+  private void renderWeeklyOverview(List<Task> tasks, List<Event> events) {
+    // Clear weekly overview
+    weeklyOverview.getChildren().removeIf(n -> n instanceof VBox);
+
+    if (tasks.size() > 0) {
+      int numOfTasks = tasks.size();
+      NumberFormat percent = NumberFormat.getPercentInstance();
+
+      long numTasksCompleted = tasks.stream().filter(Task::isComplete).count();
+      double tasksCompletedFraction = (double) numTasksCompleted / (double) numOfTasks;
+
+      String percentFormat = percent.format(tasksCompletedFraction);
+
+
+      VBox numTasksVBox = createWeeklyOverviewValue("Total Tasks", String.valueOf(numOfTasks));
+      VBox taskPercentVBox = createWeeklyOverviewValue("Tasks Completed", percentFormat);
+
+      weeklyOverview.getChildren().addAll(numTasksVBox, taskPercentVBox);
+    }
+
+    if (events.size() > 0) {
+      int numOfEvents = events.size();
+      VBox numEventsVBox = createWeeklyOverviewValue("Total Events", String.valueOf(numOfEvents));
+
+      weeklyOverview.getChildren().add(numEventsVBox);
+    }
   }
 
   private void registerWeekTitleHandlers() {
@@ -430,7 +491,7 @@ public class JournalControllerImpl implements JournalController {
 
   }
 
-  public boolean saveFile(boolean saveAs) {
+  private boolean saveFile(boolean saveAs) {
     if (!this.manager.hasFileManager() || saveAs) {
       String filePath = saveBujoFile();
       if (filePath == null) {
@@ -462,10 +523,12 @@ public class JournalControllerImpl implements JournalController {
   }
 
   private void loadFile() {
-    if (modificationCount > 0 && !saveFile(false)) {
-      showAlert("Error saving current bujo!",
-          "Please save the current working bujo before loading a different one.");
-      return;
+    if (modificationCount > 0) {
+      boolean saveResult = showSaveRequest();
+
+      if (!saveResult) {
+        return;
+      }
     }
 
     String filePath = chooseBujoFile();

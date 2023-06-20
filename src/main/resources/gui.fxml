@@ -200,17 +200,33 @@
                         </HBox>
                         <ScrollPane fitToWidth="true" hbarPolicy="NEVER" hmax="0.0" hvalue="1.0" minHeight="400.0" minWidth="120.0" prefHeight="200.0" vbarPolicy="NEVER">
                            <content>
-                              <VBox fx:id="sideBar" minWidth="120.0" spacing="10.0">
+                              <VBox minWidth="120.0" spacing="10.0">
                                  <children>
-                                    <Label maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Week Tasks" VBox.vgrow="ALWAYS">
-                                       <font>
-                                          <Font size="12.0" />
-                                       </font>
-                                    </Label>
+                                    <VBox fx:id="weeklyOverview" minWidth="121.0" spacing="10.0" VBox.vgrow="ALWAYS">
+                                       <children>
+                                          <Label maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Overview" VBox.vgrow="ALWAYS">
+                                             <font>
+                                                <Font size="12.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <padding>
+                                          <Insets left="8.0" right="8.0" />
+                                       </padding>
+                                    </VBox>
+                                    <VBox fx:id="sideBar" minWidth="120.0" spacing="10.0">
+                                       <children>
+                                          <Label maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Week Tasks" VBox.vgrow="ALWAYS">
+                                             <font>
+                                                <Font size="12.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <padding>
+                                          <Insets left="8.0" right="8.0" />
+                                       </padding>
+                                    </VBox>
                                  </children>
-                                 <padding>
-                                    <Insets left="8.0" right="8.0" />
-                                 </padding>
                               </VBox>
                            </content>
                         </ScrollPane>
