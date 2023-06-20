@@ -2,15 +2,10 @@ package cs3500.pa05.model.file_manager;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import cs3500.pa05.model.file_manager.json.BujoJson;
 import cs3500.pa05.model.Settings;
 import cs3500.pa05.model.Week;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,6 +50,15 @@ public class FileManagerImplTest {
     String expectedContent = "{\"data\":[{\"weekNumber\":0,\"events\":[],\"tasks\":[],\"weekName\":null}]," +
         "\"settings\":{\"maximumTasks\":0,\"maximumEvents\":0,\"currentWeek\":0}}";
     assertEquals(expectedContent, savedContent.trim());
+
+    String validJsonContent = "{\"data\":[],\"settings\":{\"maximumTasks\":2," +
+        "\"maximumEvents\":1,\"currentWeek\":1}}";
+    FileReaderWriter.writeFileContents("temp.txt", validJsonContent);
+
+    BujoJson loadedBujoJson = fileManager.loadFromFile();
+    fileManager.saveToFile(loadedBujoJson);
+
+    assertEquals(validJsonContent, FileReaderWriter.readFileContents("temp.txt").trim());
   }
 }
 
