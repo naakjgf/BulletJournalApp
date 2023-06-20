@@ -50,6 +50,11 @@ public class ScheduleManagerImplTest {
     scheduleManager.setFileManager(fileManager);
     scheduleManager.saveData();
     verify(fileManager, times(1)).saveToFile(any());
+    //just to get the other branch of the if statement
+    fileManager = null;
+    scheduleManager.setFileManager(null);
+    scheduleManager.saveData();
+    assertEquals(0, scheduleManager.getCurrentWeekNum());
   }
 
   @Test

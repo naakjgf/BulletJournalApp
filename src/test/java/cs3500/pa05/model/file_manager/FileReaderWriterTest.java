@@ -25,6 +25,8 @@ public class FileReaderWriterTest {
 
   @Test
   public void testWriteFileContents() {
+    // because jacoco is highlighting the class name as red for some reason.
+    FileReaderWriter fileReaderWriter = new FileReaderWriter();
     String content = "test content";
     String tempFile = "temp.txt";
     FileReaderWriter.writeFileContents(tempFile, content);
