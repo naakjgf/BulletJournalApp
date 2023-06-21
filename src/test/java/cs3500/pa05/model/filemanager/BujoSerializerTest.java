@@ -1,4 +1,4 @@
-package cs3500.pa05.model.file_manager;
+package cs3500.pa05.model.filemanager;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -8,20 +8,28 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cs3500.pa05.model.Settings;
 import cs3500.pa05.model.Week;
-import cs3500.pa05.model.file_manager.json.BujoJson;
-import cs3500.pa05.model.file_manager.json.CryptoJson;
+import cs3500.pa05.model.filemanager.json.BujoJson;
+import cs3500.pa05.model.filemanager.json.CryptoJson;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests for the BujoSerializer class.
+ */
 public class BujoSerializerTest {
 
   private BujoSerializer bujoSerializer;
   private BujoJson bujoJson;
   private String validJson;
 
+  /**
+   * Sets up the test. Creates a valid BujoJson object and encrypts it.
+   *
+   * @throws GeneralSecurityException if there is an error with the encryption.
+   */
   @BeforeEach
   public void setUp() throws GeneralSecurityException {
     bujoSerializer = new BujoSerializer();

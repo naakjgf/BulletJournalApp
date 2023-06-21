@@ -1,4 +1,4 @@
-package cs3500.pa05.model.file_manager;
+package cs3500.pa05.model.filemanager;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -24,6 +24,14 @@ public class MenuController {
     this.handleMenuAction = handleMenuAction;
   }
 
+  /**
+   * Creates a menu bar item with a specific action and keybind possibility passed.
+   *
+   * @param action MenuBarAction
+   * @param name Name of the menu item.
+   * @param createKeybind Whether or not to create a keybind for the menu item.
+   * @return MenuItem
+   */
   private MenuItem createMenuItem(MenuBarAction action, String name, boolean createKeybind) {
     MenuItem menuItem = new MenuItem(name);
     menuItem.setOnAction(e -> this.handleMenuAction.accept(e, action));
@@ -35,6 +43,12 @@ public class MenuController {
     return menuItem;
   }
 
+  /**
+   * Creates a menu bar.
+   *
+   * @param createKeybinds Whether or not to create keybinds for the menu bar.
+   * @return MenuBar
+   */
   private MenuBar createMenuBar(boolean createKeybinds) {
     Menu menuFile = new Menu("File");
     menuFile.getStyleClass().add("menu");
@@ -42,10 +56,13 @@ public class MenuController {
     MenuItem itemSave = createMenuItem(MenuBarAction.SAVE, "Save", createKeybinds);
     MenuItem itemSaveAs = createMenuItem(MenuBarAction.SAVE_AS, "Save As", createKeybinds);
     MenuItem itemOpen = createMenuItem(MenuBarAction.OPEN, "Open", createKeybinds);
-    MenuItem itemOpenTemplate = createMenuItem(MenuBarAction.OPEN_TEMPLATE, "Open as template", createKeybinds);
-    MenuItem itemSettings = createMenuItem(MenuBarAction.OPEN_SETTINGS, "Settings", createKeybinds);
+    MenuItem itemOpenTemplate = createMenuItem(MenuBarAction.OPEN_TEMPLATE,
+        "Open as template", createKeybinds);
+    MenuItem itemSettings = createMenuItem(MenuBarAction.OPEN_SETTINGS,
+        "Settings", createKeybinds);
 
-    menuFile.getItems().addAll(itemNewBujo, itemSave, itemSaveAs, itemOpen, itemOpenTemplate, itemSettings);
+    menuFile.getItems().addAll(
+        itemNewBujo, itemSave, itemSaveAs, itemOpen, itemOpenTemplate, itemSettings);
 
     Menu menuInsert = new Menu("Insert");
     MenuItem itemEvent = createMenuItem(MenuBarAction.NEW_EVENT, "New Event", createKeybinds);

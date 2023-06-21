@@ -3,12 +3,13 @@ package cs3500.pa05.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-
+/**
+ * Tests for the Settings class.
+ */
 public class SettingsTest {
   Settings settings;
   ObjectMapper objectMapper;

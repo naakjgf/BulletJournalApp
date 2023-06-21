@@ -55,6 +55,11 @@ public class ScheduleItemAlert extends Dialog<Void> {
     getDialogPane().setContent(vbox);
   }
 
+  /**
+   * Creates the dialogue for the popup.
+   *
+   * @param callback Callback with the ItemAction intended by the user.
+   */
   private void createDialogue(Consumer<ItemAction> callback) {
     ButtonType editButtonType = new ButtonType("Edit", ButtonBar.ButtonData.OTHER);
     ButtonType deleteButtonType = new ButtonType("Delete", ButtonBar.ButtonData.LEFT);
@@ -74,6 +79,13 @@ public class ScheduleItemAlert extends Dialog<Void> {
     });
   }
 
+  /**
+   * Adds a field to the popup.
+   *
+   * @param parent Parent pane to add field to.
+   * @param title Title of the field.
+   * @param value Value of the field.
+   */
   private void addField(Pane parent, String title, String value) {
     Label label = new Label(title);
     label.setFont(Font.font("Verdana", FontWeight.BOLD, 14));

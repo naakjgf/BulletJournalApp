@@ -28,6 +28,9 @@ public class PasswordView extends Dialog<String> {
     newPassword = false;
   }
 
+  /**
+   * Initializes the password view with the appropriate JavaFX components.
+   */
   private void initializePasswordView() {
     setTitle("Password");
     setHeaderText("Please enter password.");
@@ -49,6 +52,9 @@ public class PasswordView extends Dialog<String> {
     setConverter();
   }
 
+  /**
+   * Adds the needed elements to close the PasswordView.
+   */
   private void setConverter() {
     ButtonType passwordButtonType = new ButtonType("Okay", ButtonData.OK_DONE);
     getDialogPane().getButtonTypes().addAll(passwordButtonType, ButtonType.CANCEL);
@@ -61,6 +67,12 @@ public class PasswordView extends Dialog<String> {
     });
   }
 
+  /**
+   * Creates an HBox with the given password field.
+   *
+   * @param passwordField Password field to add to HBox.
+   * @return HBox with password field.
+   */
   private HBox createHbox(PasswordField passwordField) {
     HBox hbox = new HBox();
     hbox.getChildren().add(passwordField);
@@ -94,6 +106,12 @@ public class PasswordView extends Dialog<String> {
     return result.get();
   }
 
+  /**
+   * Checks if the given password is valid.
+   *
+   * @param password Password to check.
+   * @return Whether the password is valid.
+   */
   private boolean isValidPassword(String password) {
     if (password.length() < 8) {
       return false;
@@ -104,6 +122,9 @@ public class PasswordView extends Dialog<String> {
     return true;
   }
 
+  /**
+   * Shows a warning alert if password requirements are not met.
+   */
   private void showWarningAlert() {
     Alert alert = new Alert(AlertType.WARNING);
     alert.setTitle("Password Requirement Not Met");

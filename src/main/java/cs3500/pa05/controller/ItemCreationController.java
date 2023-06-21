@@ -14,6 +14,7 @@ import java.util.function.Consumer;
  * Controller for managing item creation and editing.
  */
 public class ItemCreationController {
+
   /**
    * Edits a task using a TaskEditingView dialog.
    *
@@ -33,7 +34,7 @@ public class ItemCreationController {
   }
 
   /**
-   * Edits an event using a EventEditingView dialog.
+   * Edits an event using the EventEditingView dialog.
    *
    * @param event Event to edit.
    */
@@ -53,7 +54,6 @@ public class ItemCreationController {
     });
   }
 
-
   /**
    * Constructs a dialogue for task creation and passes the task back using a Consumer.
    *
@@ -71,8 +71,6 @@ public class ItemCreationController {
     });
   }
 
-
-
   /**
    * Constructs a dialogue for event creation and passes the event back using a Consumer.
    *
@@ -89,7 +87,5 @@ public class ItemCreationController {
       eventConsumer.accept(eventResult);
     });
   }
-
-
 }
 

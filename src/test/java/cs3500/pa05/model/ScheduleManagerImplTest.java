@@ -9,14 +9,17 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import cs3500.pa05.model.file_manager.FileManager;
-import cs3500.pa05.model.file_manager.json.BujoJson;
+import cs3500.pa05.model.filemanager.FileManager;
+import cs3500.pa05.model.filemanager.json.BujoJson;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+/**
+ * Tests for ScheduleManagerImpl.
+ */
 public class ScheduleManagerImplTest {
 
   private ScheduleManagerImpl scheduleManager;
@@ -41,7 +44,7 @@ public class ScheduleManagerImplTest {
     when(fileManager.loadFromFile()).thenReturn(bujoJson);
 
     scheduleManager.setFileManager(fileManager);
-    scheduleManager.loadData(bujoJson); // Modify this line according to the new method signature
+    scheduleManager.loadData(bujoJson);
 
     assertEquals(1, scheduleManager.getCurrentWeekNum());
   }
@@ -51,12 +54,12 @@ public class ScheduleManagerImplTest {
     scheduleManager.setFileManager(fileManager);
     scheduleManager.saveData();
     verify(fileManager, times(1)).saveToFile(any());
-    //just to get the other branch of the if statement
+
     fileManager = null;
     scheduleManager.setFileManager(null);
     scheduleManager.saveData();
     assertEquals(0,
-        scheduleManager.getCurrentWeekNum());  // This assertion may not hold true anymore as saving data without a FileManager does not reset the current week
+        scheduleManager.getCurrentWeekNum());
   }
 
   @Test
@@ -72,7 +75,7 @@ public class ScheduleManagerImplTest {
     when(fileManager.loadFromFile()).thenReturn(bujoJson);
 
     scheduleManager.setFileManager(fileManager);
-    scheduleManager.loadData(bujoJson); // Modify this line according to the new method signature
+    scheduleManager.loadData(bujoJson);
 
     assertEquals(1, scheduleManager.getCurrentWeekNum());
 

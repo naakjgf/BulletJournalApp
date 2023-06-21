@@ -1,4 +1,4 @@
-package cs3500.pa05.model.file_manager;
+package cs3500.pa05.model.filemanager;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -7,7 +7,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
 
-
+/**
+ * Tests for the FileReaderWriter class.
+ */
 public class FileReaderWriterTest {
 
   @Test
@@ -26,7 +28,6 @@ public class FileReaderWriterTest {
   @Test
   public void testWriteFileContents() {
     // because jacoco is highlighting the class name as red for some reason.
-    FileReaderWriter fileReaderWriter = new FileReaderWriter();
     String content = "test content";
     String tempFile = "temp.txt";
     FileReaderWriter.writeFileContents(tempFile, content);
@@ -41,15 +42,13 @@ public class FileReaderWriterTest {
   }
 
   @Test
-  public void testReadFileContentsThrowsIOException() {
-    // An invalid file path
+  public void testReadFileContentsThrowsIoException() {
     String filePath = "/invalid/file/path.txt";
     FileReaderWriter.readFileContents(filePath);
   }
 
   @Test
-  public void testWriteFileContentsThrowsIOException() {
-    // An invalid file path
+  public void testWriteFileContentsThrowsIoException() {
     String filePath = "/invalid/file/path.txt";
     FileReaderWriter.writeFileContents(filePath, "Some content");
   }

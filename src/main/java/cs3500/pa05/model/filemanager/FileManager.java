@@ -1,6 +1,6 @@
-package cs3500.pa05.model.file_manager;
+package cs3500.pa05.model.filemanager;
 
-import cs3500.pa05.model.file_manager.json.BujoJson;
+import cs3500.pa05.model.filemanager.json.BujoJson;
 
 /**
  * Representation of a Bujo file manager. Handles reading and writing of .bujo files.

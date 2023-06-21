@@ -1,25 +1,21 @@
-package cs3500.pa05.model.file_manager;
+package cs3500.pa05.model.filemanager;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import cs3500.pa05.model.file_manager.json.BujoJson;
 import cs3500.pa05.model.Settings;
 import cs3500.pa05.model.Week;
-import cs3500.pa05.model.file_manager.json.CryptoJson;
-import java.security.GeneralSecurityException;
+import cs3500.pa05.model.filemanager.json.BujoJson;
+import cs3500.pa05.model.filemanager.json.CryptoJson;
 import java.util.ArrayList;
 import java.util.List;
-import javax.crypto.BadPaddingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-
+/**
+ * Tests for the FileManagerImpl class.
+ */
 public class FileManagerImplTest {
 
   private FileManagerImpl fileManager;
@@ -27,6 +23,9 @@ public class FileManagerImplTest {
   private String password;
   private String tempFile;
 
+  /**
+   * Sets up the test environment with a new FileManagerImpl and ObjectMapper and sets password.
+   */
   @BeforeEach
   public void setUp() {
     password = "testPassword";
@@ -37,8 +36,8 @@ public class FileManagerImplTest {
 
   @Test
   public void testLoadFromFileValid() throws Exception {
-    String validJsonContent = "{ \"data\": [], \"settings\": { \"currentWeek\": 0," +
-        " \"maximumEvents\": 0, \"maximumTasks\": 0 } }";
+    String validJsonContent = "{ \"data\": [], \"settings\": { \"currentWeek\": 0,"
+        + " \"maximumEvents\": 0, \"maximumTasks\": 0 } }";
     String salt = CryptoManager.generateSalt(16);
     String encryptedContent = CryptoManager.encrypt(validJsonContent, password, salt);
     CryptoJson cryptoJson = new CryptoJson(encryptedContent, salt);
@@ -55,11 +54,10 @@ public class FileManagerImplTest {
     assertEquals(expectedSettings.getMaximumTasks(), loadedBujoJson.settings().getMaximumTasks());
   }
 
-
   @Test
   public void testLoadFromFileIncorrectPassword() throws Exception {
-    String validJsonContent = "{ \"data\": [], \"settings\": { \"currentWeek\": 0," +
-        " \"maximumEvents\": 0, \"maximumTasks\": 0 } } }";
+    String validJsonContent = "{ \"data\": [], \"settings\": { \"currentWeek\": 0,"
+        + " \"maximumEvents\": 0, \"maximumTasks\": 0 } } }";
     String salt = CryptoManager.generateSalt(16);
     String encryptedContent = CryptoManager.encrypt(validJsonContent, password, salt);
     CryptoJson cryptoJson = new CryptoJson(encryptedContent, salt);
@@ -72,39 +70,12 @@ public class FileManagerImplTest {
     assertNull(loadedBujoJson);
   }
 
-  /*@Test
-  public void testLoadFromFileBadContent() throws Exception {
-    String malformedJsonContent = "this is not valid JSON";
-    String salt = CryptoManager.generateSalt(16);
-    String encryptedContent = CryptoManager.encrypt(malformedJsonContent, password, salt);
-    CryptoJson cryptoJson = new CryptoJson(encryptedContent, salt);
-    ObjectMapper mapper = new ObjectMapper();
-    FileReaderWriter.writeFileContents(tempFile, mapper.writeValueAsString(cryptoJson));
-
-    assertThrows(RuntimeException.class, () -> fileManager.loadFromFile());
-  }
-
-  @Test
-  public void testLoadFromFileThrowsSecurityException()
-      throws GeneralSecurityException, JsonProcessingException {
-    String invalidPermissionsFile = "invalidPermissions.txt";
-    FileReaderWriter.writeFileContents(invalidPermissionsFile, "test");
-    // Create a FileManager with the invalidPermissionsFile
-    FileManagerImpl invalidPermissionsFileManager =
-        new FileManagerImpl(invalidPermissionsFile, password);
-    BujoDeserializer bujoDeserializer = mock(BujoDeserializer.class);
-    when(bujoDeserializer.jsonToBujo("test", password)).thenThrow(GeneralSecurityException.class);
-
-    assertThrows(RuntimeException.class, invalidPermissionsFileManager::loadFromFile);
-  }*/
-
-
   @Test
   public void testLoadFromFile() {
     List<Week> weeks = new ArrayList<>();
     BujoJson bujoJson = new BujoJson(weeks, new Settings(0, 0, 0));
     String salt = CryptoManager.generateSalt(16);
-    String validJsonContent = "";
+    String validJsonContent;
     try {
       String encryptedData =
           CryptoManager.encrypt(objectMapper.writeValueAsString(bujoJson), password, salt);
@@ -118,9 +89,28 @@ public class FileManagerImplTest {
 
     BujoJson loadedBujoJson = fileManager.loadFromFile();
 
-    assertEquals(bujoJson.settings().getMaximumTasks(), loadedBujoJson.settings().getMaximumTasks());
+    assertEquals(bujoJson.settings().getMaximumTasks(),
+        loadedBujoJson.settings().getMaximumTasks());
     assertEquals(bujoJson.settings().getMaximumEvents(),
         loadedBujoJson.settings().getMaximumEvents());
   }
 
+  @Test
+  public void testSaveToFile() {
+    List<Week> weeks = new ArrayList<>();
+    Settings settings = new Settings(0, 0, 0);
+    BujoJson bujoJson = new BujoJson(weeks, settings);
+
+    fileManager.saveToFile(bujoJson);
+
+    BujoJson loadedBujoJson = fileManager.loadFromFile();
+
+    assertEquals(bujoJson.settings().getMaximumTasks(),
+        loadedBujoJson.settings().getMaximumTasks());
+    assertEquals(bujoJson.settings().getMaximumEvents(),
+        loadedBujoJson.settings().getMaximumEvents());
+    assertEquals(bujoJson.settings().getCurrentWeek(),
+        loadedBujoJson.settings().getCurrentWeek());
+    assertEquals(bujoJson.weeks(), loadedBujoJson.weeks());
+  }
 }
