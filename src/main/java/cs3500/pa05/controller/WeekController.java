@@ -185,7 +185,10 @@ public class WeekController {
     weekTitleField.setDisable(true);
   }
 
-  private void editWeekTitle() {
+  /**
+   * Edit the title of the week.
+   */
+  public void editWeekTitle() {
     weekTitleField.setText(weekTitle.getText());
     weekTitle.setVisible(false);
     weekTitleField.setVisible(true);

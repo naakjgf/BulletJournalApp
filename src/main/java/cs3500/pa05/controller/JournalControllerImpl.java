@@ -8,6 +8,7 @@ import cs3500.pa05.model.file_manager.FileManager;
 import cs3500.pa05.model.file_manager.FileManagerImpl;
 import cs3500.pa05.model.file_manager.json.BujoJson;
 import cs3500.pa05.view.PasswordView;
+import cs3500.pa05.view.RenameWeekView;
 import java.io.File;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -76,7 +77,7 @@ public class JournalControllerImpl implements JournalController {
   /**
    * Constructor for a JournalController.
    *
-   * @param stage JavaFX stage for the window.
+   * @param stage   JavaFX stage for the window.
    * @param manager ScheduleManager to retrieve Week data from.
    */
   public JournalControllerImpl(Stage stage, ScheduleManager manager) {
@@ -124,6 +125,7 @@ public class JournalControllerImpl implements JournalController {
       case NEW_TASK -> createNewTask();
       case NEW_EVENT -> createNewEvent();
       case OPEN_SETTINGS -> openSettings();
+      case OPEN_TEMPLATE -> openTemplate();
       case NEW_JOURNAL -> createNewJournal();
       default -> throw new IllegalArgumentException("Unknown action provided!");
     }
@@ -245,6 +247,59 @@ public class JournalControllerImpl implements JournalController {
     });
   }
 
+  private FileManager openFile() {
+    String filePath = chooseBujoFile();
+    if (filePath == null) {
+      System.out.println("User did not choose bujo file. Operation cancelled!");
+      return null;
+    }
+
+    String password = getUserPassword(false);
+
+    if (password.isEmpty()) {
+      showAlert("Unable to open file.", "Could not open file because no password was entered.");
+      return null;
+    }
+
+    return new FileManagerImpl(filePath, password);
+  }
+
+  private void openTemplate() {
+    if (modificationCount.get() > 0) {
+      boolean saveResult = showSaveRequest();
+
+      if (!saveResult) {
+        return;
+      }
+    }
+
+    FileManager fileManager = openFile();
+
+    if (fileManager == null) {
+      return;
+    }
+
+    BujoJson bujoJson = fileManager.loadFromFile();
+
+    if (bujoJson == null) {
+      showAlert("Unable to open file.",
+          "Could not open file. Either the password is incorrect or the bujo file is corrupted.");
+      return;
+    }
+
+    this.manager.loadTemplate(bujoJson);
+    this.manager.setFileManager(null);
+    modificationCount.set(1);
+
+    RenameWeekView renameWeekView = new RenameWeekView();
+
+    Optional<String> newWeekName = renameWeekView.showAndWait();
+
+    newWeekName.ifPresent(s -> this.manager.getCurrentWeek().setWeekName(s));
+
+    this.weekController.renderWeek();
+  }
+
 
   private void loadFile() {
     if (modificationCount.get() > 0) {
@@ -255,28 +310,20 @@ public class JournalControllerImpl implements JournalController {
       }
     }
 
-    String filePath = chooseBujoFile();
-    if (filePath == null) {
-      System.out.println("User did not choose save file. Operation cancelled!");
+    FileManager fileManager = openFile();
+
+    if (fileManager == null) {
       return;
     }
 
-    String password = getUserPassword(false);
-
-    if (password.isEmpty()) {
-      showAlert("Unable to open file.", "Could not open file because no password was entered.");
-      return;
-    }
-
-    this.fileManager = new FileManagerImpl(filePath, password);
-
-    BujoJson bujoJson = this.fileManager.loadFromFile();
+    BujoJson bujoJson = fileManager.loadFromFile();
     if (bujoJson == null) {
       showAlert("Unable to open file.",
           "Could not open file. Either the password is incorrect or the bujo file is corrupted.");
       return;
     }
 
+    this.fileManager = fileManager;
     this.manager.setFileManager(this.fileManager);
     this.manager.loadData(bujoJson);
     modificationCount.set(0);

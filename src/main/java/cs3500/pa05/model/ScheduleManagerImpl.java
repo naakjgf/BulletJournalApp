@@ -44,6 +44,17 @@ public class ScheduleManagerImpl implements ScheduleManager {
   }
 
   @Override
+  public void loadTemplate(BujoJson bujoJson) {
+    Settings settingsObject = bujoJson.settings();
+    this.weeks = new ArrayList<>();
+    this.settings = settingsObject;
+
+    int week = createNewWeek();
+    settingsObject.setCurrentWeek(week);
+
+  }
+
+  @Override
   public void saveData() {
     if (this.fileManager != null) {
       BujoJson bujo = new BujoJson(weeks, settings);

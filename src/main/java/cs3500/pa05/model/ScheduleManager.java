@@ -71,4 +71,11 @@ public interface ScheduleManager {
    * @return Settings object.
    */
   Settings getSettings();
+
+  /**
+   * Load a Bujo file as a template.
+   *
+   * @param bujoJson Bujo file data to load as template.
+   */
+  void loadTemplate(BujoJson bujoJson);
 }
