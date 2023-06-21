@@ -16,6 +16,7 @@ public class WeekTest {
   ObjectMapper objectMapper;
   Task task;
   Event event;
+  ScheduleItem scheduleItem;
 
   @BeforeEach
   public void setUp() {
@@ -68,6 +69,9 @@ public class WeekTest {
 
     week.deleteItem(event);
     assertFalse(week.getEvents().contains(event));
+
+    week.addEvent((Event) scheduleItem);
+    week.deleteItem(scheduleItem);
   }
 
   @Test
@@ -81,5 +85,11 @@ public class WeekTest {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  @Test
+  void getAndSetWeekName() {
+    week.setWeekName("Test Week");
+    assertEquals("Test Week", week.getWeekName());
   }
 }

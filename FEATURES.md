@@ -17,5 +17,5 @@
 - Mind Changes
 - Week tabs
 
-
 ## Section 5: Extra Credit
+- Splash Screen

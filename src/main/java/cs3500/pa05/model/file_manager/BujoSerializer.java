@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import cs3500.pa05.model.Settings;
 import cs3500.pa05.model.Week;
 import cs3500.pa05.model.file_manager.json.BujoJson;
+import cs3500.pa05.model.file_manager.json.CryptoJson;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 /**
@@ -28,7 +30,7 @@ public class BujoSerializer {
    * @return the JsonNode representation of the given record
    * @throws IllegalArgumentException if the record could not be converted correctly
    */
-  public JsonNode serializeRecord(Record record) throws IllegalArgumentException {
+  public JsonNode serializeRecord(Record record) {
     try {
       return this.mapper.convertValue(record, JsonNode.class);
     } catch (IllegalArgumentException e) {
@@ -41,9 +43,16 @@ public class BujoSerializer {
    *
    * @param bujoJson BujoJson object
    * @return List of Week objects represented by JSON.
-   * @throws JsonProcessingException If error processing input JSON.
+   * @throws GeneralSecurityException If error encrypting input JSON.
    */
-  public String bujoToJson(BujoJson bujoJson) {
-    return serializeRecord(bujoJson).toString();
+  public String bujoToJson(BujoJson bujoJson, String password) throws GeneralSecurityException {
+    String plainText = serializeRecord(bujoJson).toString();
+    String salt = CryptoManager.generateSalt(16);
+
+    String cipher = CryptoManager.encrypt(plainText, password, salt);
+
+    CryptoJson cryptoJson = new CryptoJson(cipher, salt);
+
+    return serializeRecord(cryptoJson).toString();
   }
 }

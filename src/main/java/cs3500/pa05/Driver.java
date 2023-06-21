@@ -6,17 +6,23 @@ import cs3500.pa05.model.file_manager.FileManager;
 import cs3500.pa05.model.file_manager.FileManagerImpl;
 import cs3500.pa05.view.GuiView;
 import cs3500.pa05.view.GuiViewImpl;
+import cs3500.pa05.view.SplashScreenViewImpl;
 import java.util.Objects;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * Driver for the Bullet Journal application.
  */
 public class Driver extends Application {
+  private Stage splashStage;
+  private Stage primaryStage;
+  private Scene splashScreen;
+
   /**
    * Main method for the Bullet Journal application.
    *
@@ -26,20 +32,40 @@ public class Driver extends Application {
     launch(args);
   }
 
+
+  @Override
+  public void init() throws Exception {
+    SplashScreenViewImpl splashScreenView = new SplashScreenViewImpl();
+    splashScreen = splashScreenView.load();
+  }
+
+
   @Override
   public void start(Stage primaryStage) {
-    ScheduleManagerImpl scheduleManager = new ScheduleManagerImpl();
-    JournalControllerImpl controller = new JournalControllerImpl(primaryStage, scheduleManager);
+    this.primaryStage = primaryStage;
+    Stage splashStage = new Stage();
+    splashStage.initStyle(StageStyle.UNDECORATED);
+    splashStage.setScene(splashScreen);
 
-    GuiView view = new GuiViewImpl(controller);
+    splashStage.show();
+
+    splashScreen.setOnMouseClicked(e -> {
+      splashStage.hide();
+      loadMainApp();
+    });
+  }
+
+
+  private void loadMainApp() {
+    ScheduleManagerImpl scheduleManager = new ScheduleManagerImpl();
+    JournalControllerImpl journalController = new JournalControllerImpl(primaryStage, scheduleManager);
+    GuiView journalView = new GuiViewImpl(journalController);
 
     try {
-//      FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("gui.fxml"));
-//      primaryStage.setTitle("Bullet Journal");
-      primaryStage.setScene(view.load());
+      primaryStage.setScene(journalView.load());
       primaryStage.setMinHeight(500.0);
       primaryStage.setMinWidth(1000.0);
-      controller.run();
+      journalController.run();
       primaryStage.show();
     } catch (Exception e) {
       System.out.println("Error loading GUI; Please reference the stack trace below:");

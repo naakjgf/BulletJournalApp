@@ -26,7 +26,7 @@ jacocoTestReport {
 }
 
 group 'cs3500.pa05'
-version '1.0-SNAPSHOT'
+version '1.0.0'
 
 repositories {
     mavenCentral()

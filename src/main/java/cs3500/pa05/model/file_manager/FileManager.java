@@ -11,13 +11,14 @@ import java.util.List;
 public interface FileManager {
   /**
    * Loads Bujo data from a Bujo File
+   *
    * @return BujoJson object
    */
   BujoJson loadFromFile();
 
   /**
    * Save Bujo data to a bujo file.
-   * @param bujoJson bujo data object to save to file.
+   * @param saveBujo bujo data object to save to file.
    */
-  void saveToFile(BujoJson bujoJson);
+  void saveToFile(BujoJson saveBujo);
 }

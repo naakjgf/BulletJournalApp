@@ -12,14 +12,19 @@ import cs3500.pa05.model.Task;
 import cs3500.pa05.model.Week;
 import cs3500.pa05.model.file_manager.FileManager;
 import cs3500.pa05.model.file_manager.FileManagerImpl;
+import cs3500.pa05.model.file_manager.json.BujoJson;
 import cs3500.pa05.view.EventView;
+import cs3500.pa05.view.PasswordView;
 import cs3500.pa05.view.TaskView;
 import java.io.File;
+import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import javafx.beans.binding.Bindings;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -27,13 +32,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -52,7 +53,11 @@ public class JournalControllerImpl implements JournalController {
   private ItemCreationController itemCreator;
   private SettingsController settingsController;
 
-  private int modificationCount;
+  private MenuController menuController;
+
+  private WeekController weekController;
+
+  private AtomicInteger modificationCount;
 
   private Settings settings;
   @FXML
@@ -82,6 +87,9 @@ public class JournalControllerImpl implements JournalController {
   @FXML
   private Label warningLabel;
 
+  @FXML
+  private VBox weeklyOverview;
+
 
   private Stage stage;
 
@@ -95,7 +103,8 @@ public class JournalControllerImpl implements JournalController {
     this.stage = stage;
     this.itemCreator = new ItemCreationController();
     this.settingsController = new SettingsController();
-    this.modificationCount = 0;
+    this.modificationCount = new AtomicInteger(0);
+    this.menuController = new MenuController(this::handleMenuAction);
   }
 
   /**
@@ -105,71 +114,28 @@ public class JournalControllerImpl implements JournalController {
 
   }
 
-  public static Map.Entry<DayOfWeek, Integer> findMax(Map<DayOfWeek, Integer> days) {
-    if (days == null || days.isEmpty()) {
-      return null;  // or throw an exception, depending on your requirements
-    }
-
-    return Collections.max(days.entrySet(), Map.Entry.comparingByValue());
-  }
-
-  @Override
-  public void updateCurrentWeek() {
-
-  }
-
   @FXML
   public void run() {
-    attachMenuHandlers();
-    attachWeekHandlers();
+    this.weekController = new WeekController(manager, itemCreator, modificationCount, weekView, weekTitle, weekTitleField, nextWeek, prevWeek,
+        newWeek, sideBar, weeklyOverview, warningLabel);
+
+    this.menuController.attachMenuHandlers(menuBarContainer);
+
+    this.weekController.attachWeekHandlers();
     this.manager.createNewWeek();
-    updateWeekTitle();
-    registerWeekTitleHandlers();
+    this.weekController.updateWeekTitle();
+    this.weekController.registerWeekTitleHandlers();
     createCloseHandler();
   }
 
-  private void attachWeekHandlers() {
-    nextWeek.setOnAction((e) -> {
-      if (this.manager.getCurrentWeek().getWeekNumber() >= this.manager.getNumWeeks() - 1) {
-        return;
-      }
 
-      this.manager.setCurrentWeek(this.manager.getCurrentWeekNum() + 1);
-      renderWeek();
-    });
-
-    prevWeek.setOnAction((e) -> {
-      if (this.manager.getCurrentWeek().getWeekNumber() <= 0) {
-        return;
-      }
-
-      this.manager.setCurrentWeek(this.manager.getCurrentWeekNum() - 1);
-      renderWeek();
-    });
-
-    newWeek.setOnAction(e -> createNewWeek());
-  }
-
-  /**
-   * Updates the week title to the current active week.
-   */
-  public void updateWeekTitle() {
-    finishEditWeekTitle();
-    Week currentWeek = this.manager.getCurrentWeek();
-
-    if (currentWeek.getWeekName() != null) {
-      weekTitle.setText(currentWeek.getWeekName());
-    } else {
-      weekTitle.setText("Week " + (this.manager.getCurrentWeekNum() + 1));
-    }
-  }
 
   private void handleMenuAction(ActionEvent e, MenuBarAction action) {
     switch (action) {
       case OPEN -> loadFile();
       case SAVE -> saveFile(false);
       case SAVE_AS -> saveFile(true);
-      case NEW_WEEK -> createNewWeek();
+      case NEW_WEEK -> this.weekController.createNewWeek();
       case NEW_TASK -> createNewTask();
       case NEW_EVENT -> createNewEvent();
       case OPEN_SETTINGS -> openSettings();
@@ -179,48 +145,61 @@ public class JournalControllerImpl implements JournalController {
 
   private void createCloseHandler() {
     this.stage.setOnCloseRequest(event -> {
-      if (modificationCount > 0) {
-        event.consume();
+      if (modificationCount.get() > 0) {
+        boolean result = showSaveRequest();
 
-        // create a confirmation dialog
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Unsaved changes");
-        alert.setHeaderText("You have unsaved changes");
-        alert.setContentText("Choose your option.");
-
-        ButtonType buttonSave = new ButtonType("Save");
-        ButtonType buttonCancel = new ButtonType("Cancel");
-        ButtonType buttonDontSave = new ButtonType("Don't save");
-
-        alert.getButtonTypes().setAll(buttonSave, buttonCancel, buttonDontSave);
-
-        alert.showAndWait().ifPresent(type -> {
-          if (type == buttonSave) {
-            if (saveFile(false)) {
-              this.stage.close();
-            } else {
-              showAlert("Unable to save file", "User cancelled operation!");
-            }
-          } else if (type == buttonDontSave) {
-            this.stage.close();
-          }
-        });
+        if (result) {
+          this.stage.close();
+        }
       }
     });
   }
 
+  private boolean showSaveRequest() {
+    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    alert.setTitle("Unsaved changes");
+    alert.setHeaderText("You have unsaved changes");
+    alert.setContentText("Choose your option.");
+
+    ButtonType buttonSave = new ButtonType("Save");
+    ButtonType buttonCancel = new ButtonType("Cancel");
+    ButtonType buttonDontSave = new ButtonType("Don't save");
+
+    alert.getButtonTypes().setAll(buttonSave, buttonCancel, buttonDontSave);
+
+    Optional<ButtonType> result = alert.showAndWait();
+
+    if (result.isPresent()) {
+      if (result.get() == buttonSave) {
+        if (saveFile(false)) {
+          return true;
+        } else {
+          showAlert("Unable to save file", "User cancelled operation!");
+          return false;
+        }
+      } else if (result.get() == buttonDontSave) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   private void createNewJournal() {
-    if (modificationCount > 0 && !saveFile(false)) {
-      showAlert("Error saving current bujo!",
-          "Please save the current working bujo before creating a new one.");
-      return;
+    if (modificationCount.get() > 0) {
+      boolean saveResult = showSaveRequest();
+
+      if (!saveResult) {
+        return;
+      }
     }
 
     this.manager = new ScheduleManagerImpl();
+    this.weekController.setManager(this.manager);
     this.manager.createNewWeek();
-    renderWeek();
+    this.weekController.renderWeek();
 
-    modificationCount = 0;
+    modificationCount.set(0);
   }
 
   private void showAlert(String title, String message) {
@@ -233,239 +212,64 @@ public class JournalControllerImpl implements JournalController {
 
   private void openSettings() {
     this.settingsController.openSettingsModal(this.manager.getSettings());
-    renderWeek();
+    this.weekController.renderWeek();
   }
 
-  private void createNewWeek() {
-    this.manager.createNewWeek();
-    renderWeek();
-    modificationCount++;
+  private String getUserPassword(boolean newPassword) {
+    PasswordView passwordView = new PasswordView();
+    String password = passwordView.requestPassword(newPassword);
+
+    return password;
   }
 
-  private MenuItem createMenuItem(MenuBarAction action, String name, boolean createKeybind) {
-    MenuItem menuItem = new MenuItem(name);
-    menuItem.setOnAction(e -> handleMenuAction(e, action));
-
-    if (createKeybind) {
-      menuItem.setAccelerator(KeyCombination.keyCombination(action.getKeyCombination()));
-    }
-
-    return menuItem;
-  }
-
-  private MenuBar createMenuBar(boolean createKeybinds) {
-    Menu menuFile = new Menu("File");
-    MenuItem itemNewBujo = createMenuItem(MenuBarAction.NEW_JOURNAL, "New Bujo", createKeybinds);
-    MenuItem itemSave = createMenuItem(MenuBarAction.SAVE, "Save", createKeybinds);
-    MenuItem itemSaveAs = createMenuItem(MenuBarAction.SAVE_AS, "Save As", createKeybinds);
-    MenuItem itemOpen = createMenuItem(MenuBarAction.OPEN, "Open", createKeybinds);
-    MenuItem itemSettings = createMenuItem(MenuBarAction.OPEN_SETTINGS, "Settings", createKeybinds);
-
-    menuFile.getItems().addAll(itemNewBujo, itemSave, itemSaveAs, itemOpen, itemSettings);
-
-    Menu menuInsert = new Menu("Insert");
-    MenuItem itemEvent = createMenuItem(MenuBarAction.NEW_EVENT, "New Event", createKeybinds);
-    MenuItem itemTask = createMenuItem(MenuBarAction.NEW_TASK, "New Task", createKeybinds);
-    MenuItem itemWeek = createMenuItem(MenuBarAction.NEW_WEEK, "New Week", createKeybinds);
-
-    menuInsert.getItems().addAll(itemEvent, itemTask, itemWeek);
-
-    MenuBar menubar = new MenuBar();
-    menubar.getMenus().addAll(menuFile, menuInsert);
-
-    return menubar;
-  }
-
-  private void attachMenuHandlers() {
-    MenuBar menuBarVisible = createMenuBar(true);
-    MenuBar menuBarHidden = createMenuBar(false);
-
-    menuBarHidden.useSystemMenuBarProperty().set(true);
-
-    menuBarContainer.getChildren().addAll(menuBarVisible, menuBarHidden);
-  }
-
-  private void handleItemAction(ItemAction action, Week w, ScheduleItem item) {
-    switch (action) {
-      case DELETE -> w.deleteItem(item);
-      case EDIT -> itemCreator.editItem(item);
-    }
-
-    renderWeek();
-    modificationCount++;
-  }
-
-  public void renderWeek() {
-    Map<DayOfWeek, Integer> taskCountMap = new HashMap<>();
-    Map<DayOfWeek, Integer> eventCountMap = new HashMap<>();
-
-    for (Node node : weekView.getChildren()) {
-      // Check if this child is a VBox
-      if (node instanceof ScrollPane scrollPane) {
-        // Now, we can remove specific children from the VBox
-        VBox vbox = (VBox) scrollPane.getContent();
-
-        ((VBox) vbox).getChildren().removeIf(
-            child -> child instanceof TaskView || child instanceof EventView);
-      }
-    }
-
-    sideBar.getChildren().removeIf(child -> !(child instanceof Label));
-
-    Week currentWeek = manager.getCurrentWeek();
-
-    for (Task t : currentWeek.getTasks()) {
-      TaskView tView = new TaskView(t,
-          (ItemAction action) -> handleItemAction(action, currentWeek, t));
-
-      if (taskCountMap.containsKey(t.getDayOfWeek())) {
-        taskCountMap.put(t.getDayOfWeek(), taskCountMap.get(t.getDayOfWeek()) + 1);
-      } else {
-        taskCountMap.put(t.getDayOfWeek(), 1);
-      }
-
-      //Add tView to GUI
-      VBox vbox = (VBox) ((ScrollPane) weekView.getChildren()
-          .get(t.getDayOfWeek().getNumVal())).getContent();
-
-      vbox.getChildren().add(tView);
-
-      //Add completion status to sidebar
-      VBox sidebarTask = new VBox(5);
-      sidebarTask.getStyleClass().add("sidebarTask");
-      Label nameLabel = new Label(t.getName());
-      nameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-      Label completeLabel = new Label(t.isComplete() ? "Completed" : "Incomplete");
-      completeLabel.setFont(Font.font("Arial", 12));
-
-
-      sidebarTask.getChildren().addAll(nameLabel, completeLabel);
-
-      sideBar.getChildren().add(sidebarTask);
-    }
-
-    currentWeek.getEvents().sort(Comparator.comparingLong(Event::getStartTime));
-    for (Event e : currentWeek.getEvents()) {
-      if (eventCountMap.containsKey(e.getDayOfWeek())) {
-        eventCountMap.put(e.getDayOfWeek(), eventCountMap.get(e.getDayOfWeek()) + 1);
-      } else {
-        eventCountMap.put(e.getDayOfWeek(), 1);
-      }
-
-      EventView eView = new EventView(e,
-          (ItemAction action) -> handleItemAction(action, currentWeek, e));
-
-      VBox vbox = (VBox) ((ScrollPane) weekView.getChildren()
-          .get(e.getDayOfWeek().getNumVal())).getContent();
-
-      vbox.getChildren().add(eView);
-    }
-
-    alertMaximumItems(taskCountMap, eventCountMap);
-
-    updateWeekTitle();
-  }
-
-  private void registerWeekTitleHandlers() {
-    weekTitle.addEventFilter(MouseEvent.MOUSE_CLICKED, (mouseEvent) -> {
-      if (mouseEvent.getClickCount() == 2) {
-        editWeekTitle();
-      }
-    });
-
-    weekTitleField.setOnKeyPressed(event -> {
-      if (event.getCode() == KeyCode.ENTER) {
-        this.manager.getCurrentWeek().setWeekName(weekTitleField.getText());
-        updateWeekTitle();
-      }
-    });
-
-    weekTitleField.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-      if (wasFocused && !isNowFocused) {
-        this.manager.getCurrentWeek().setWeekName(weekTitleField.getText());
-        updateWeekTitle();
-      }
-    });
-  }
-
-  private void finishEditWeekTitle() {
-    weekTitle.setVisible(true);  // Set the label's text to the text field's text
-    weekTitleField.setVisible(false);
-    weekTitleField.setDisable(true);
-  }
-
-  private void editWeekTitle() {
-    weekTitleField.setText(weekTitle.getText());
-    weekTitle.setVisible(false);
-    weekTitleField.setVisible(true);
-    weekTitleField.setDisable(false);
-    weekTitleField.requestFocus();
-    modificationCount++;
-
-    // Add an event filter for pressing Enter in the text field
-  }
-
-  private void alertMaximumItems(Map<DayOfWeek, Integer> taskCountMap,
-                                 Map<DayOfWeek, Integer> eventCountMap) {
-    Settings settings = this.manager.getSettings();
-
-    warningLabel.setText("");
-
-    Map.Entry<DayOfWeek, Integer> taskMax = findMax(taskCountMap);
-    Map.Entry<DayOfWeek, Integer> eventMax = findMax(eventCountMap);
-
-    if (taskMax != null && settings.getMaximumTasks() != 0) {
-      if (taskMax.getValue() > settings.getMaximumTasks()) {
-        warningLabel.setText("Maximum number of tasks exceeded for " + taskMax.getKey() + "    ");
-      }
-    }
-
-    if (eventMax != null && settings.getMaximumEvents() != 0) {
-      if (eventMax.getValue() > settings.getMaximumEvents()) {
-        warningLabel.setText(
-            warningLabel.getText() + "Maximum number of events exceeded for " + eventMax.getKey());
-      }
-    }
-
-
-  }
-
-  public boolean saveFile(boolean saveAs) {
+  private boolean saveFile(boolean saveAs) {
     if (!this.manager.hasFileManager() || saveAs) {
+      String password = getUserPassword(true);
+
+      if (password.isEmpty()) {
+        showAlert("No password entered!", "Operation cancelled");
+        return false;
+      }
+
       String filePath = saveBujoFile();
       if (filePath == null) {
         System.out.println("User did not choose save file. Operation cancelled!");
         return false;
       }
-      this.fileManager = new FileManagerImpl(filePath);
+      this.fileManager = new FileManagerImpl(filePath, password);
       this.manager.setFileManager(this.fileManager);
     }
 
     this.manager.saveData();
+    modificationCount.set(0);
     return true;
   }
 
   private void createNewTask() {
     itemCreator.createNewTask(task -> {
       this.manager.getCurrentWeek().addTask(task);
-      modificationCount++;
-      renderWeek();
+      modificationCount.incrementAndGet();
+      this.weekController.renderWeek();
     });
   }
 
   private void createNewEvent() {
     itemCreator.createNewEvent(event -> {
       this.manager.getCurrentWeek().addEvent(event);
-      modificationCount++;
-      renderWeek();
+      modificationCount.incrementAndGet();
+      this.weekController.renderWeek();
     });
   }
 
+
+
   private void loadFile() {
-    if (modificationCount > 0 && !saveFile(false)) {
-      showAlert("Error saving current bujo!",
-          "Please save the current working bujo before loading a different one.");
-      return;
+    if (modificationCount.get() > 0) {
+      boolean saveResult = showSaveRequest();
+
+      if (!saveResult) {
+        return;
+      }
     }
 
     String filePath = chooseBujoFile();
@@ -473,11 +277,26 @@ public class JournalControllerImpl implements JournalController {
       System.out.println("User did not choose save file. Operation cancelled!");
       return;
     }
-    this.fileManager = new FileManagerImpl(filePath);
+
+    String password = getUserPassword(false);
+
+    if (password.isEmpty()) {
+      showAlert("Unable to open file.", "Could not open file because no password was entered.");
+      return;
+    }
+
+    this.fileManager = new FileManagerImpl(filePath, password);
+
+    BujoJson bujoJson = this.fileManager.loadFromFile();
+    if (bujoJson == null) {
+      showAlert("Unable to open file.", "Could not open file. Either the password is incorrect or the bujo file is corrupted.");
+      return;
+    }
+
     this.manager.setFileManager(this.fileManager);
-    this.manager.loadData();
-    modificationCount = 0;
-    renderWeek();
+    this.manager.loadData(bujoJson);
+    modificationCount.set(0);
+    this.weekController.renderWeek();
   }
 
 
