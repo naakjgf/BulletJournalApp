@@ -14,12 +14,13 @@ public class FileManagerImpl implements FileManager {
   private final BujoSerializer serializer;
   private final BujoDeserializer deserializer;
   private String jsonContent;
-  private String password;
+  private final String password;
 
   /**
    * Constructor for a FileManager.
    *
    * @param filepath Filepath for Bujo file.
+   * @param password Password to encrypt/decrypt bujo file with.
    */
   public FileManagerImpl(String filepath, String password) {
     this.filepath = filepath;

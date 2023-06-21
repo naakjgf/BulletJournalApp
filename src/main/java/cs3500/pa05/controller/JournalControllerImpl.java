@@ -1,46 +1,26 @@
 package cs3500.pa05.controller;
 
-import cs3500.pa05.enums.DayOfWeek;
-import cs3500.pa05.enums.ItemAction;
 import cs3500.pa05.enums.MenuBarAction;
-import cs3500.pa05.model.Event;
-import cs3500.pa05.model.ScheduleItem;
 import cs3500.pa05.model.ScheduleManager;
 import cs3500.pa05.model.ScheduleManagerImpl;
 import cs3500.pa05.model.Settings;
-import cs3500.pa05.model.Task;
-import cs3500.pa05.model.Week;
 import cs3500.pa05.model.file_manager.FileManager;
 import cs3500.pa05.model.file_manager.FileManagerImpl;
 import cs3500.pa05.model.file_manager.json.BujoJson;
-import cs3500.pa05.view.EventView;
 import cs3500.pa05.view.PasswordView;
-import cs3500.pa05.view.TaskView;
 import java.io.File;
-import java.text.NumberFormat;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -96,6 +76,7 @@ public class JournalControllerImpl implements JournalController {
   /**
    * Constructor for a JournalController.
    *
+   * @param stage JavaFX stage for the window.
    * @param manager ScheduleManager to retrieve Week data from.
    */
   public JournalControllerImpl(Stage stage, ScheduleManager manager) {
@@ -114,10 +95,15 @@ public class JournalControllerImpl implements JournalController {
 
   }
 
+  /**
+   * Runs the Journal Controller.
+   */
   @FXML
   public void run() {
-    this.weekController = new WeekController(manager, itemCreator, modificationCount, weekView, weekTitle, weekTitleField, nextWeek, prevWeek,
-        newWeek, sideBar, weeklyOverview, warningLabel);
+    this.weekController =
+        new WeekController(manager, itemCreator, modificationCount, weekView, weekTitle,
+            weekTitleField, nextWeek, prevWeek,
+            newWeek, sideBar, weeklyOverview, warningLabel);
 
     this.menuController.attachMenuHandlers(menuBarContainer);
 
@@ -127,7 +113,6 @@ public class JournalControllerImpl implements JournalController {
     this.weekController.registerWeekTitleHandlers();
     createCloseHandler();
   }
-
 
 
   private void handleMenuAction(ActionEvent e, MenuBarAction action) {
@@ -140,6 +125,7 @@ public class JournalControllerImpl implements JournalController {
       case NEW_EVENT -> createNewEvent();
       case OPEN_SETTINGS -> openSettings();
       case NEW_JOURNAL -> createNewJournal();
+      default -> throw new IllegalArgumentException("Unknown action provided!");
     }
   }
 
@@ -217,9 +203,8 @@ public class JournalControllerImpl implements JournalController {
 
   private String getUserPassword(boolean newPassword) {
     PasswordView passwordView = new PasswordView();
-    String password = passwordView.requestPassword(newPassword);
 
-    return password;
+    return passwordView.requestPassword(newPassword);
   }
 
   private boolean saveFile(boolean saveAs) {
@@ -246,7 +231,7 @@ public class JournalControllerImpl implements JournalController {
   }
 
   private void createNewTask() {
-    itemCreator.createNewTask(task -> {
+    itemCreator.createTask(task -> {
       this.manager.getCurrentWeek().addTask(task);
       modificationCount.incrementAndGet();
       this.weekController.renderWeek();
@@ -254,13 +239,12 @@ public class JournalControllerImpl implements JournalController {
   }
 
   private void createNewEvent() {
-    itemCreator.createNewEvent(event -> {
+    itemCreator.createEvent(event -> {
       this.manager.getCurrentWeek().addEvent(event);
       modificationCount.incrementAndGet();
       this.weekController.renderWeek();
     });
   }
-
 
 
   private void loadFile() {
@@ -289,7 +273,8 @@ public class JournalControllerImpl implements JournalController {
 
     BujoJson bujoJson = this.fileManager.loadFromFile();
     if (bujoJson == null) {
-      showAlert("Unable to open file.", "Could not open file. Either the password is incorrect or the bujo file is corrupted.");
+      showAlert("Unable to open file.",
+          "Could not open file. Either the password is incorrect or the bujo file is corrupted.");
       return;
     }
 

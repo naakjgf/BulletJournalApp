@@ -1,10 +1,8 @@
 package cs3500.pa05.controller;
 
 import cs3500.pa05.model.Settings;
-import java.util.function.Consumer;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -35,9 +33,6 @@ public class SettingsController {
    * @param settings Settings object to edit.
    */
   public void openSettingsModal(Settings settings) {
-    Dialog<String> dialog = new Dialog<>();
-    DialogPane dialogPane = setupDialogPane(dialog, "Settings");
-
     VBox vbox = new VBox();
     vbox.setPadding(new Insets(10));
 
@@ -58,6 +53,9 @@ public class SettingsController {
     TextField eventsField = new TextField();
     eventsField.setText(Integer.toString(settings.getMaximumEvents()));
 
+    Dialog<String> dialog = new Dialog<>();
+    DialogPane dialogPane = setupDialogPane(dialog, "Settings");
+
     ButtonType saveBtnType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
     dialogPane.getButtonTypes().addAll(saveBtnType, ButtonType.CANCEL);
 
@@ -74,7 +72,8 @@ public class SettingsController {
         alert.setTitle("Input Error");
         alert.setHeaderText(null);
         alert.setContentText(
-            "Please enter a valid number for maximum tasks and events (greater than or equal to 0)");
+            "Please enter a valid number for maximum tasks and events (greater than or equal to 0)"
+        );
         alert.showAndWait();
       }
     });

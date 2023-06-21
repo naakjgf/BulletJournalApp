@@ -2,15 +2,10 @@ package cs3500.pa05;
 
 import cs3500.pa05.controller.JournalControllerImpl;
 import cs3500.pa05.model.ScheduleManagerImpl;
-import cs3500.pa05.model.file_manager.FileManager;
-import cs3500.pa05.model.file_manager.FileManagerImpl;
 import cs3500.pa05.view.GuiView;
 import cs3500.pa05.view.GuiViewImpl;
 import cs3500.pa05.view.SplashScreenViewImpl;
-import java.util.Objects;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -19,7 +14,6 @@ import javafx.stage.StageStyle;
  * Driver for the Bullet Journal application.
  */
 public class Driver extends Application {
-  private Stage splashStage;
   private Stage primaryStage;
   private Scene splashScreen;
 
@@ -27,14 +21,14 @@ public class Driver extends Application {
    * Main method for the Bullet Journal application.
    *
    * @param args Command line arguments.
-    */
+   */
   public static void main(String[] args) {
     launch(args);
   }
 
 
   @Override
-  public void init() throws Exception {
+  public void init() {
     SplashScreenViewImpl splashScreenView = new SplashScreenViewImpl();
     splashScreen = splashScreenView.load();
   }
@@ -58,7 +52,8 @@ public class Driver extends Application {
 
   private void loadMainApp() {
     ScheduleManagerImpl scheduleManager = new ScheduleManagerImpl();
-    JournalControllerImpl journalController = new JournalControllerImpl(primaryStage, scheduleManager);
+    JournalControllerImpl journalController =
+        new JournalControllerImpl(primaryStage, scheduleManager);
     GuiView journalView = new GuiViewImpl(journalController);
 
     try {

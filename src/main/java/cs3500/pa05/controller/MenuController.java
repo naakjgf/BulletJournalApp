@@ -2,7 +2,6 @@ package cs3500.pa05.controller;
 
 import cs3500.pa05.enums.MenuBarAction;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;

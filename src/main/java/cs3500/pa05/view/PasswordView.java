@@ -3,20 +3,12 @@ package cs3500.pa05.view;
 import java.util.Optional;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.ButtonBar.ButtonData;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-
-import javafx.application.Platform;
-import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -43,16 +35,16 @@ public class PasswordView extends Dialog<String> {
     passwordField = new PasswordField();
     passwordField.setPromptText("Password");
 
-    VBox vBox = new VBox();
-    vBox.getChildren().add(createHBox(passwordField));
+    VBox vbox = new VBox();
+    vbox.getChildren().add(createHbox(passwordField));
 
     if (newPassword) {
       confirmPasswordField = new PasswordField();
       confirmPasswordField.setPromptText("Confirm Password");
-      vBox.getChildren().add(createHBox(confirmPasswordField));
+      vbox.getChildren().add(createHbox(confirmPasswordField));
     }
 
-    getDialogPane().setContent(vBox);
+    getDialogPane().setContent(vbox);
     Platform.runLater(() -> passwordField.requestFocus());
     setConverter();
   }
@@ -69,18 +61,19 @@ public class PasswordView extends Dialog<String> {
     });
   }
 
-  private HBox createHBox(PasswordField passwordField) {
-    HBox hBox = new HBox();
-    hBox.getChildren().add(passwordField);
-    hBox.setPadding(new Insets(20));
+  private HBox createHbox(PasswordField passwordField) {
+    HBox hbox = new HBox();
+    hbox.getChildren().add(passwordField);
+    hbox.setPadding(new Insets(20));
     HBox.setHgrow(passwordField, Priority.ALWAYS);
-    return hBox;
+    return hbox;
   }
 
   /**
    * Requests a password from the user using the dialogue.
    *
-   * @param newPassword Whether to request a new password (Should there be a confirmation password or not)
+   * @param newPassword Whether to request a new password
+   *                    (Should there be a confirmation password or not)
    * @return Password
    */
   public String requestPassword(boolean newPassword) {
@@ -89,7 +82,7 @@ public class PasswordView extends Dialog<String> {
     Optional<String> result;
     do {
       result = showAndWait();
-      if (!result.isPresent()) {
+      if (result.isEmpty()) {
         return "";
       }
       String password = result.get();
@@ -115,8 +108,9 @@ public class PasswordView extends Dialog<String> {
     Alert alert = new Alert(AlertType.WARNING);
     alert.setTitle("Password Requirement Not Met");
     alert.setHeaderText(null);
-    String warningMessage = newPassword ? "Passwords must be longer than 7 characters and match. Please try again." :
-        "Your password must be longer than 7 characters. Please try again.";
+    String warningMessage =
+        newPassword ? "Passwords must be longer than 7 characters and match." :
+            "Your password must be longer than 7 characters.";
     alert.setContentText(warningMessage);
     alert.showAndWait();
   }

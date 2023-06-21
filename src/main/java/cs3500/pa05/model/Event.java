@@ -2,7 +2,6 @@ package cs3500.pa05.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import cs3500.pa05.enums.DayOfWeek;
 import java.util.UUID;
 
@@ -24,6 +23,7 @@ public class Event implements EventInterface {
    * @param description Description.
    * @param day         Day of the week the event belongs to.
    * @param startTime   The epoch time for the event starts
+   * @param id          ID of the Event object
    * @param duration    The duration the event lasts, in milliseconds.
    */
   @JsonCreator
@@ -66,11 +66,6 @@ public class Event implements EventInterface {
   }
 
   @Override
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  @Override
   public long getStartTime() {
     return startTime;
   }
@@ -93,6 +88,11 @@ public class Event implements EventInterface {
   @Override
   public String getName() {
     return name;
+  }
+
+  @Override
+  public void setName(String name) {
+    this.name = name;
   }
 
   @Override

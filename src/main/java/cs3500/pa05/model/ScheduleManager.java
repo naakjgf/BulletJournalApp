@@ -2,19 +2,11 @@ package cs3500.pa05.model;
 
 import cs3500.pa05.model.file_manager.FileManager;
 import cs3500.pa05.model.file_manager.json.BujoJson;
-import java.util.List;
 
 /**
  * Represents a manager for a Bullet Journal Schedule.
  */
 public interface ScheduleManager {
-  /**
-   * Retrieves a Week object given the week number.
-   *
-   * @param week Week number.
-   * @return Week object.
-   */
-  Week getWeek(int week);
 
   /**
    * Load data from bujo file into the model.
@@ -44,6 +36,7 @@ public interface ScheduleManager {
 
   /**
    * Retrieves current week number.
+   *
    * @return current week number
    */
   int getCurrentWeekNum();
@@ -74,6 +67,7 @@ public interface ScheduleManager {
 
   /**
    * Retrieves the settings from the schedule manager.
+   *
    * @return Settings object.
    */
   Settings getSettings();
