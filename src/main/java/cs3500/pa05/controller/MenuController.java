@@ -37,6 +37,7 @@ public class MenuController {
 
   private MenuBar createMenuBar(boolean createKeybinds) {
     Menu menuFile = new Menu("File");
+    menuFile.getStyleClass().add("menu");
     MenuItem itemNewBujo = createMenuItem(MenuBarAction.NEW_JOURNAL, "New Bujo", createKeybinds);
     MenuItem itemSave = createMenuItem(MenuBarAction.SAVE, "Save", createKeybinds);
     MenuItem itemSaveAs = createMenuItem(MenuBarAction.SAVE_AS, "Save As", createKeybinds);

@@ -53,6 +53,15 @@
     -fx-alignment: CENTER;
 }
 
+.menu-bar {
+    -fx-background-color: #FFF8E7;
+}
+
+.menu .label {
+    -fx-font-family: "Hannotate TC";
+    -fx-font-size: 14px;
+}
+
 .woodBackground {
     -fx-background-image: url('/bevo_the_pages_of_a_notebook_so_that_one_page_fills_up_the_scr_47f8be58-fab6-4f34-a4f9-3e8c6fc496f2.png');;
 }
