@@ -22,24 +22,7 @@ public class BujoDeserializerTest {
         " \"maximumEvents\": 0, \"maximumTasks\": 0 } }";
   }
 
-  @Test
-  public void testJsonToWeeks() throws JsonProcessingException {
-    List<Week> weeks = bujoDeserializer.jsonToWeeks(validJson);
-    assertNotNull(weeks);
 
-
-    // Here you can make further assertions about the contents of the weeks list
-    // For example, if you know that the validJson should result in a list with one week, you could assert:
-    // assertEquals(1, weeks.size());
-  }
-
-  @Test
-  public void testJsonToSettings() throws JsonProcessingException {
-    Settings settings = bujoDeserializer.jsonToSettings(validJson);
-    assertNotNull(settings);
-
-    // Here you can make further assertions about the contents of the settings object
-  }
 
   @Test
   public void testJsonToBujo() throws JsonProcessingException {

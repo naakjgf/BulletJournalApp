@@ -1,10 +1,10 @@
 package cs3500.pa05.model.file_manager;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import cs3500.pa05.model.Settings;
-import cs3500.pa05.model.Week;
 import cs3500.pa05.model.file_manager.json.BujoJson;
-import java.util.List;
+import java.security.GeneralSecurityException;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
 
 /**
  * Implementation for a Bujo File Manager.
@@ -14,16 +14,18 @@ public class FileManagerImpl implements FileManager {
   private final BujoSerializer serializer;
   private final BujoDeserializer deserializer;
   private String jsonContent;
+  private String password;
 
   /**
    * Constructor for a FileManager.
    *
    * @param filepath Filepath for Bujo file.
    */
-  public FileManagerImpl(String filepath) {
+  public FileManagerImpl(String filepath, String password) {
     this.filepath = filepath;
     this.deserializer = new BujoDeserializer();
     this.serializer = new BujoSerializer();
+    this.password = password;
   }
 
   /**
@@ -39,9 +41,12 @@ public class FileManagerImpl implements FileManager {
     BujoJson bujoJson;
 
     try {
-      bujoJson = deserializer.jsonToBujo(this.jsonContent);
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException("Malformed Bujo file: " + this.filepath);
+      bujoJson = deserializer.jsonToBujo(this.jsonContent, this.password);
+    } catch (BadPaddingException | IllegalBlockSizeException | JsonProcessingException e) {
+      // Incorrect Password
+      return null;
+    } catch (GeneralSecurityException e) {
+      throw new RuntimeException("Unable to decrypt file: " + e.getMessage());
     }
 
     return bujoJson;
@@ -50,7 +55,14 @@ public class FileManagerImpl implements FileManager {
 
   @Override
   public void saveToFile(BujoJson saveBujo) {
-    String serializedBujo = serializer.bujoToJson(saveBujo);
+    String serializedBujo;
+
+    try {
+      serializedBujo = serializer.bujoToJson(saveBujo, this.password);
+    } catch (GeneralSecurityException e) {
+      throw new RuntimeException("Unable to encrypt file: " + e.getMessage());
+    }
+
     FileReaderWriter.writeFileContents(filepath, serializedBujo);
   }
 }

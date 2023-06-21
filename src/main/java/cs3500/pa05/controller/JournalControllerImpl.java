@@ -12,7 +12,9 @@ import cs3500.pa05.model.Task;
 import cs3500.pa05.model.Week;
 import cs3500.pa05.model.file_manager.FileManager;
 import cs3500.pa05.model.file_manager.FileManagerImpl;
+import cs3500.pa05.model.file_manager.json.BujoJson;
 import cs3500.pa05.view.EventView;
+import cs3500.pa05.view.PasswordView;
 import cs3500.pa05.view.TaskView;
 import java.io.File;
 import java.text.NumberFormat;
@@ -213,18 +215,33 @@ public class JournalControllerImpl implements JournalController {
     this.weekController.renderWeek();
   }
 
+  private String getUserPassword(boolean newPassword) {
+    PasswordView passwordView = new PasswordView();
+    String password = passwordView.requestPassword(newPassword);
+
+    return password;
+  }
+
   private boolean saveFile(boolean saveAs) {
     if (!this.manager.hasFileManager() || saveAs) {
+      String password = getUserPassword(true);
+
+      if (password.isEmpty()) {
+        showAlert("No password entered!", "Operation cancelled");
+        return false;
+      }
+
       String filePath = saveBujoFile();
       if (filePath == null) {
         System.out.println("User did not choose save file. Operation cancelled!");
         return false;
       }
-      this.fileManager = new FileManagerImpl(filePath);
+      this.fileManager = new FileManagerImpl(filePath, password);
       this.manager.setFileManager(this.fileManager);
     }
 
     this.manager.saveData();
+    modificationCount.set(0);
     return true;
   }
 
@@ -244,6 +261,8 @@ public class JournalControllerImpl implements JournalController {
     });
   }
 
+
+
   private void loadFile() {
     if (modificationCount.get() > 0) {
       boolean saveResult = showSaveRequest();
@@ -258,9 +277,24 @@ public class JournalControllerImpl implements JournalController {
       System.out.println("User did not choose save file. Operation cancelled!");
       return;
     }
-    this.fileManager = new FileManagerImpl(filePath);
+
+    String password = getUserPassword(false);
+
+    if (password.isEmpty()) {
+      showAlert("Unable to open file.", "Could not open file because no password was entered.");
+      return;
+    }
+
+    this.fileManager = new FileManagerImpl(filePath, password);
+
+    BujoJson bujoJson = this.fileManager.loadFromFile();
+    if (bujoJson == null) {
+      showAlert("Unable to open file.", "Could not open file. Either the password is incorrect or the bujo file is corrupted.");
+      return;
+    }
+
     this.manager.setFileManager(this.fileManager);
-    this.manager.loadData();
+    this.manager.loadData(bujoJson);
     modificationCount.set(0);
     this.weekController.renderWeek();
   }

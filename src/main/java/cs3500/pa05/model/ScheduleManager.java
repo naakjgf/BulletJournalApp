@@ -1,6 +1,7 @@
 package cs3500.pa05.model;
 
 import cs3500.pa05.model.file_manager.FileManager;
+import cs3500.pa05.model.file_manager.json.BujoJson;
 import java.util.List;
 
 /**
@@ -17,8 +18,10 @@ public interface ScheduleManager {
 
   /**
    * Load data from bujo file into the model.
+   *
+   * @param bujoJson BujoJson to load into ScheduleManager.
    */
-  void loadData();
+  void loadData(BujoJson bujoJson);
 
   /**
    * Save data to Bujo file using FileManager.
