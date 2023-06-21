@@ -18,4 +18,8 @@
 - Week tabs
 
 ## Section 5: Extra Credit
+- Deployable Application
+- Visual Flourish
 - Splash Screen
+- Privacy Lock
+- Weekly Starters

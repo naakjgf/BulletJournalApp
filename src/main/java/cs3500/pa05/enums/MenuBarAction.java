@@ -32,7 +32,7 @@ public enum MenuBarAction {
   /**
    * Creating a new week.
    */
-  NEW_WEEK("Shortcut+W"),
+  NEW_WEEK("Shortcut+N"),
 
   /**
    * Opening the bujo settings.
@@ -47,7 +47,7 @@ public enum MenuBarAction {
   /**
    * Creating a new journal.
    */
-  NEW_JOURNAL("Shortcut+N");
+  NEW_JOURNAL("Shortcut+W");
 
   private final String keyCombination;
 

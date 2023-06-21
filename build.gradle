@@ -32,6 +32,12 @@ repositories {
     mavenCentral()
 }
 
+jar {
+    manifest {
+        attributes 'Main-Class': 'cs3500.pa05.Driver'
+    }
+}
+
 ext {
     junitVersion = '5.9.2'
 }

@@ -7,7 +7,6 @@ module cs3500.pa05 {
   requires com.fasterxml.jackson.annotation;
   requires com.fasterxml.jackson.core;
   requires com.fasterxml.jackson.databind;
-
   requires org.controlsfx.controls;
 
 
