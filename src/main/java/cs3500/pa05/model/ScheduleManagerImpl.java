@@ -51,7 +51,6 @@ public class ScheduleManagerImpl implements ScheduleManager {
 
     int week = createNewWeek();
     settingsObject.setCurrentWeek(week);
-
   }
 
   @Override

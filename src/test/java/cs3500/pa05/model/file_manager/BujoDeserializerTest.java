@@ -1,34 +1,48 @@
 package cs3500.pa05.model.file_manager;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
-import cs3500.pa05.model.Settings;
-import cs3500.pa05.model.Week;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import cs3500.pa05.model.file_manager.json.BujoJson;
-import java.util.List;
+import cs3500.pa05.model.file_manager.json.CryptoJson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.security.GeneralSecurityException;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class BujoDeserializerTest {
   private BujoDeserializer bujoDeserializer;
   private String validJson;
-  private String invalidJson;
+  private String cryptoJson;
 
   @BeforeEach
-  public void setUp() {
+  public void setUp() throws GeneralSecurityException {
     bujoDeserializer = new BujoDeserializer();
     validJson = "{ \"data\": [], \"settings\": { \"currentWeek\": 0," +
         " \"maximumEvents\": 0, \"maximumTasks\": 0 } }";
+    String password = "Password";
+    String salt = CryptoManager.generateSalt(16);
+    String encryptedData = CryptoManager.encrypt(validJson, password, salt);
+    CryptoJson cryptoJsonObj = new CryptoJson(encryptedData, salt);
+    ObjectMapper objectMapper = new ObjectMapper();
+    try {
+      cryptoJson = objectMapper.writeValueAsString(cryptoJsonObj);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
   }
-
-
 
   @Test
-  public void testJsonToBujo() throws JsonProcessingException {
-    BujoJson bujoJson = bujoDeserializer.jsonToBujo(validJson);
+  public void testJsonToBujo() {
+    BujoJson bujoJson = null;
+    try {
+      bujoJson = bujoDeserializer.jsonToBujo(cryptoJson, "Password");
+    } catch (GeneralSecurityException | JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
     assertNotNull(bujoJson);
-
-    // Here you can make further assertions about the contents of the bujoJson object
   }
 }
+
+
