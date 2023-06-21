@@ -2,23 +2,21 @@ package cs3500.pa05.model.file_manager;
 
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Base64;
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
+/**
+ * Manages Cryptography for encrpytion and decryption of Bujo files.
+ */
 public class CryptoManager {
   private static final int ITERATION_COUNT = 65536;
   private static final int KEY_LENGTH = 256;
@@ -41,10 +39,10 @@ public class CryptoManager {
    * Calculates a hashed secret key with SHA256 for AES encryption using a password and salt.
    *
    * @param password Password to generate key with.
-   * @param salt Salt to use for hashing.
+   * @param salt     Salt to use for hashing.
    * @return SecretKey object for AES encryption/decryption.
    * @throws NoSuchAlgorithmException If algorithm does not exist.
-   * @throws InvalidKeySpecException If key spec is invalid.
+   * @throws InvalidKeySpecException  If key spec is invalid.
    */
   private static SecretKey getSecretKey(String password, String salt)
       throws NoSuchAlgorithmException, InvalidKeySpecException {
@@ -59,12 +57,13 @@ public class CryptoManager {
    * Encrypts plaintext using a password and salt.
    *
    * @param plainText Text to encrypt.
-   * @param password Password to encrypt with.
-   * @param salt Generated salt to use for encryption
+   * @param password  Password to encrypt with.
+   * @param salt      Generated salt to use for encryption
    * @return Encrypted cipher.
    * @throws GeneralSecurityException If exception caught during encryption or key calculation.
    */
-  public static String encrypt(String plainText, String password, String salt) throws GeneralSecurityException {
+  public static String encrypt(String plainText, String password, String salt)
+      throws GeneralSecurityException {
     Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
     SecretKey secretKey = getSecretKey(password, salt);
 
@@ -88,12 +87,13 @@ public class CryptoManager {
    * Decrypts plaintext using a password and salt.
    *
    * @param cipherText Cipher to decrypt.
-   * @param password Password to decrypt with.
-   * @param salt Stored salt to use for decryption hash
+   * @param password   Password to decrypt with.
+   * @param salt       Stored salt to use for decryption hash
    * @return Decrypted plaintext.
    * @throws GeneralSecurityException If exception caught during decryption or key calculation.
    */
-  public static String decrypt(String cipherText, String password, String salt) throws GeneralSecurityException {
+  public static String decrypt(String cipherText, String password, String salt)
+      throws GeneralSecurityException {
     Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
     SecretKey secretKey = getSecretKey(password, salt);
 

@@ -4,25 +4,27 @@ import cs3500.pa05.enums.ItemAction;
 import cs3500.pa05.model.Event;
 import cs3500.pa05.model.ScheduleItem;
 import cs3500.pa05.model.Task;
-import java.io.File;
-import java.net.MalformedURLException;
 import java.util.function.Consumer;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+/**
+ * Represents a popup for a schedule item.
+ */
 public class ScheduleItemAlert extends Dialog<Void> {
+  /**
+   * Constructor for ScheduleItemAlert.
+   *
+   * @param item ScheduleItem to view info for.
+   * @param callback Callback with the ItemAction intended by the user.
+   */
   public ScheduleItemAlert(ScheduleItem item, Consumer<ItemAction> callback) {
     super();
     setTitle("Manage " + (item instanceof Task ? "Task" : "Event") + ": " + item.getName());

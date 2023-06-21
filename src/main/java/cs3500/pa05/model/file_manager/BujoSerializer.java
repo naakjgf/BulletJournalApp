@@ -1,14 +1,10 @@
 package cs3500.pa05.model.file_manager;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import cs3500.pa05.model.Settings;
-import cs3500.pa05.model.Week;
 import cs3500.pa05.model.file_manager.json.BujoJson;
 import cs3500.pa05.model.file_manager.json.CryptoJson;
 import java.security.GeneralSecurityException;
-import java.util.List;
 
 /**
  * A class for serializing objects into Bujo files.
@@ -42,6 +38,7 @@ public class BujoSerializer {
    * Serialize a BujoJson into JSON.
    *
    * @param bujoJson BujoJson object
+   * @param password Password to encrypt bujo file with.
    * @return List of Week objects represented by JSON.
    * @throws GeneralSecurityException If error encrypting input JSON.
    */

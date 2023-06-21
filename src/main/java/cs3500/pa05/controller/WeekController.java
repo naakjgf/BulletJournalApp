@@ -11,8 +11,11 @@ import cs3500.pa05.model.Week;
 import cs3500.pa05.view.EventView;
 import cs3500.pa05.view.TaskView;
 import java.text.NumberFormat;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import javafx.scene.Node;
@@ -23,14 +26,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+/**
+ * Controller for a Week on the Schedule GUI.
+ */
 public class WeekController {
   private static final String DEFAULT_WEEK_NAME_FORMAT = "Week %d";
   private static final String FONT_NAME = "Arial";
@@ -43,7 +45,6 @@ public class WeekController {
   private final VBox sideBar;
   private final VBox weeklyOverview;
   private final Label warningLabel;
-  private ScheduleManager manager;
   private final HBox weekView;
   private final Label weekTitle;
   private final TextField weekTitleField;
@@ -52,8 +53,24 @@ public class WeekController {
   private final Button prevWeek;
   private final AtomicInteger modificationCount;
   private final Button newWeek;
+  private ScheduleManager manager;
 
-
+  /**
+   * Constructor for WeekController.
+   *
+   * @param manager ScheduleManager.
+   * @param itemCreator ItemCreationController.
+   * @param modificationCount AtomicInteger for modifications made to page.
+   * @param weekView HBox with days of the week.
+   * @param weekTitle Label for week title.
+   * @param weekTitleField Textbox for week title change.
+   * @param nextWeek Button for changing weeks to next week
+   * @param prevWeek Button for changing weeks to previous week.
+   * @param newWeek Button for creating a new week.
+   * @param sideBar VBox holding task list in sidebar.
+   * @param weeklyOverview VBox holding weekly overview statistics.
+   * @param warningLabel Label holding the warnings for the current page.
+   */
   public WeekController(ScheduleManager manager, ItemCreationController itemCreator,
                         AtomicInteger modificationCount, HBox weekView,
                         Label weekTitle,
@@ -74,11 +91,7 @@ public class WeekController {
 
   }
 
-  public void setManager(ScheduleManager manager) {
-    this.manager = manager;
-  }
-
-  public static Optional<Map.Entry<DayOfWeek, Integer>> findMax(Map<DayOfWeek, Integer> days) {
+  private static Optional<Map.Entry<DayOfWeek, Integer>> findMax(Map<DayOfWeek, Integer> days) {
     if (days == null || days.isEmpty()) {
       return Optional.empty();
     }
@@ -86,6 +99,18 @@ public class WeekController {
     return Optional.of(Collections.max(days.entrySet(), Map.Entry.comparingByValue()));
   }
 
+  /**
+   * Sets the ScheduleManager for the Week Controller
+   *
+   * @param manager ScheduleManager instance created in parent controller.
+   */
+  public void setManager(ScheduleManager manager) {
+    this.manager = manager;
+  }
+
+  /**
+   * Attaches the Week change handlers
+   */
   public void attachWeekHandlers() {
     nextWeek.setOnAction(e -> updateWeekBy(1));
     prevWeek.setOnAction(e -> updateWeekBy(-1));
@@ -103,12 +128,18 @@ public class WeekController {
     }
   }
 
+  /**
+   * Creates a new week.
+   */
   public void createNewWeek() {
     this.manager.createNewWeek();
     renderWeek();
     this.modificationCount.incrementAndGet();
   }
 
+  /**
+   * Updates the title for the week.
+   */
   public void updateWeekTitle() {
     finishEditWeekTitle();
     Week currentWeek = this.manager.getCurrentWeek();
@@ -121,6 +152,9 @@ public class WeekController {
     }
   }
 
+  /**
+   * Registers handlers for changing title of week.
+   */
   public void registerWeekTitleHandlers() {
     weekTitle.addEventFilter(MouseEvent.MOUSE_CLICKED, (mouseEvent) -> {
       if (mouseEvent.getClickCount() == 2) {
@@ -159,15 +193,30 @@ public class WeekController {
     weekTitleField.requestFocus();
   }
 
+  /**
+   * Handles an action on an item.
+   *
+   * @param action ItemAction representing action taken on item.
+   * @param w Week to which the item belongs to.
+   * @param item Item on which the action was taken.
+   */
   public void handleItemAction(ItemAction action, Week w, ScheduleItem item) {
-    switch (action) {
-      case DELETE -> w.deleteItem(item);
-      case EDIT -> itemCreator.editItem(item);
+    if (action == ItemAction.DELETE) {
+      w.deleteItem(item);
+    } else if (action == ItemAction.EDIT) {
+      if (item instanceof Task) {
+        itemCreator.editTask((Task) item);
+      } else if (item instanceof Event) {
+        itemCreator.editEvent((Event) item);
+      }
     }
 
     renderWeek();
   }
 
+  /**
+   * Renders the schedule GUI. Ran whenever the GUI is updated.
+   */
   public void renderWeek() {
     Map<DayOfWeek, Integer> taskCountMap = new HashMap<>();
     Map<DayOfWeek, Integer> eventCountMap = new HashMap<>();
@@ -197,15 +246,15 @@ public class WeekController {
 
   private void renderTasks(Week currentWeek, Map<DayOfWeek, Integer> taskCountMap) {
     for (Task t : currentWeek.getTasks()) {
-      TaskView tView = new TaskView(t,
+      TaskView taskView = new TaskView(t,
           (ItemAction action) -> handleItemAction(action, currentWeek, t));
       taskCountMap.merge(t.getDayOfWeek(), 1, Integer::sum);
-      addTaskToGUI(t, tView);
+      addTaskToGui(t, taskView);
       addCompletionStatusToSideBar(t);
     }
   }
 
-  private void addTaskToGUI(Task task, TaskView taskView) {
+  private void addTaskToGui(Task task, TaskView taskView) {
     VBox vbox = (VBox) ((ScrollPane) weekView.getChildren()
         .get(task.getDayOfWeek().getNumVal())).getContent();
     vbox.getChildren().add(taskView);
@@ -225,14 +274,14 @@ public class WeekController {
   private void renderEvents(Week currentWeek, Map<DayOfWeek, Integer> eventCountMap) {
     currentWeek.getEvents().sort(Comparator.comparingLong(Event::getStartTime));
     for (Event e : currentWeek.getEvents()) {
-      EventView eView =
+      EventView eventView =
           new EventView(e, (ItemAction action) -> handleItemAction(action, currentWeek, e));
       eventCountMap.merge(e.getDayOfWeek(), 1, Integer::sum);
-      addEventToGUI(e, eView);
+      addEventToGui(e, eventView);
     }
   }
 
-  private void addEventToGUI(Event event, EventView eventView) {
+  private void addEventToGui(Event event, EventView eventView) {
     VBox vbox = (VBox) ((ScrollPane) weekView.getChildren()
         .get(event.getDayOfWeek().getNumVal())).getContent();
     vbox.getChildren().add(eventView);
@@ -264,17 +313,17 @@ public class WeekController {
       String percentFormat = percent.format(tasksCompletedFraction);
 
 
-      VBox numTasksVBox = createWeeklyOverviewValue("Total Tasks", String.valueOf(numOfTasks));
-      VBox taskPercentVBox = createWeeklyOverviewValue("Tasks Completed", percentFormat);
+      VBox numTasksVbox = createWeeklyOverviewValue("Total Tasks", String.valueOf(numOfTasks));
+      VBox taskPercentVbox = createWeeklyOverviewValue("Tasks Completed", percentFormat);
 
-      weeklyOverview.getChildren().addAll(numTasksVBox, taskPercentVBox);
+      weeklyOverview.getChildren().addAll(numTasksVbox, taskPercentVbox);
     }
 
     if (events.size() > 0) {
       int numOfEvents = events.size();
-      VBox numEventsVBox = createWeeklyOverviewValue("Total Events", String.valueOf(numOfEvents));
+      VBox numEventsVbox = createWeeklyOverviewValue("Total Events", String.valueOf(numOfEvents));
 
-      weeklyOverview.getChildren().add(numEventsVBox);
+      weeklyOverview.getChildren().add(numEventsVbox);
     }
   }
 

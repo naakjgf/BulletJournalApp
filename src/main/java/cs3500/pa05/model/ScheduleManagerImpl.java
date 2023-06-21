@@ -4,7 +4,6 @@ import cs3500.pa05.model.file_manager.FileManager;
 import cs3500.pa05.model.file_manager.json.BujoJson;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Implementation of the ScheduleManager.
@@ -37,11 +36,6 @@ public class ScheduleManagerImpl implements ScheduleManager {
   }
 
   @Override
-  public Week getWeek(int week) {
-    return weeks.get(week);
-  }
-
-  @Override
   public void loadData(BujoJson bujoJson) {
     this.weeks = bujoJson.weeks();
     this.settings = bujoJson.settings();
@@ -63,10 +57,20 @@ public class ScheduleManagerImpl implements ScheduleManager {
     return settings;
   }
 
+  /**
+   * Sets the maximum number of tasks setting on the Settings object.
+   *
+   * @param maximumTasks Maximum number of tasks.
+   */
   public void setMaximumTasks(int maximumTasks) {
     settings.setMaximumTasks(maximumTasks);
   }
 
+  /**
+   * Sets the maximum number of events setting on the Settings object.
+   *
+   * @param maximumEvents Maximum number of events.
+   */
   public void setMaximumEvents(int maximumEvents) {
     settings.setMaximumEvents(maximumEvents);
   }
@@ -99,9 +103,9 @@ public class ScheduleManagerImpl implements ScheduleManager {
 
     return newWeekNumber;
   }
+
   @Override
-  public int getNumWeeks()
-  {
+  public int getNumWeeks() {
     return weeks.size();
   }
 }

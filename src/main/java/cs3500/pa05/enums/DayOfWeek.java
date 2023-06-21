@@ -39,7 +39,7 @@ public enum DayOfWeek {
    */
   SUNDAY(6);
 
-  private int numVal;
+  private final int numVal;
 
   /**
    * Constructor for DayOfWeek enum.

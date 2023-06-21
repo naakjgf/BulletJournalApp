@@ -1,12 +1,10 @@
 package cs3500.pa05.view;
 
 import cs3500.pa05.controller.JournalControllerImpl;
-import cs3500.pa05.enums.DayOfWeek;
 import java.io.IOException;
 import java.net.URL;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
 
 /**
  * Implementation of GuiView.

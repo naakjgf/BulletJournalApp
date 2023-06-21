@@ -10,7 +10,7 @@ import java.util.UUID;
  */
 public class Task implements TaskInterface {
   private String name;
-  private String id;
+  private final String id;
   private boolean complete;
   private String description;
   private DayOfWeek day;

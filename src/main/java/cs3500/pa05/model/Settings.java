@@ -18,6 +18,7 @@ public class Settings {
    *
    * @param maximumTasks The Maximum number of tasks a user can create per week.
    * @param maximumEvents The Maximum number of events a user can create per week.
+   * @param currentWeek Current week selected on the bujo schedule view.
    */
   @JsonCreator
   public Settings(@JsonProperty("maximumTasks") int maximumTasks,

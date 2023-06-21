@@ -4,13 +4,44 @@ package cs3500.pa05.enums;
  * Represents an action on a menu bar.
  */
 public enum MenuBarAction {
+  /**
+   * Saving a bujo file.
+   */
   SAVE("Shortcut+S"),
+
+  /**
+   * Saving a bujo file to a new location.
+   */
   SAVE_AS("Shortcut+A"),
+
+  /**
+   * Opening a Bujo file.
+   */
   OPEN("Shortcut+O"),
+
+  /**
+   * Creating a new event.
+   */
   NEW_EVENT("Shortcut+E"),
+
+  /**
+   * Creating a new task.
+   */
   NEW_TASK("Shortcut+T"),
+
+  /**
+   * Creating a new week.
+   */
   NEW_WEEK("Shortcut+W"),
+
+  /**
+   * Opening the bujo settings.
+   */
   OPEN_SETTINGS("Shortcut+,"),
+
+  /**
+   * Creating a new journal.
+   */
   NEW_JOURNAL("Shortcut+N");
 
   private final String keyCombination;

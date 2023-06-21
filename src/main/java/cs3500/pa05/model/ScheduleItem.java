@@ -15,6 +15,7 @@ public interface ScheduleItem {
 
   /**
    * Sets the name of the ScheduleItem to the specified name.
+   *
    * @param name Name to set.
    */
   void setName(String name);
@@ -49,6 +50,7 @@ public interface ScheduleItem {
 
   /**
    * Retrieves the ID of the Schedule Item.
+   *
    * @return UUID string id
    */
   String getId();
