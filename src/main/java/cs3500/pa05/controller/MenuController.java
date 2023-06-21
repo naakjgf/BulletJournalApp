@@ -42,9 +42,10 @@ public class MenuController {
     MenuItem itemSave = createMenuItem(MenuBarAction.SAVE, "Save", createKeybinds);
     MenuItem itemSaveAs = createMenuItem(MenuBarAction.SAVE_AS, "Save As", createKeybinds);
     MenuItem itemOpen = createMenuItem(MenuBarAction.OPEN, "Open", createKeybinds);
+    MenuItem itemOpenTemplate = createMenuItem(MenuBarAction.OPEN_TEMPLATE, "Open as template", createKeybinds);
     MenuItem itemSettings = createMenuItem(MenuBarAction.OPEN_SETTINGS, "Settings", createKeybinds);
 
-    menuFile.getItems().addAll(itemNewBujo, itemSave, itemSaveAs, itemOpen, itemSettings);
+    menuFile.getItems().addAll(itemNewBujo, itemSave, itemSaveAs, itemOpen, itemOpenTemplate, itemSettings);
 
     Menu menuInsert = new Menu("Insert");
     MenuItem itemEvent = createMenuItem(MenuBarAction.NEW_EVENT, "New Event", createKeybinds);

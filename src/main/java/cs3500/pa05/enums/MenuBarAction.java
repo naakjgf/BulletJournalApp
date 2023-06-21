@@ -40,6 +40,11 @@ public enum MenuBarAction {
   OPEN_SETTINGS("Shortcut+,"),
 
   /**
+   * Open's a bujo file as a template
+   */
+  OPEN_TEMPLATE("Shortcut+P"),
+
+  /**
    * Creating a new journal.
    */
   NEW_JOURNAL("Shortcut+N");

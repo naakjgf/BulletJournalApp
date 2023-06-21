@@ -7,6 +7,8 @@ import cs3500.pa05.view.GuiViewImpl;
 import cs3500.pa05.view.SplashScreenViewImpl;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -46,6 +48,13 @@ public class Driver extends Application {
     splashScreen.setOnMouseClicked(e -> {
       splashStage.hide();
       loadMainApp();
+    });
+
+    splashScreen.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.A) {
+        splashStage.hide();
+        loadMainApp();
+      }
     });
   }
 
