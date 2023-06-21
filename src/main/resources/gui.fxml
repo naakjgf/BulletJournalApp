@@ -6,6 +6,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -17,6 +19,11 @@
    <root>
       <AnchorPane minHeight="300.0" minWidth="600.0" prefHeight="589.0" prefWidth="1037.0">
          <children>
+            <ImageView fitHeight="590.0" fitWidth="1038.0" pickOnBounds="true">
+               <image>
+                  <Image url="@bevo_the_pages_of_a_notebook_so_that_one_page_fills_up_the_scr_47f8be58-fab6-4f34-a4f9-3e8c6fc496f2.png" />
+               </image>
+            </ImageView>
             <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <VBox fx:id="menuBarContainer" />
@@ -31,7 +38,7 @@
                                           <Insets />
                                        </HBox.margin>
                                        <font>
-                                          <Font size="25.0" />
+                                          <Font name="Hoefler Text" size="25.0" />
                                        </font>
                                     </Button>
                                     <StackPane fx:id="weekTitleContainer">
@@ -41,19 +48,19 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </TextField>
-                                          <Label fx:id="weekTitle" text="Week 4">
+                                          <Label fx:id="weekTitle" text="Week 4" textFill="WHITE" underline="true">
                                              <padding>
                                                 <Insets left="15.0" right="15.0" />
                                              </padding>
                                              <font>
-                                                <Font size="22.0" />
+                                                <Font name="Hoefler Text" size="36.0" />
                                              </font>
                                           </Label>
                                        </children>
                                     </StackPane>
                                     <Button fx:id="nextWeek" alignment="CENTER_RIGHT" mnemonicParsing="false" styleClass="roundedButton" text="Next">
                                        <font>
-                                          <Font size="25.0" />
+                                          <Font name="Hoefler Text" size="25.0" />
                                        </font>
                                     </Button>
                                  </children>
@@ -64,6 +71,9 @@
                                  <BorderPane.margin>
                                     <Insets right="5.0" />
                                  </BorderPane.margin>
+                                 <font>
+                                    <Font name="Katari Regular" size="13.0" />
+                                 </font>
                               </Button>
                            </right>
                            <left>
@@ -90,7 +100,7 @@
                                        <children>
                                           <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Monday">
                                              <font>
-                                                <Font size="12.0" />
+                                                <Font name="Hiragino Sans W9" size="18.0" />
                                              </font>
                                           </Label>
                                        </children>
@@ -106,7 +116,7 @@
                                        <children>
                                           <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Tuesday">
                                              <font>
-                                                <Font size="12.0" />
+                                                <Font name="Hiragino Sans W9" size="18.0" />
                                              </font>
                                           </Label>
                                        </children>
@@ -122,7 +132,7 @@
                                        <children>
                                           <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Wednesday" VBox.vgrow="ALWAYS">
                                              <font>
-                                                <Font size="12.0" />
+                                                <Font name="Hiragino Sans W9" size="18.0" />
                                              </font>
                                           </Label>
                                        </children>
@@ -138,7 +148,7 @@
                                        <children>
                                           <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Thursday">
                                              <font>
-                                                <Font size="12.0" />
+                                                <Font name="Hiragino Sans W9" size="18.0" />
                                              </font>
                                           </Label>
                                        </children>
@@ -154,7 +164,7 @@
                                        <children>
                                           <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Friday">
                                              <font>
-                                                <Font size="12.0" />
+                                                <Font name="Hiragino Sans W9" size="18.0" />
                                              </font>
                                           </Label>
                                        </children>
@@ -170,7 +180,7 @@
                                        <children>
                                           <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Saturday" VBox.vgrow="ALWAYS">
                                              <font>
-                                                <Font size="12.0" />
+                                                <Font name="Hiragino Sans W9" size="18.0" />
                                              </font>
                                           </Label>
                                        </children>
@@ -186,7 +196,7 @@
                                        <children>
                                           <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Sunday" VBox.vgrow="ALWAYS">
                                              <font>
-                                                <Font size="12.0" />
+                                                <Font name="Hiragino Sans W9" size="18.0" />
                                              </font>
                                           </Label>
                                        </children>
@@ -206,7 +216,7 @@
                                        <children>
                                           <Label maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Overview" VBox.vgrow="ALWAYS">
                                              <font>
-                                                <Font size="12.0" />
+                                                <Font name="Hiragino Sans W9" size="18.0" />
                                              </font>
                                           </Label>
                                        </children>
@@ -218,7 +228,7 @@
                                        <children>
                                           <Label maxWidth="1.7976931348623157E308" styleClass="weekLabel" text="Week Tasks" VBox.vgrow="ALWAYS">
                                              <font>
-                                                <Font size="12.0" />
+                                                <Font name="Katari Regular" size="12.0" />
                                              </font>
                                           </Label>
                                        </children>

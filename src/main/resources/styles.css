@@ -9,6 +9,13 @@
     -fx-start-margin: 30px;
 }
 
+.panes {
+    -fx-background-color: transparent;
+}
+.panes .viewport {
+    -fx-background-color: transparent;
+}
+
 .normalButton {
     -fx-background-radius: 5px;
     -fx-padding: 5px 5px 5px 5px;
