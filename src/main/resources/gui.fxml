@@ -26,7 +26,7 @@
                            <center>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" styleClass="otherBackground" BorderPane.alignment="CENTER">
                                  <children>
-                                    <Button fx:id="prevWeek" alignment="CENTER_RIGHT" mnemonicParsing="false" text="Prev" styleClass="arrowButton">
+                                    <Button fx:id="prevWeek" alignment="CENTER_RIGHT" mnemonicParsing="false" text="Prev" styleClass="normalButton">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
@@ -51,7 +51,7 @@
                                           </Label>
                                        </children>
                                     </StackPane>
-                                    <Button fx:id="nextWeek" alignment="CENTER_RIGHT" mnemonicParsing="false" text="Next" styleClass="arrowButton">
+                                    <Button fx:id="nextWeek" alignment="CENTER_RIGHT" mnemonicParsing="false" text="Next" styleClass="normalButton">
                                        <font>
                                           <Font name="Hoefler Text" size="25.0" />
                                        </font>
