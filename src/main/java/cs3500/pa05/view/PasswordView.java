@@ -38,7 +38,7 @@ public class PasswordView extends Dialog<String> {
 
   private void initializePasswordView() {
     setTitle("Password");
-    setHeaderText("Please enter your password.");
+    setHeaderText("Please enter password.");
 
     passwordField = new PasswordField();
     passwordField.setPromptText("Password");
@@ -93,16 +93,16 @@ public class PasswordView extends Dialog<String> {
         return "";
       }
       String password = result.get();
-      if (!isValidPassword(password)) {
+      if (newPassword && !isValidPassword(password)) {
         showWarningAlert();
       }
-    } while (!isValidPassword(result.get()));
+    } while (newPassword && !isValidPassword(result.get()));
 
     return result.get();
   }
 
   private boolean isValidPassword(String password) {
-    if (password.length() <= 8) {
+    if (password.length() < 8) {
       return false;
     }
     if (newPassword && !password.equals(confirmPasswordField.getText())) {
@@ -115,8 +115,8 @@ public class PasswordView extends Dialog<String> {
     Alert alert = new Alert(AlertType.WARNING);
     alert.setTitle("Password Requirement Not Met");
     alert.setHeaderText(null);
-    String warningMessage = newPassword ? "Passwords must be longer than 8 characters and match. Please try again." :
-        "Your password must be longer than 8 characters. Please try again.";
+    String warningMessage = newPassword ? "Passwords must be longer than 7 characters and match. Please try again." :
+        "Your password must be longer than 7 characters. Please try again.";
     alert.setContentText(warningMessage);
     alert.showAndWait();
   }
