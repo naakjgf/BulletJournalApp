@@ -134,8 +134,8 @@ public class JournalControllerImpl implements JournalController {
       if (modificationCount.get() > 0) {
         boolean result = showSaveRequest();
 
-        if (result) {
-          this.stage.close();
+        if (!result) {
+          event.consume();
         }
       }
     });
@@ -160,7 +160,6 @@ public class JournalControllerImpl implements JournalController {
         if (saveFile(false)) {
           return true;
         } else {
-          showAlert("Unable to save file", "User cancelled operation!");
           return false;
         }
       } else if (result.get() == buttonDontSave) {
