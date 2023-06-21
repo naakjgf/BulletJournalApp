@@ -1,9 +1,9 @@
-package cs3500.pa05.model.file_manager;
+package cs3500.pa05.model.filemanager;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import cs3500.pa05.model.file_manager.json.BujoJson;
-import cs3500.pa05.model.file_manager.json.CryptoJson;
+import cs3500.pa05.model.filemanager.json.BujoJson;
+import cs3500.pa05.model.filemanager.json.CryptoJson;
 import java.security.GeneralSecurityException;
 
 /**

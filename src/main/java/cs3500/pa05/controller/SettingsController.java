@@ -18,6 +18,13 @@ import javafx.scene.text.FontWeight;
  */
 public class SettingsController {
 
+  /**
+   * Sets up the dialog pane for a dialog.
+   *
+   * @param dialog Dialog to setup.
+   * @param title Title of the dialog.
+   * @return The dialog pane.
+   */
   private DialogPane setupDialogPane(Dialog<?> dialog, String title) {
     dialog.setTitle(title);
     DialogPane dialogPane = new DialogPane();
@@ -25,7 +32,6 @@ public class SettingsController {
 
     return dialogPane;
   }
-
 
   /**
    * Opens a settings modal and edits the passed Settings object.
@@ -78,7 +84,6 @@ public class SettingsController {
       }
     });
 
-
     VBox dialogVbox = new VBox(10);
     dialogVbox.setPadding(new Insets(20, 20, 20, 20));
     dialogVbox.getChildren().addAll(tasksLabel, tasksField, eventsLabel, eventsField);
@@ -88,6 +93,12 @@ public class SettingsController {
     dialog.showAndWait();
   }
 
+  /**
+   * Validates the input for a settings modal.
+   *
+   * @param input Input to validate.
+   * @return True if the input is valid, false otherwise.
+   */
   private boolean validateInput(String input) {
     try {
       int value = Integer.parseInt(input);

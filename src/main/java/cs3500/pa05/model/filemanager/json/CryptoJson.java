@@ -1,4 +1,4 @@
-package cs3500.pa05.model.file_manager.json;
+package cs3500.pa05.model.filemanager.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

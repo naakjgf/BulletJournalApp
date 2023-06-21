@@ -1,7 +1,7 @@
-package cs3500.pa05.model.file_manager;
+package cs3500.pa05.model.filemanager;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import cs3500.pa05.model.file_manager.json.BujoJson;
+import cs3500.pa05.model.filemanager.json.BujoJson;
 import java.security.GeneralSecurityException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;

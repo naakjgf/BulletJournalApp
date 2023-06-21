@@ -48,6 +48,9 @@ public class TaskCreationView extends TaskManagerView {
     dialogPane.setContent(dialogVbox);
   }
 
+  /**
+   * Initializes the fields for task creation.
+   */
   private void initializeFields() {
     nameField = new TextField();
     nameField.setPromptText("Task Name");

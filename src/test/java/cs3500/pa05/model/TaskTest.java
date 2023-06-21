@@ -11,6 +11,9 @@ import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests for the Task class.
+ */
 public class TaskTest {
   Task task;
   ObjectMapper objectMapper;
@@ -66,8 +69,8 @@ public class TaskTest {
 
   @Test
   public void jsonCreatorTest() {
-    String json = "{ \"name\" : \"Coding\", \"description\" : \"Finish the code\"," +
-        " \"id\" : \"123\", \"day\" : \"MONDAY\", \"complete\" : false }";
+    String json = "{ \"name\" : \"Coding\", \"description\" : \"Finish the code\","
+        + " \"id\" : \"123\", \"day\" : \"MONDAY\", \"complete\" : false }";
     try {
       Task parsedTask = objectMapper.readValue(json, Task.class);
 

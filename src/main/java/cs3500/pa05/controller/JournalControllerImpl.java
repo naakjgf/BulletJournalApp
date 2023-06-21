@@ -4,9 +4,9 @@ import cs3500.pa05.enums.MenuBarAction;
 import cs3500.pa05.model.ScheduleManager;
 import cs3500.pa05.model.ScheduleManagerImpl;
 import cs3500.pa05.model.Settings;
-import cs3500.pa05.model.file_manager.FileManager;
-import cs3500.pa05.model.file_manager.FileManagerImpl;
-import cs3500.pa05.model.file_manager.json.BujoJson;
+import cs3500.pa05.model.filemanager.FileManager;
+import cs3500.pa05.model.filemanager.FileManagerImpl;
+import cs3500.pa05.model.filemanager.json.BujoJson;
 import cs3500.pa05.view.PasswordView;
 import cs3500.pa05.view.RenameWeekView;
 import java.io.File;
@@ -33,45 +33,32 @@ public class JournalControllerImpl implements JournalController {
   private FileManager fileManager;
   private ItemCreationController itemCreator;
   private SettingsController settingsController;
-
   private MenuController menuController;
-
   private WeekController weekController;
-
   private AtomicInteger modificationCount;
-
   private Settings settings;
   @FXML
   private HBox weekView;
   @FXML
   private VBox sideBar;
-
   @FXML
   private VBox menuBarContainer;
-
   @FXML
   private Label weekTitle;
-
   @FXML
   private TextField weekTitleField;
-
   @FXML
   private StackPane weekTitleContainer;
-
   @FXML
   private Button prevWeek;
   @FXML
   private Button nextWeek;
   @FXML
   private Button newWeek;
-
   @FXML
   private Label warningLabel;
-
   @FXML
   private VBox weeklyOverview;
-
-
   private Stage stage;
 
   /**
@@ -90,7 +77,7 @@ public class JournalControllerImpl implements JournalController {
   }
 
   /**
-   * Constructor for JournalController.
+   * A Blank Constructor for JournalController.
    */
   public JournalControllerImpl() {
 
@@ -115,7 +102,12 @@ public class JournalControllerImpl implements JournalController {
     createCloseHandler();
   }
 
-
+  /**
+   * Handles Menu Bar Actions.
+   *
+   * @param e      ActionEvent
+   * @param action MenuBarAction
+   */
   private void handleMenuAction(ActionEvent e, MenuBarAction action) {
     switch (action) {
       case OPEN -> loadFile();
@@ -131,6 +123,9 @@ public class JournalControllerImpl implements JournalController {
     }
   }
 
+  /**
+   * Creates a way of closing the window.
+   */
   private void createCloseHandler() {
     this.stage.setOnCloseRequest(event -> {
       if (modificationCount.get() > 0) {
@@ -143,6 +138,11 @@ public class JournalControllerImpl implements JournalController {
     });
   }
 
+  /**
+   * Displays a confirmation alert for saving updates to the file.
+   *
+   * @return true if the user wants to save, false otherwise.
+   */
   private boolean showSaveRequest() {
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
     alert.setTitle("Unsaved changes");
@@ -168,10 +168,12 @@ public class JournalControllerImpl implements JournalController {
         return true;
       }
     }
-
     return false;
   }
 
+  /**
+   * Creates a new journal.
+   */
   private void createNewJournal() {
     if (modificationCount.get() > 0) {
       boolean saveResult = showSaveRequest();
@@ -189,6 +191,12 @@ public class JournalControllerImpl implements JournalController {
     modificationCount.set(0);
   }
 
+  /**
+   * displays an information alert.
+   *
+   * @param title   title of the alert
+   * @param message message of the alert
+   */
   private void showAlert(String title, String message) {
     Alert alert = new Alert(Alert.AlertType.INFORMATION);
     alert.setTitle(title);
@@ -197,17 +205,32 @@ public class JournalControllerImpl implements JournalController {
     alert.showAndWait();
   }
 
+  /**
+   * Opens the settings of the journal.
+   */
   private void openSettings() {
     this.settingsController.openSettingsModal(this.manager.getSettings());
     this.weekController.renderWeek();
   }
 
+  /**
+   * Gets a password from the user.
+   *
+   * @param newPassword true if the password is new, false otherwise.
+   * @return the password entered by the user.
+   */
   private String getUserPassword(boolean newPassword) {
     PasswordView passwordView = new PasswordView();
 
     return passwordView.requestPassword(newPassword);
   }
 
+  /**
+   * Provides functionality to save a bujo file.
+   *
+   * @param saveAs true if the file is being saved as a new file, false otherwise.
+   * @return boolean true if the file was saved, false otherwise.
+   */
   private boolean saveFile(boolean saveAs) {
     if (!this.manager.hasFileManager() || saveAs) {
       String password = getUserPassword(true);
@@ -231,6 +254,9 @@ public class JournalControllerImpl implements JournalController {
     return true;
   }
 
+  /**
+   * Creates a new task.
+   */
   private void createNewTask() {
     itemCreator.createTask(task -> {
       this.manager.getCurrentWeek().addTask(task);
@@ -239,6 +265,9 @@ public class JournalControllerImpl implements JournalController {
     });
   }
 
+  /**
+   * Creates a new event.
+   */
   private void createNewEvent() {
     itemCreator.createEvent(event -> {
       this.manager.getCurrentWeek().addEvent(event);
@@ -247,6 +276,11 @@ public class JournalControllerImpl implements JournalController {
     });
   }
 
+  /**
+   * Opens a file chooser to choose a bujo file.
+   *
+   * @return a FileManager of the file chosen.
+   */
   private FileManager openFile() {
     String filePath = chooseBujoFile();
     if (filePath == null) {
@@ -264,6 +298,9 @@ public class JournalControllerImpl implements JournalController {
     return new FileManagerImpl(filePath, password);
   }
 
+  /**
+   * Opens a template which is present if the user has not saved the file.
+   */
   private void openTemplate() {
     if (modificationCount.get() > 0) {
       boolean saveResult = showSaveRequest();
@@ -300,7 +337,9 @@ public class JournalControllerImpl implements JournalController {
     this.weekController.renderWeek();
   }
 
-
+  /**
+   * Loads a bujo file.
+   */
   private void loadFile() {
     if (modificationCount.get() > 0) {
       boolean saveResult = showSaveRequest();
@@ -330,7 +369,11 @@ public class JournalControllerImpl implements JournalController {
     this.weekController.renderWeek();
   }
 
-
+  /**
+   * Opens up a bujo file chooser. Can only take in bujo files.
+   *
+   * @return a FileChooser that only takes in bujo files.
+   */
   private FileChooser getBujoChooser() {
     FileChooser fileChooser = new FileChooser();
 
@@ -342,6 +385,11 @@ public class JournalControllerImpl implements JournalController {
     return fileChooser;
   }
 
+  /**
+   * Opens up a file chooser dialog for the user to choose a bujo file.
+   *
+   * @return the absolute path of the file chosen.
+   */
   private String chooseBujoFile() {
     FileChooser fileChooser = getBujoChooser();
 
@@ -354,6 +402,11 @@ public class JournalControllerImpl implements JournalController {
     return file.getAbsolutePath();
   }
 
+  /**
+   * Saves a bujo file.
+   *
+   * @return the absolute path of the file saved.
+   */
   private String saveBujoFile() {
     FileChooser fileChooser = getBujoChooser();
 

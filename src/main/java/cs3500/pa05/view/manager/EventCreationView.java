@@ -60,6 +60,9 @@ public class EventCreationView extends EventManagerView {
     dialogPane.setContent(dialogVbox);
   }
 
+  /**
+   * Initializes the fields for the event creation view.
+   */
   private void initializeFields() {
     nameField = new TextField();
     nameField.setPromptText("Event Name");

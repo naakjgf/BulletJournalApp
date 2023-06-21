@@ -1,7 +1,7 @@
 package cs3500.pa05.model;
 
-import cs3500.pa05.model.file_manager.FileManager;
-import cs3500.pa05.model.file_manager.json.BujoJson;
+import cs3500.pa05.model.filemanager.FileManager;
+import cs3500.pa05.model.filemanager.json.BujoJson;
 
 /**
  * Represents a manager for a Bullet Journal Schedule.

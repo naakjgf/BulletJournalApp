@@ -33,6 +33,9 @@ public class RenameWeekView extends Dialog<String> {
     dialogPane.setContent(renameVbox);
   }
 
+  /**
+   * Adds the needed elements to close the rename week view.
+   */
   private void setConverter() {
     ButtonType passwordButtonType = new ButtonType("Confirm", ButtonBar.ButtonData.OK_DONE);
 

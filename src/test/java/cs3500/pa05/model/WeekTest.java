@@ -11,6 +11,9 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests for the Week class.
+ */
 public class WeekTest {
   Week week;
   ObjectMapper objectMapper;
@@ -18,6 +21,9 @@ public class WeekTest {
   Event event;
   ScheduleItem scheduleItem;
 
+  /**
+   * Sets up the Week and ObjectMapper for testing.
+   */
   @BeforeEach
   public void setUp() {
     week = new Week(1);

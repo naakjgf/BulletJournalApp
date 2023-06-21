@@ -26,6 +26,13 @@ import javafx.util.converter.LocalTimeStringConverter;
  * Abstract class for editing or creating an event.
  */
 public abstract class EventManagerView extends ItemManagerView {
+
+  /**
+   * Populates and creates a time picker with the local time.
+   *
+   * @param startTime start time of the event.
+   * @return A spinner of local time.
+   */
   protected Spinner<LocalTime> setupTimePicker(Optional<Long> startTime) {
     Spinner<LocalTime> timeSpinner = createTimePicker(); // the method we previously defined
     startTime.ifPresent(time -> {
@@ -36,6 +43,11 @@ public abstract class EventManagerView extends ItemManagerView {
     return timeSpinner;
   }
 
+  /**
+   * Creates a time picker for editing an event's start time.
+   *
+   * @return A spinner of local time.
+   */
   protected Spinner<LocalTime> createTimePicker() {
     Spinner<LocalTime> timeSpinner = new Spinner<>();
     timeSpinner.setValueFactory(
@@ -72,7 +84,16 @@ public abstract class EventManagerView extends ItemManagerView {
     return timeSpinner;
   }
 
-
+  /**
+   * Validates the input for creating or editing an event.
+   *
+   * @param name name of the event
+   * @param day day of the week for the event
+   * @param date date of the event
+   * @param time time of the event
+   * @param duration duration of the event
+   * @param ev event that triggered the validation
+   */
   protected void validateInput(String name, DayOfWeek day, LocalDate date, LocalTime time,
                                String duration,
                                javafx.event.ActionEvent ev) {
@@ -89,6 +110,12 @@ public abstract class EventManagerView extends ItemManagerView {
     }
   }
 
+  /**
+   * Sets up the date picker for the event manager view.
+   *
+   * @param epochTimeOpt optional epoch time
+   * @return date picker for the event manager view
+   */
   protected DatePicker setupDatePicker(Optional<Long> epochTimeOpt) {
     DatePicker startTimePicker = new DatePicker();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -118,6 +145,18 @@ public abstract class EventManagerView extends ItemManagerView {
   }
 
 
+  /**
+   * Sets up the time picker for the event manager view.
+   *
+   * @param nameField name field for the event manager view.
+   * @param descriptionField description field for the event manager view.
+   * @param dayOfWeekComboBox day of week combo box for the event manager view.
+   * @param startDatePicker start date picker for the event manager view.
+   * @param startTimePicker start time picker for the event manager view.
+   * @param durationField duration field for the event manager view.
+   * @param createBtnType create button of a specific type for the event manager view.
+   * @return callback for the event manager view.
+   */
   protected Callback<ButtonType, ScheduleItem> createResultConverter(TextField nameField,
       TextField descriptionField,
       ComboBox<DayOfWeek> dayOfWeekComboBox,
@@ -138,5 +177,4 @@ public abstract class EventManagerView extends ItemManagerView {
       return null;
     };
   }
-
 }

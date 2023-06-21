@@ -15,6 +15,9 @@ public class EventTest {
   Event event;
   ObjectMapper objectMapper;
 
+  /**
+   * Sets up the event and object mapper for testing.
+   */
   @BeforeEach
   public void setUp() {
     event = new Event("Meeting", "Project meeting", DayOfWeek.MONDAY,
@@ -27,8 +30,8 @@ public class EventTest {
   @Test
   public void jsonCreatorTest() {
     String json =
-        "{ \"name\" : \"Meeting\", \"description\" : \"Project meeting\", \"day\" : \"MONDAY\"," +
-            " \"startTime\" : 1615972928, \"duration\" : 3600000, \"id\" : \"123\" }";
+        "{ \"name\" : \"Meeting\", \"description\" : \"Project meeting\", \"day\" : \"MONDAY\","
+            + " \"startTime\" : 1615972928, \"duration\" : 3600000, \"id\" : \"123\" }";
     try {
       Event parsedEvent = objectMapper.readValue(json, Event.class);
 

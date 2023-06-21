@@ -40,8 +40,6 @@ public class WeekController {
   private static final int TITLE_FONT_SIZE = 14;
   private static final String TASKS_EXCEEDED_WARNING = "Maximum number of tasks exceeded for %s";
   private static final String EVENTS_EXCEEDED_WARNING = "Maximum number of events exceeded for %s";
-
-
   private final VBox sideBar;
   private final VBox weeklyOverview;
   private final Label warningLabel;
@@ -58,22 +56,21 @@ public class WeekController {
   /**
    * Constructor for WeekController.
    *
-   * @param manager ScheduleManager.
-   * @param itemCreator ItemCreationController.
+   * @param manager           ScheduleManager.
+   * @param itemCreator       ItemCreationController.
    * @param modificationCount AtomicInteger for modifications made to page.
-   * @param weekView HBox with days of the week.
-   * @param weekTitle Label for week title.
-   * @param weekTitleField Textbox for week title change.
-   * @param nextWeek Button for changing weeks to next week
-   * @param prevWeek Button for changing weeks to previous week.
-   * @param newWeek Button for creating a new week.
-   * @param sideBar VBox holding task list in sidebar.
-   * @param weeklyOverview VBox holding weekly overview statistics.
-   * @param warningLabel Label holding the warnings for the current page.
+   * @param weekView          HBox with days of the week.
+   * @param weekTitle         Label for week title.
+   * @param weekTitleField    Textbox for week title change.
+   * @param nextWeek          Button for changing weeks to next week
+   * @param prevWeek          Button for changing weeks to previous week.
+   * @param newWeek           Button for creating a new week.
+   * @param sideBar           VBox holding task list in sidebar.
+   * @param weeklyOverview    VBox holding weekly overview statistics.
+   * @param warningLabel      Label holding the warnings for the current page.
    */
   public WeekController(ScheduleManager manager, ItemCreationController itemCreator,
-                        AtomicInteger modificationCount, HBox weekView,
-                        Label weekTitle,
+                        AtomicInteger modificationCount, HBox weekView, Label weekTitle,
                         TextField weekTitleField, Button nextWeek, Button prevWeek, Button newWeek,
                         VBox sideBar, VBox weeklyOverview, Label warningLabel) {
     this.manager = manager;
@@ -91,6 +88,12 @@ public class WeekController {
 
   }
 
+  /**
+   * Finds if the current week has exceeded the maximum number of tasks or events.
+   *
+   * @param days Map of days to number of tasks or events.
+   * @return Optional map of DayOfWeek to number of tasks or events.
+   */
   private static Optional<Map.Entry<DayOfWeek, Integer>> findMax(Map<DayOfWeek, Integer> days) {
     if (days == null || days.isEmpty()) {
       return Optional.empty();
@@ -117,6 +120,11 @@ public class WeekController {
     newWeek.setOnAction(e -> createNewWeek());
   }
 
+  /**
+   * Updates the week field to be the current week when changing weeks.
+   *
+   * @param increment int representing to move forward or backward in weeks.
+   */
   private void updateWeekBy(int increment) {
     int currentWeekNumber = this.manager.getCurrentWeek().getWeekNumber();
     int newWeekNumber = currentWeekNumber + increment;
@@ -179,6 +187,9 @@ public class WeekController {
     });
   }
 
+  /**
+   * Finishes editing the title of the week.
+   */
   private void finishEditWeekTitle() {
     weekTitle.setVisible(true);  // Set the label's text to the text field's text
     weekTitleField.setVisible(false);
@@ -200,8 +211,8 @@ public class WeekController {
    * Handles an action on an item.
    *
    * @param action ItemAction representing action taken on item.
-   * @param w Week to which the item belongs to.
-   * @param item Item on which the action was taken.
+   * @param w      Week to which the item belongs to.
+   * @param item   Item on which the action was taken.
    */
   public void handleItemAction(ItemAction action, Week w, ScheduleItem item) {
     if (action == ItemAction.DELETE) {
@@ -213,7 +224,6 @@ public class WeekController {
         itemCreator.editEvent((Event) item);
       }
     }
-
     renderWeek();
   }
 
@@ -236,6 +246,9 @@ public class WeekController {
     updateWeekTitle();
   }
 
+  /**
+   * Clears the existing children in views of the GUI.
+   */
   private void clearExistingViews() {
     for (Node node : weekView.getChildren()) {
       if (node instanceof ScrollPane scrollPane) {
@@ -247,22 +260,39 @@ public class WeekController {
     sideBar.getChildren().removeIf(child -> !(child instanceof Label));
   }
 
+  /**
+   * Renders the tasks contained in a specific week on the day it is to be rendered.
+   *
+   * @param currentWeek  Week to be rendered.
+   * @param taskCountMap Map of DayOfWeek to number of tasks on that day.
+   */
   private void renderTasks(Week currentWeek, Map<DayOfWeek, Integer> taskCountMap) {
     for (Task t : currentWeek.getTasks()) {
-      TaskView taskView = new TaskView(t,
-          (ItemAction action) -> handleItemAction(action, currentWeek, t));
+      TaskView taskView =
+          new TaskView(t, (ItemAction action) -> handleItemAction(action, currentWeek, t));
       taskCountMap.merge(t.getDayOfWeek(), 1, Integer::sum);
       addTaskToGui(t, taskView);
       addCompletionStatusToSideBar(t);
     }
   }
 
+  /**
+   * Adds a task to the GUI.
+   *
+   * @param task     Task to be added.
+   * @param taskView TaskView of the task to be added.
+   */
   private void addTaskToGui(Task task, TaskView taskView) {
     VBox vbox = (VBox) ((ScrollPane) weekView.getChildren()
         .get(task.getDayOfWeek().getNumVal())).getContent();
     vbox.getChildren().add(taskView);
   }
 
+  /**
+   * Adds the completion status of a task to the sidebar.
+   *
+   * @param task Task to be added.
+   */
   private void addCompletionStatusToSideBar(Task task) {
     VBox sidebarTask = new VBox(5);
     sidebarTask.getStyleClass().add("sidebarTask");
@@ -274,6 +304,12 @@ public class WeekController {
     sideBar.getChildren().add(sidebarTask);
   }
 
+  /**
+   * Renders the events contained in a specific week on the day it is to be rendered.
+   *
+   * @param currentWeek   Week to be rendered.
+   * @param eventCountMap Map of DayOfWeek to number of events on that day.
+   */
   private void renderEvents(Week currentWeek, Map<DayOfWeek, Integer> eventCountMap) {
     currentWeek.getEvents().sort(Comparator.comparingLong(Event::getStartTime));
     for (Event e : currentWeek.getEvents()) {
@@ -284,12 +320,25 @@ public class WeekController {
     }
   }
 
+  /**
+   * Adds an event to the GUI.
+   *
+   * @param event     Event to be added.
+   * @param eventView EventView of the event to be added.
+   */
   private void addEventToGui(Event event, EventView eventView) {
     VBox vbox = (VBox) ((ScrollPane) weekView.getChildren()
         .get(event.getDayOfWeek().getNumVal())).getContent();
     vbox.getChildren().add(eventView);
   }
 
+  /**
+   * Creates a VBox containing the weekly overview and sets the font and text size to be used.
+   *
+   * @param labelVal Label to be displayed.
+   * @param value    Value to be displayed.
+   * @return VBox containing the weekly overview.
+   */
   private VBox createWeeklyOverviewValue(String labelVal, String value) {
     VBox vbox = new VBox();
     Label label = new Label(labelVal);
@@ -302,6 +351,12 @@ public class WeekController {
     return vbox;
   }
 
+  /**
+   * Renders the weekly overview.
+   *
+   * @param tasks  List of tasks to be displayed.
+   * @param events List of events to be displayed.
+   */
   private void renderWeeklyOverview(List<Task> tasks, List<Event> events) {
     // Clear weekly overview
     weeklyOverview.getChildren().removeIf(n -> n instanceof VBox);
@@ -330,6 +385,12 @@ public class WeekController {
     }
   }
 
+  /**
+   * Alerts the user if the number of tasks or events on a day exceeds the maximum number of items.
+   *
+   * @param taskCountMap A map of DayOfWeek to number of tasks on that day.
+   * @param eventCountMap A map of DayOfWeek to number of events on that day.
+   */
   private void alertMaximumItems(Map<DayOfWeek, Integer> taskCountMap,
                                  Map<DayOfWeek, Integer> eventCountMap) {
     Settings settings = this.manager.getSettings();

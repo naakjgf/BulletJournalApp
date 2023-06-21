@@ -53,6 +53,9 @@ public class TaskEditingView extends TaskManagerView {
     dialogPane.setContent(dialogVbox);
   }
 
+  /**
+   * Initializes the fields for task editting.
+   */
   private void initializeFields() {
     nameField = new TextField(task.getName());
     nameField.setPromptText("Task Name");
@@ -69,5 +72,4 @@ public class TaskEditingView extends TaskManagerView {
 
     createBtnType = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
   }
-
 }

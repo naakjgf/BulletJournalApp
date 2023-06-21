@@ -2,20 +2,24 @@ package cs3500.pa05.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import cs3500.pa05.model.file_manager.FileManager;
-import cs3500.pa05.model.file_manager.json.BujoJson;
+import cs3500.pa05.model.filemanager.FileManager;
+import cs3500.pa05.model.filemanager.json.BujoJson;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+/**
+ * Tests for ScheduleManagerImpl.
+ */
 public class ScheduleManagerImplTest {
 
   private ScheduleManagerImpl scheduleManager;
@@ -40,7 +44,7 @@ public class ScheduleManagerImplTest {
     when(fileManager.loadFromFile()).thenReturn(bujoJson);
 
     scheduleManager.setFileManager(fileManager);
-    scheduleManager.loadData();
+    scheduleManager.loadData(bujoJson);
 
     assertEquals(1, scheduleManager.getCurrentWeekNum());
   }
@@ -50,11 +54,12 @@ public class ScheduleManagerImplTest {
     scheduleManager.setFileManager(fileManager);
     scheduleManager.saveData();
     verify(fileManager, times(1)).saveToFile(any());
-    //just to get the other branch of the if statement
+
     fileManager = null;
     scheduleManager.setFileManager(null);
     scheduleManager.saveData();
-    assertEquals(0, scheduleManager.getCurrentWeekNum());
+    assertEquals(0,
+        scheduleManager.getCurrentWeekNum());
   }
 
   @Test
@@ -70,7 +75,7 @@ public class ScheduleManagerImplTest {
     when(fileManager.loadFromFile()).thenReturn(bujoJson);
 
     scheduleManager.setFileManager(fileManager);
-    scheduleManager.loadData();
+    scheduleManager.loadData(bujoJson);
 
     assertEquals(1, scheduleManager.getCurrentWeekNum());
 
@@ -89,7 +94,7 @@ public class ScheduleManagerImplTest {
     when(fileManager.loadFromFile()).thenReturn(bujoJson);
 
     scheduleManager.setFileManager(fileManager);
-    scheduleManager.loadData();
+    scheduleManager.loadData(bujoJson);
 
     assertEquals(week1, scheduleManager.getCurrentWeek());
   }
@@ -103,25 +108,6 @@ public class ScheduleManagerImplTest {
   }
 
   @Test
-  void getWeek() {
-    Week week1 = new Week(0);
-    Week week2 = new Week(1);
-
-    List<Week> weeks = new ArrayList<>();
-    weeks.add(week1);
-    weeks.add(week2);
-
-    BujoJson bujoJson = new BujoJson(weeks, new Settings(3, 4, 0));
-    when(fileManager.loadFromFile()).thenReturn(bujoJson);
-
-    scheduleManager.setFileManager(fileManager);
-    scheduleManager.loadData();
-
-    assertEquals(week1, scheduleManager.getWeek(0));
-    assertEquals(week2, scheduleManager.getWeek(1));
-  }
-
-  @Test
   void getSettings() {
     Settings settings = new Settings(3, 4, 0);
 
@@ -131,7 +117,7 @@ public class ScheduleManagerImplTest {
     when(fileManager.loadFromFile()).thenReturn(bujoJson);
 
     scheduleManager.setFileManager(fileManager);
-    scheduleManager.loadData();
+    scheduleManager.loadData(bujoJson);
 
     assertEquals(settings, scheduleManager.getSettings());
   }
@@ -146,5 +132,18 @@ public class ScheduleManagerImplTest {
   void setMaximumEvents() {
     scheduleManager.setMaximumEvents(7);
     assertEquals(7, scheduleManager.getSettings().getMaximumEvents());
+  }
+
+  @Test
+  void loadTemplate() {
+    Settings templateSettings = new Settings(3, 4, 0);
+
+    BujoJson templateBujoJson = new BujoJson(new ArrayList<>(), templateSettings);
+    scheduleManager.loadTemplate(templateBujoJson);
+
+    assertEquals(templateSettings, scheduleManager.getSettings());
+    assertEquals(1, scheduleManager.getNumWeeks());
+    assertEquals(0, scheduleManager.getCurrentWeekNum());
+    assertNotNull(scheduleManager.getCurrentWeek());
   }
 }

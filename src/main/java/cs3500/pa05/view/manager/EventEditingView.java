@@ -28,7 +28,6 @@ public class EventEditingView extends EventManagerView {
   private ButtonType createBtnType;
   private final Event event;
 
-
   /**
    * EventCreationView constructor
    *
@@ -50,12 +49,10 @@ public class EventEditingView extends EventManagerView {
         validateInput(nameField.getText(), dayOfWeekComboBox.getValue(), startDatePicker.getValue(),
             startTimePicker.getValue(), durationField.getText(), ev));
 
-
     // Set result converter
     setResultConverter(
         createResultConverter(nameField, descriptionField, dayOfWeekComboBox, startDatePicker,
             startTimePicker, durationField, createBtnType));
-
 
     // Create dialog Vbox
     VBox dialogVbox = new VBox(10);
@@ -67,7 +64,9 @@ public class EventEditingView extends EventManagerView {
     dialogPane.setContent(dialogVbox);
   }
 
-
+  /**
+   * Initializes the fields of the view to edit events.
+   */
   private void initializeFields() {
     nameField = new TextField(event.getName());
     nameField.setPromptText("Event Name");
@@ -94,6 +93,4 @@ public class EventEditingView extends EventManagerView {
 
     createBtnType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
   }
-
-
 }
