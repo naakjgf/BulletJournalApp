@@ -32,11 +32,17 @@ public class WeekTest {
     objectMapper = new ObjectMapper();
   }
 
+  /**
+   * Tests that the getWeekNumber method returns the correct week number.
+   */
   @Test
   public void getWeekNumber() {
     assertEquals(1, week.getWeekNumber());
   }
 
+  /**
+   * Tests that getEvents gets the correct events in the week.
+   */
   @Test
   public void getEvents() {
     week.addEvent(event);
@@ -44,6 +50,9 @@ public class WeekTest {
     assertTrue(events.contains(event));
   }
 
+  /**
+   * Tests that getTasks gets the correct tasks in the week.
+   */
   @Test
   public void getTasks() {
     week.addTask(task);
@@ -51,18 +60,27 @@ public class WeekTest {
     assertTrue(tasks.contains(task));
   }
 
+  /**
+   * Tests that the addTask method adds the task it is given to the week.
+   */
   @Test
   public void addTask() {
     week.addTask(task);
     assertTrue(week.getTasks().contains(task));
   }
 
+  /**
+   * Tests that the addEvent method adds the event to the week.
+   */
   @Test
   public void addEvent() {
     week.addEvent(event);
     assertTrue(week.getEvents().contains(event));
   }
 
+  /**
+   * Tests that the deleteItem method deletes the item from the week properly.
+   */
   @Test
   public void deleteItem() {
     week.addTask(task);
@@ -80,6 +98,9 @@ public class WeekTest {
     week.deleteItem(scheduleItem);
   }
 
+  /**
+   * Checks that jsonCreator can create an expected week from a json string.
+   */
   @Test
   public void jsonCreatorTest() {
     String json = "{ \"weekNumber\" : 1, \"events\" : [], \"tasks\" : [] }";
@@ -93,6 +114,9 @@ public class WeekTest {
     }
   }
 
+  /**
+   * Test the getAndSetWeekName method to check if they both do their jobs.
+   */
   @Test
   void getAndSetWeekName() {
     week.setWeekName("Test Week");

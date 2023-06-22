@@ -14,6 +14,10 @@ import org.junit.jupiter.api.Test;
  * Tests for CryptoManager.
  */
 class CryptoManagerTest {
+
+  /**
+   * Tests that the encrypt and decrypt methods work properly.
+   */
   @Test
   void encryptDecryptTest() {
     String password = "testPassword";
@@ -39,6 +43,9 @@ class CryptoManagerTest {
     assertEquals(originalMessage, decryptedMessage);
   }
 
+  /**
+   * Tests the generateSalt method and checks if it generates the proper type and length of salt.
+   */
   @Test
   void generateSaltLength() {
     String salt = CryptoManager.generateSalt(16);

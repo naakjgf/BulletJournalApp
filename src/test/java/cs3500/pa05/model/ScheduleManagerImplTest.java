@@ -25,12 +25,18 @@ public class ScheduleManagerImplTest {
   private ScheduleManagerImpl scheduleManager;
   private FileManager fileManager;
 
+  /**
+   * Sets up the test with a ScheduleManagerImpl and a mock FileManager.
+   */
   @BeforeEach
   public void setUp() {
     scheduleManager = new ScheduleManagerImpl();
     fileManager = Mockito.mock(FileManager.class);
   }
 
+  /**
+   * Tests that setFileManager sets the fileManager field properly.
+   */
   @Test
   public void setFileManager() {
     assertFalse(scheduleManager.hasFileManager());
@@ -38,6 +44,9 @@ public class ScheduleManagerImplTest {
     assertTrue(scheduleManager.hasFileManager());
   }
 
+  /**
+   * Tests that the loadData method loads the data from a bujoJson properly.
+   */
   @Test
   public void loadData() {
     BujoJson bujoJson = new BujoJson(new ArrayList<>(), new Settings(3, 4, 1));
@@ -49,6 +58,9 @@ public class ScheduleManagerImplTest {
     assertEquals(1, scheduleManager.getCurrentWeekNum());
   }
 
+  /**
+   * Tests that the loadData method loads the data from a bujoJson properly.
+   */
   @Test
   public void saveData() {
     scheduleManager.setFileManager(fileManager);
@@ -62,6 +74,9 @@ public class ScheduleManagerImplTest {
         scheduleManager.getCurrentWeekNum());
   }
 
+  /**
+   * Tests that setCurrentWeek sets the current week properly.
+   */
   @Test
   public void setCurrentWeek() {
     Week week1 = new Week(0);
@@ -83,6 +98,9 @@ public class ScheduleManagerImplTest {
     assertEquals(0, scheduleManager.getCurrentWeekNum());
   }
 
+  /**
+   * Tests that getCurrentWeek returns the current week number properly.
+   */
   @Test
   public void getCurrentWeek() {
     Week week1 = new Week(0);
@@ -99,6 +117,9 @@ public class ScheduleManagerImplTest {
     assertEquals(week1, scheduleManager.getCurrentWeek());
   }
 
+  /**
+   * Tests that createNewWeek creates a new week properly and increments the number of weeks.
+   */
   @Test
   public void createNewWeek() {
     int newWeekNumber = scheduleManager.createNewWeek();
@@ -107,6 +128,9 @@ public class ScheduleManagerImplTest {
     assertEquals(newWeekNumber + 1, scheduleManager.getNumWeeks());
   }
 
+  /**
+   * Tests getSettings validating it returning the settings properly.
+   */
   @Test
   void getSettings() {
     Settings settings = new Settings(3, 4, 0);
@@ -122,18 +146,27 @@ public class ScheduleManagerImplTest {
     assertEquals(settings, scheduleManager.getSettings());
   }
 
+  /**
+   * Tests setMaximumTasks validating it setting the maximum tasks properly.
+   */
   @Test
   void setMaximumTasks() {
     scheduleManager.setMaximumTasks(5);
     assertEquals(5, scheduleManager.getSettings().getMaximumTasks());
   }
 
+  /**
+   * Tests setMaximumEvents validating it setting the maximum events properly.
+   */
   @Test
   void setMaximumEvents() {
     scheduleManager.setMaximumEvents(7);
     assertEquals(7, scheduleManager.getSettings().getMaximumEvents());
   }
 
+  /**
+   * Tests the loadTemplate method validating it loads the proper template of bujoJson when called.
+   */
   @Test
   void loadTemplate() {
     Settings templateSettings = new Settings(3, 4, 0);

@@ -56,6 +56,10 @@ public class BujoSerializerTest {
     }
   }
 
+  /**
+   * Tests that the serializeRecord method checks if the method converts properly to
+   * a non-null JsonNode object.
+   */
   @Test
   public void testSerializeRecord() {
     JsonNode resultNode = bujoSerializer.serializeRecord(bujoJson);
@@ -64,10 +68,14 @@ public class BujoSerializerTest {
     assertEquals(0, resultNode.get("settings").get("maximumEvents").asInt());
   }
 
+  /**
+   * Tests that the bujoToJson method, when given a valid BujoJson object
+   * returns a valid String Json
+   */
   @Test
   public void testBujoToJson() {
 
-    String jsonResult = null;
+    String jsonResult;
     try {
       jsonResult = bujoSerializer.bujoToJson(bujoJson, "Password");
     } catch (GeneralSecurityException e) {
@@ -75,8 +83,8 @@ public class BujoSerializerTest {
     }
 
     ObjectMapper objectMapper = new ObjectMapper();
-    CryptoJson validCryptoJson = null;
-    CryptoJson actualCryptoJson = null;
+    CryptoJson validCryptoJson;
+    CryptoJson actualCryptoJson;
     try {
       validCryptoJson = objectMapper.readValue(validJson, CryptoJson.class);
       actualCryptoJson = objectMapper.readValue(jsonResult, CryptoJson.class);
@@ -85,8 +93,8 @@ public class BujoSerializerTest {
     }
 
     String password = "Password";
-    String validPlainText = null;
-    String actualPlainText = null;
+    String validPlainText;
+    String actualPlainText;
     try {
       validPlainText =
           CryptoManager.decrypt(validCryptoJson.encryptedData(), password, validCryptoJson.salt());

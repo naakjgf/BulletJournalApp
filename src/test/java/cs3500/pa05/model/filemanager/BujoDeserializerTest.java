@@ -39,6 +39,9 @@ public class BujoDeserializerTest {
     }
   }
 
+  /**
+   * Tests that the jsonToBujo method checks if the method makes a non-null BujoJson object.
+   */
   @Test
   public void testJsonToBujo() {
     BujoJson bujoJson;

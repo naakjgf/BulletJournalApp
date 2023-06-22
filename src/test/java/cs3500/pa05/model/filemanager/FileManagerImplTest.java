@@ -34,6 +34,11 @@ public class FileManagerImplTest {
     objectMapper = new ObjectMapper();
   }
 
+  /**
+   * Tests loadFromFile with a valid file string, turns it encrypted content into a BujoJson
+   *
+   * @throws Exception if there is an error with the encryption.
+   */
   @Test
   public void testLoadFromFileValid() throws Exception {
     String validJsonContent = "{ \"data\": [], \"settings\": { \"currentWeek\": 0,"
@@ -54,6 +59,12 @@ public class FileManagerImplTest {
     assertEquals(expectedSettings.getMaximumTasks(), loadedBujoJson.settings().getMaximumTasks());
   }
 
+  /**
+   * Tests loadFromFile with an invalid file string, turns it encrypted content into an expected
+   * null bujoJson
+   *
+   * @throws Exception if there is an error with the encryption.
+   */
   @Test
   public void testLoadFromFileIncorrectPassword() throws Exception {
     String validJsonContent = "{ \"data\": [], \"settings\": { \"currentWeek\": 0,"
@@ -70,6 +81,10 @@ public class FileManagerImplTest {
     assertNull(loadedBujoJson);
   }
 
+  /**
+   * Tests loadFromFile with a valid input yet again, turns encrypted content into an
+   * expected bujoJson.
+   */
   @Test
   public void testLoadFromFile() {
     List<Week> weeks = new ArrayList<>();
@@ -95,6 +110,9 @@ public class FileManagerImplTest {
         loadedBujoJson.settings().getMaximumEvents());
   }
 
+  /**
+   * Tests saveToFile with a valid input bujoJson.
+   */
   @Test
   public void testSaveToFile() {
     List<Week> weeks = new ArrayList<>();
